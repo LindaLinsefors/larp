@@ -18,9 +18,8 @@ class Character(BasicModel):
     character_description = models.TextField(blank=True, default='')
     comments_from_God = models.TextField(blank=True, default='')
 
-    group = models.ForeignKey(  Group,  
-                                null=True, 
-                                on_delete=models.SET_NULL )
+    group = models.ForeignKey(  Group,  null=True, on_delete=models.SET_NULL )
+    #group = models.ManyToManyField(  Group,  null=True  )
 
 
 class Plot_line(BasicModel):

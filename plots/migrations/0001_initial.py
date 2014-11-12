@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -12,68 +11,66 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='BasicModel',
+            name='Character',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=50)),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name='Character',
-            fields=[
-                ('basicmodel_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='plots.BasicModel')),
                 ('character_description', models.TextField(default=b'', blank=True)),
                 ('comments_from_God', models.TextField(default=b'', blank=True)),
             ],
             options={
+                'abstract': False,
             },
-            bases=('plots.basicmodel',),
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Group',
             fields=[
-                ('basicmodel_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='plots.BasicModel')),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=50)),
                 ('group_description', models.TextField(default=b'', blank=True)),
             ],
             options={
+                'abstract': False,
             },
-            bases=('plots.basicmodel',),
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Plot',
             fields=[
-                ('basicmodel_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='plots.BasicModel')),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=50)),
                 ('plot', models.TextField(default=b'', blank=True)),
-                ('character', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, to='plots.Character', null=True)),
-                ('group', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, to='plots.Group', null=True)),
+                ('characters', models.ManyToManyField(to='plots.Character', null=True)),
+                ('groups', models.ManyToManyField(to='plots.Group', null=True)),
             ],
             options={
+                'abstract': False,
             },
-            bases=('plots.basicmodel',),
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Plot_line',
             fields=[
-                ('basicmodel_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='plots.BasicModel')),
-                ('summery', models.TextField()),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=50)),
+                ('summery', models.TextField(default=b'', blank=True)),
             ],
             options={
+                'abstract': False,
             },
-            bases=('plots.basicmodel',),
+            bases=(models.Model,),
         ),
         migrations.AddField(
             model_name='plot',
-            name='plot_line',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, to='plots.Plot_line', null=True),
+            name='plot_lines',
+            field=models.ManyToManyField(to='plots.Plot_line', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='character',
-            name='group',
-            field=models.ManyToManyField(to='plots.Group'),
+            name='groups',
+            field=models.ManyToManyField(to='plots.Group', null=True),
             preserve_default=True,
         ),
     ]

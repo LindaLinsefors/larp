@@ -94,6 +94,16 @@ class Plot_line(BasicModel):
         return self.plot_parts().count()
 
 
+    def characters(self):
+        return Character.objects.filter(plot__in=self.plot_parts() )
+    characters.short_description = (
+         'Characters that have part in the plot line, not including individual group plots')
+    def charactersString(self):
+        return ', '.join([character.name for character in self.character.all()])
+    charactersString.string = True
+    charactersString.short_description = characters.short_description
+
+
     def groups(self):
         return Group.objects.filter(plot__in=self.plot_parts() )
     groups.short_description = (
@@ -104,16 +114,6 @@ class Plot_line(BasicModel):
     groupsString.short_description = groups.short_description
 
 
-    def characters(self):
-        return Character.objects.filter(plot__in=self.plot_parts() )
-    characters.short_description = (
-         'Characters that have part in the plot line, not including individual group plots')
-    def charactersString(self):
-        return ', '.join([character.name for character in self.character.all()])
-    charactersString.string = True
-    characterString.short_description = characters.short_description
-
-
     def groups_incl_char(self):
         return Group.objects.filter(
                     models.Q( plot__in=self.plot_parts() ) | 
@@ -121,6 +121,7 @@ class Plot_line(BasicModel):
                ).distinct()        
     groups_incl_char.short_description = (
         'Groupes that have part in the plot line, including individual character plots')
+    groups_incl_char.query=True
     def groups_incl_charString(self):
         return ', '.join([group.name for group in self.groups_incl_char.all()])
     groups_incl_charString.string = True

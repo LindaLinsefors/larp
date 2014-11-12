@@ -66,7 +66,16 @@ class PlotInlinePlot_line(admin.TabularInline):
 class Plot_lineAdmin(admin.ModelAdmin):
 
     list_display = ('name', 
-                    'no_of_plot_parts')
+                    'no_of_plot_parts',
+                    'charactersString',
+                    'groupsString',
+                    'groups_incl_charString', 
+                    'plot_is_finished' )
+
+    list_filter = [ 'plot_is_finished',
+                    'groups_incl_char',
+                    'groups',
+                    'characters']
 
     inlines = [PlotInlinePlot_line]
 
@@ -78,10 +87,15 @@ admin.site.register(Plot_line, Plot_lineAdmin)
 class PlotAdmin(admin.ModelAdmin):
 
     list_display = ('name', 
-                    'charactersString', 
-                    'groupsString', 
-                    'plot_linesString', 
-                    'plot_is_finished')
+                    'charactersString',
+                    'groupsString',
+                    'plot_linesString',
+                    'plot_is_finished' )
+
+    list_filter = [ 'plot_is_finished',
+                    'plot_lines',
+                    'groups',
+                    'characters']
 
     list_filter = ['groups', 'characters', 'plot_lines', 'plot_is_finished']
 

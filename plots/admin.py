@@ -10,6 +10,7 @@ class CharacterInlineGroupe(admin.TabularInline):
     model = Character.groups.through
     extra = 0
 
+
 class PlotInlineGroupe(admin.TabularInline):
     model = Plot.groups.through
     extra = 0
@@ -73,9 +74,10 @@ class Plot_lineAdmin(admin.ModelAdmin):
                     'plot_is_finished' )
 
     list_filter = [ 'plot_is_finished',
-                    'groups_incl_char',
-                    'groups',
-                    'characters']
+                    #'groups_incl_char',
+                    #'groups',
+                    #'characters'
+                    ]
 
     inlines = [PlotInlinePlot_line]
 
@@ -95,7 +97,8 @@ class PlotAdmin(admin.ModelAdmin):
     list_filter = [ 'plot_is_finished',
                     'plot_lines',
                     'groups',
-                    'characters']
+                    'characters'
+                    ]
 
     list_filter = ['groups', 'characters', 'plot_lines', 'plot_is_finished']
 

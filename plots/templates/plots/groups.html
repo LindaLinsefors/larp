@@ -2,7 +2,7 @@
 {% if open_groups %}
     <ul>
     {% for gruop in open_groups %}
-        <li><a href="/groups/{{ gruop.id }}/">{{ gruop.name }}</a></li>
+        <li><a href="/groups/{{ gruop.id }}/">{{ gruop.name }}</li>
     {% endfor %}
     </ul>
 {% else %}
@@ -17,5 +17,5 @@
     {% endfor %}
     </ul>
 {% else %}
-    <p>Thera are no such groups.</p>
+    <p>Ther are no such groups.</p>
 {% endif %}

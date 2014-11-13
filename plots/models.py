@@ -81,8 +81,9 @@ class Group(BasicModel):
         return self.members().count()
 
     def make_members_presentation(self):
-        self.members_presentation = '\n\n'.join( member.name + '\n' + member.presentation
-                                                  for member in self.members() )
+        self.members_presentation = '\n\n'.join( 
+                    member.name + '\n' + member.presentation
+                    for member in self.members() )
 
 
 def make_members_pressentation(modeladmin, request, queryset):

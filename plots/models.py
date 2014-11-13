@@ -13,6 +13,8 @@ class BasicModel(models.Model):
     def __unicode__(self):          # for Python 2 
         return unicode(self.name)
 
+    plot_is_finished = models.BooleanField(default=False)
+
 
 
 
@@ -22,7 +24,6 @@ class Plot(BasicModel):
     characters = models.ManyToManyField( 'Character', null=True, blank=True)
     groups = models.ManyToManyField( 'Group', null=True, blank=True)
     plot_lines = models.ManyToManyField( 'Plot_line', null=True, blank=True)
-    plot_is_finished = models.BooleanField(default=False)
 
     plot = models.TextField(blank=True, default='')
 
@@ -46,7 +47,6 @@ class Plot(BasicModel):
 class Character(BasicModel):
     groups = models.ManyToManyField( 'Group', null=True, blank=True)
     character_concept = models.CharField(max_length=50)
-    plot_is_finished = models.BooleanField(default=False)
 
     presentation = models.TextField(blank=True, default='', max_length=500)
     character_description = models.TextField(blank=True, default='', max_length=5000)
@@ -68,7 +68,6 @@ class Character(BasicModel):
 
     
 class Group(BasicModel):
-    plot_is_finished = models.BooleanField(default=False)
     group_description = models.TextField(blank=True, default='')
     seceret_comments = models.TextField(blank=True, default='')
     
@@ -102,7 +101,6 @@ def make_members_pressentation(modeladmin, request, queryset):
 
 
 class Plot_line(BasicModel):
-    plot_is_finished = models.BooleanField(default=False)
     summery = models.TextField(blank=True, default='')
 
     def plot_parts(self):

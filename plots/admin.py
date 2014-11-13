@@ -93,6 +93,13 @@ class PlotInlinePlot_line(admin.TabularInline):
 
 class Plot_lineAdmin(admin.ModelAdmin):
 
+    fields =       ('name', 
+                    'plot_is_finished',
+                    #'charactersString',
+                    #'groupsString',
+                    #'groups_incl_charString'
+                    )
+
     list_display = ('name', 
                     'no_of_plot_parts',
                     'charactersString',
@@ -117,6 +124,7 @@ admin.site.register(Plot_line, Plot_lineAdmin)
 
 class PlotAdmin(admin.ModelAdmin):
 
+
     list_display = ('name', 
                     'charactersString',
                     'groupsString',
@@ -129,7 +137,6 @@ class PlotAdmin(admin.ModelAdmin):
                     'characters'
                     ]
 
-    list_filter = ['groups', 'characters', 'plot_lines', 'plot_is_finished']
     actions = [make_finished, make_unfinished]
 
 

@@ -9,11 +9,17 @@ from django import forms
 class CharacterInlineGroupe(admin.TabularInline):
     model = Character.groups.through
     extra = 0
+    #raw_id_fields = ("character",)
+    fieldsets = [
+        (None,                  {'fields': ['character', 'group']}),
+
+    ]
 
 
 class PlotInlineGroupe(admin.TabularInline):
     model = Plot.groups.through
     extra = 0
+    
 
 class GroupAdmin(admin.ModelAdmin):
     fieldsets = [

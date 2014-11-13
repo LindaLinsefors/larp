@@ -50,6 +50,7 @@ class Character(BasicModel):
 
     character_description = models.TextField(blank=True, default='')
     comments_from_God = models.TextField(blank=True, default='')
+    comments_from_God.help_text='Comments on the character from GM to the player.'
 
     def groupsString(self):
         return ', '.join([group.name for group in self.groups.all()])

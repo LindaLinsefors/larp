@@ -14,20 +14,20 @@ make_unfinished.short_description = "Mark selected as plot is NOT finished"
 
 
 def make_open(modeladmin, request, queryset):
-    queryset.update(plot_is_finished = True)
+    queryset.update(is_open = True)
 make_open.short_description = "Open selectd groupe for registration"
 
 def make_closed(modeladmin, request, queryset):
-    queryset.update(plot_is_finished = False)
+    queryset.update(is_open = False)
 make_closed.short_description = "Close selectd groupe for registration"
 
 
 def publish_members(modeladmin, request, queryset):
-    queryset.update(plot_is_finished = True)
+    queryset.update(shows_members = True)
 publish_members = "Publish members pressentations for selected groups"
 
 def unpublish_members(modeladmin, request, queryset):
-    queryset.update(plot_is_finished = False)
+    queryset.update(shows_members = False)
 unpublish_members = "Un-publish members pressentations for selected groups"
 
 
@@ -79,8 +79,8 @@ class GroupAdmin(admin.ModelAdmin):
     actions = [ make_finished, 
                 make_unfinished, 
                 make_members_presentations,
-                publish_members,
-                unpublish_members,
+                publish_members, #Why does not this show
+                unpublish_members, #Why does not this show
                 make_closed,
                 make_open]
 

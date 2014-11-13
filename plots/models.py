@@ -91,11 +91,15 @@ class Group(BasicModel):
         characters = []
         for member in self.members():
             if member.character_concept == '':
-                characters.append(member.name + '\n' + member.presentation)
+                characters.append( 
+                        '<h2>' + member.name + '</h2>' +
+                        '\n<p>\n' + member.presentation + '\n</p>')
             else: 
-                characters.append(  member.name + ', ' +
-                                    member.character_concept +
-                                   '\n' + member.presentation)
+                characters.append(  
+                        '<h2>' + member.name + 
+                        ', <small> ' +  member.character_concept + ' </small>'
+                        + '</h2>' +
+                        '\n<p>\n' + member.presentation + '\n</p>')
      
         self.members_presentations = '\n\n'.join( characters )
 

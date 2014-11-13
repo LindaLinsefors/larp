@@ -3,8 +3,8 @@
 {{ group.group_description }}
 
 {% if group.shows_members %}
-    <h1>Mebers in this group</h1>
-    {{ group.members_presentations }}
+    <h1>Mebers of this group</h1>
+    {{ group.members_presentations|safe  }}
 {% endif %}
 
 

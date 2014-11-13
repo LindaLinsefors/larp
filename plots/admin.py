@@ -12,9 +12,30 @@ def make_unfinished(modeladmin, request, queryset):
     queryset.update(plot_is_finished = False)
 make_unfinished.short_description = "Mark selected as plot is NOT finished"
 
-def make_members_presentation(modeladmin, request, queryset):
+
+def make_open(modeladmin, request, queryset):
+    queryset.update(plot_is_finished = True)
+make_open.short_description = "Open selectd groupe for registration"
+
+def make_closed(modeladmin, request, queryset):
+    queryset.update(plot_is_finished = False)
+make_closed.short_description = "Close selectd groupe for registration"
+
+
+def publish_members(modeladmin, request, queryset):
+    queryset.update(plot_is_finished = True)
+publish_members = "Publish members pressentations for selected groups"
+
+def unpublish_members(modeladmin, request, queryset):
+    queryset.update(plot_is_finished = False)
+unpublish_members = "Un-publish members pressentations for selected groups"
+
+
+
+
+def make_members_presentations(modeladmin, request, queryset):
     for group in queryset:
-        group.make_members_presentation()
+        group.make_members_presentations()
         group.save()
 
 
@@ -36,20 +57,32 @@ class GroupAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                      {'fields': ['name',
                                                 ('is_open', 
-                                                 'public', 
-                                                 'show_members'),
+                                                 'shows_members'),
                                                 'plot_is_finished']}),
         ('Group description',       {'fields': ['group_description',
                                                 'seceret_comments'], 
                                      'classes': ['collapse']}),
-        ('Members presentation',    {'fields': ['members_presentation'], 
+        ('Members presentation',    {'fields': ['members_presentations'], 
                                      'classes': ['collapse']})
     ]
 
     inlines = [CharacterInlineGroupe, PlotInlineGroupe]
-    list_display = ('name', 'no_of_members', 'plot_is_finished')
-    list_filter = ['plot_is_finished']
-    actions = [make_finished, make_unfinished, make_members_presentation]
+
+    list_display = ('name', 
+                    'no_of_members',
+                    'plot_is_finished', 
+                    'is_open', 
+                    'shows_members')
+
+    list_filter = ['plot_is_finished', 'is_open', 'shows_members']
+
+    actions = [ make_finished, 
+                make_unfinished, 
+                make_members_presentations,
+                publish_members,
+                unpublish_members,
+                make_closed,
+                make_open]
 
 admin.site.register(Group, GroupAdmin)
 

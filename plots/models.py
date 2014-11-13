@@ -68,27 +68,26 @@ class Character(BasicModel):
 
     
 class Group(BasicModel):
-    is_open = models.BooleanField(default=False)
+    is_open = models.BooleanField('open', default=False)
     is_open.short_descripion = 'Open'
     is_open.help_text = 'Group is open for self registration by users'
 
     group_description = models.TextField(blank=True, default='')
-    public = models.BooleanField(default=False) 
-    public.help_text = 'Group decription is made public'
 
     seceret_comments = models.TextField(blank=True, default='')
     
-    members_presentation = models.TextField(blank=True, default='')    
-    show_members = models.BooleanField(default=False) 
-    show_members.help_text = 'Members presentation is made public'
+    members_presentations = models.TextField(blank=True, default='')    
+    shows_members = models.BooleanField(default=False) 
+    shows_members.help_text = 'Members presentation is made public'
     
     def members(self):
         return self.character_set.all()
     
     def no_of_members(self):
         return self.members().count()
+    no_of_members.short_descripion = '# members'
 
-    def make_members_presentation(self):
+    def make_members_presentations(self):
         characters = []
         for member in self.members():
             if member.character_concept == '':
@@ -98,7 +97,7 @@ class Group(BasicModel):
                                     member.character_concept +
                                    '\n' + member.presentation)
      
-        self.members_presentation = '\n\n'.join( characters )
+        self.members_presentations = '\n\n'.join( characters )
 
 
 

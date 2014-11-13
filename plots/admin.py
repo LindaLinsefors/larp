@@ -4,6 +4,20 @@ from django import forms
 
 
 
+def make_finished(modeladmin, request, queryset):
+    queryset.update(plot_is_finished = True)
+make_finished.short_description = "Mark selekcted as plot is finished"
+
+def make_unfinished(modeladmin, request, queryset):
+    queryset.update(plot_is_finished = False)
+make_unfinished.short_description = "Mark selekcted as plot is NOT finished"
+
+def make_members_pressentation(modeladmin, request, queryset):
+    for group in queryset:
+        group.make_members_pressentation()
+
+
+
 #Groups
 
 class CharacterInlineGroupe(admin.TabularInline):
@@ -29,12 +43,9 @@ class GroupAdmin(admin.ModelAdmin):
     ]
 
     inlines = [CharacterInlineGroupe, PlotInlineGroupe]
-
     list_display = ('name', 'no_of_members', 'plot_is_finished')
-
     list_filter = ['plot_is_finished']
-
-    actions = ['make_members_pressentation']
+    actions = [make_finished, make_unfinished]
 
 admin.site.register(Group, GroupAdmin)
 
@@ -63,6 +74,8 @@ class CharacterAdmin(admin.ModelAdmin):
     list_display = ('name', 'character_concept', 'groupsString', 'plot_is_finished')
     list_filter = ['groups','plot_is_finished']
     list_editable = ('character_concept',)
+    actions = [make_finished, make_unfinished]
+
 
 admin.site.register(Character, CharacterAdmin)
 
@@ -90,6 +103,8 @@ class Plot_lineAdmin(admin.ModelAdmin):
                     ]
 
     inlines = [PlotInlinePlot_line]
+    actions = [make_finished, make_unfinished]
+
 
 admin.site.register(Plot_line, Plot_lineAdmin)
 
@@ -111,6 +126,8 @@ class PlotAdmin(admin.ModelAdmin):
                     ]
 
     list_filter = ['groups', 'characters', 'plot_lines', 'plot_is_finished']
+    actions = [make_finished, make_unfinished]
+
 
 admin.site.register(Plot, PlotAdmin)
 

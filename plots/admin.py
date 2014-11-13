@@ -6,11 +6,11 @@ from django import forms
 
 def make_finished(modeladmin, request, queryset):
     queryset.update(plot_is_finished = True)
-make_finished.short_description = "Mark selekcted as plot is finished"
+make_finished.short_description = "Mark selected as plot is finished"
 
 def make_unfinished(modeladmin, request, queryset):
     queryset.update(plot_is_finished = False)
-make_unfinished.short_description = "Mark selekcted as plot is NOT finished"
+make_unfinished.short_description = "Mark selected as plot is NOT finished"
 
 def make_members_pressentation(modeladmin, request, queryset):
     for group in queryset:

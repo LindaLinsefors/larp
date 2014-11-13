@@ -48,9 +48,11 @@ class Character(BasicModel):
     character_concept = models.CharField(max_length=50)
     plot_is_finished = models.BooleanField(default=False)
 
-    character_description = models.TextField(blank=True, default='')
-    comments_from_God = models.TextField(blank=True, default='')
-    comments_from_God.help_text='Comments on the character from GM to the player.'
+    presentation = models.TextField(blank=True, default='', max_length=500)
+    character_description = models.TextField(blank=True, default='', max_length=5000)
+    comments_to_player = models.TextField(blank=True, default='')
+    seceret_comments = models.TextField(blank=True, default='')
+
 
     def groupsString(self):
         return ', '.join([group.name for group in self.groups.all()])
@@ -66,9 +68,12 @@ class Character(BasicModel):
 
     
 class Group(BasicModel):
-    group_description = models.TextField(blank=True, default='')
     plot_is_finished = models.BooleanField(default=False)
-
+    group_description = models.TextField(blank=True, default='')
+    seceret_comments = models.TextField(blank=True, default='')
+    
+        
+    
     def members(self):
         return Character.objects.filter(groups=self)
     

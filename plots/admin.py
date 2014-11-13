@@ -10,10 +10,6 @@ class CharacterInlineGroupe(admin.TabularInline):
     model = Character.groups.through
     extra = 0
     #raw_id_fields = ("character",)
-    fieldsets = [
-        (None,                  {'fields': ['character', 'group']}),
-
-    ]
 
 
 class PlotInlineGroupe(admin.TabularInline):
@@ -25,7 +21,8 @@ class GroupAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                  {'fields': ['name',
                                             'plot_is_finished']}),
-        ('Group description',   {'fields': ['group_description'], 
+        ('Group description',   {'fields': ['group_description',
+                                            'seceret_comments'], 
                                  'classes': ['collapse']})
     ]
 
@@ -46,12 +43,14 @@ class PlotInlineCharacter(admin.TabularInline):
 
 class CharacterAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,                      {'fields': ['name',
-                                                'character_concept',
+        (None,                      {'fields': [('name',
+                                                'character_concept'),
                                                 'groups',
                                                 'plot_is_finished']}),
-        ('Character description',   {'fields': ['character_description',
-                                                'comments_from_God'], 
+        ('Character description',   {'fields': ['presentation',
+                                                'character_description',
+                                                'comments_to_player',
+                                                'seceret_comments'], 
                                      'classes': ['collapse']})
     ]
 

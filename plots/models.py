@@ -83,7 +83,7 @@ class Group(BasicModel):
     show_members.help_text = 'Members presentation is made public'
     
     def members(self):
-        return Character.objects.filter(groups=self)
+        return self.character_set.all()
     
     def no_of_members(self):
         return self.members().count()
@@ -115,7 +115,7 @@ class Plot_line(BasicModel):
     summery = models.TextField(blank=True, default='')
 
     def plot_parts(self):
-        return Plot.objects.filter(plot_lines=self)
+        return self.plot_set.all()
     
     def no_of_plot_parts(self):
         return self.plot_parts().count()

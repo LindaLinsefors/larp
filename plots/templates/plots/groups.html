@@ -1,0 +1,21 @@
+<h1> Groups that are open to registration </h1>
+{% if open_groups %}
+    <ul>
+    {% for gruop in open_groups %}
+        <li><a href="/groups/{{ gruop.id }}/">{{ gruop.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Thera are no such groups.</p>
+{% endif %}
+
+<h1> Groups that are closed to registration </h1>
+{% if closed_groups %}
+    <ul>
+    {% for gruop in closed_groups %}
+        <li><a href="/groups/{{ gruop.id }}/">{{ gruop.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Thera are no such groups.</p>
+{% endif %}

@@ -114,21 +114,25 @@ class Plot_line(BasicModel):
 
     def characters(self):
         return Character.objects.filter(plot__in=self.plot_parts() )
-    characters.short_description = (
+    characters.help_text = (
          'Characters that have part in the plot line, not including individual group plots')
+    characters.short_description = 'Characters involved'
     def charactersString(self):
-        return ', '.join([character.name for character in self.character.all()])
+        return ', '.join([character.name for character in self.characters().all()])
     charactersString.string = True
+    charactersString.help_text = characters.help_text
     charactersString.short_description = characters.short_description
 
 
     def groups(self):
         return Group.objects.filter(plot__in=self.plot_parts() )
-    groups.short_description = (
+    groups.help_text = (
         'Groupes that have part in the plot line, not including individual character plots')
+    groups.short_description = 'Groupes involved'
     def groupsString(self):
-        return ', '.join([group.name for group in self.groups.all()])
+        return ', '.join([group.name for group in self.groups().all()])
     groupsString.string = True
+    groupsString.help_text = groups.help_text
     groupsString.short_description = groups.short_description
 
 
@@ -137,13 +141,14 @@ class Plot_line(BasicModel):
                     models.Q( plot__in=self.plot_parts() ) | 
                     models.Q( character__in=self.characters() )
                ).distinct()        
-    groups_incl_char.short_description = (
+    groups_incl_char.help_text = (
         'Groupes that have part in the plot line, including individual character plots')
-    groups_incl_char.query=True
+    groups_incl_char.short_description = 'Anyone in gruop is involved'
     def groups_incl_charString(self):
-        return ', '.join([group.name for group in self.groups_incl_char.all()])
+        return ', '.join([group.name for group in self.groups_incl_char().all()])
     groups_incl_charString.string = True
-    groups_incl_charString.short_description = groups.short_description
+    groups_incl_charString.short_description = groups_incl_char.short_description
+    groups_incl_charString.help_text = groups_incl_char.help_text
 
 
 

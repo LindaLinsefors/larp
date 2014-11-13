@@ -12,9 +12,10 @@ def make_unfinished(modeladmin, request, queryset):
     queryset.update(plot_is_finished = False)
 make_unfinished.short_description = "Mark selected as plot is NOT finished"
 
-def make_members_pressentation(modeladmin, request, queryset):
+def make_members_presentation(modeladmin, request, queryset):
     for group in queryset:
-        group.make_members_pressentation()
+        group.make_members_presentation()
+        group.save()
 
 
 
@@ -34,6 +35,9 @@ class PlotInlineGroupe(admin.TabularInline):
 class GroupAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                      {'fields': ['name',
+                                                ('is_open', 
+                                                 'public', 
+                                                 'show_members'),
                                                 'plot_is_finished']}),
         ('Group description',       {'fields': ['group_description',
                                                 'seceret_comments'], 
@@ -45,7 +49,7 @@ class GroupAdmin(admin.ModelAdmin):
     inlines = [CharacterInlineGroupe, PlotInlineGroupe]
     list_display = ('name', 'no_of_members', 'plot_is_finished')
     list_filter = ['plot_is_finished']
-    actions = [make_finished, make_unfinished]
+    actions = [make_finished, make_unfinished, make_members_presentation]
 
 admin.site.register(Group, GroupAdmin)
 

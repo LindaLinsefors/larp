@@ -46,7 +46,7 @@ class Plot(BasicModel):
 
 class Character(BasicModel):
     groups = models.ManyToManyField( 'Group', null=True, blank=True)
-    character_concept = models.CharField(max_length=50)
+    character_concept = models.CharField(max_length=50, blank=True)
 
     presentation = models.TextField(blank=True, default='', max_length=500)
     character_description = models.TextField(blank=True, default='', max_length=5000)
@@ -68,10 +68,19 @@ class Character(BasicModel):
 
     
 class Group(BasicModel):
+    is_open = models.BooleanField(default=False)
+    is_open.short_descripion = 'Open'
+    is_open.help_text = 'Group is open for self registration by users'
+
     group_description = models.TextField(blank=True, default='')
+    public = models.BooleanField(default=False) 
+    public.help_text = 'Group decription is made public'
+
     seceret_comments = models.TextField(blank=True, default='')
     
     members_presentation = models.TextField(blank=True, default='')    
+    show_members = models.BooleanField(default=False) 
+    show_members.help_text = 'Members presentation is made public'
     
     def members(self):
         return Character.objects.filter(groups=self)
@@ -80,14 +89,16 @@ class Group(BasicModel):
         return self.members().count()
 
     def make_members_presentation(self):
-        self.members_presentation = '\n\n'.join( 
-                    member.name + '\n' + member.presentation
-                    for member in self.members() )
-
-
-def make_members_pressentation(modeladmin, request, queryset):
-    for group in queryset:
-        group.make_members_pressentation()
+        characters = []
+        for member in self.members():
+            if member.character_concept == '':
+                characters.append(member.name + '\n' + member.presentation)
+            else: 
+                characters.append(  member.name + ', ' +
+                                    member.character_concept +
+                                   '\n' + member.presentation)
+     
+        self.members_presentation = '\n\n'.join( characters )
 
 
 
@@ -141,7 +152,7 @@ class Plot_line(BasicModel):
                ).distinct()        
     groups_incl_char.help_text = (
         'Groupes that have part in the plot line, including individual character plots')
-    groups_incl_char.short_description = 'Anyone in gruop is involved'
+    groups_incl_char.short_description = 'Someone in gruop is involved'
     def groups_incl_charString(self):
         return ', '.join([group.name for group in self.groups_incl_char().all()])
     groups_incl_charString.string = True

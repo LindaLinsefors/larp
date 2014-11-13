@@ -84,9 +84,9 @@ class Plot_lineAdmin(admin.ModelAdmin):
                     'plot_is_finished' )
 
     list_filter = [ 'plot_is_finished',
-                    'groups_incl_char',
-                    'groups',
-                    'characters'
+                    #'groups_incl_char',
+                    #'groups',
+                    #'characters'
                     ]
 
     inlines = [PlotInlinePlot_line]

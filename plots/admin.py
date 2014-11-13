@@ -19,11 +19,13 @@ class PlotInlineGroupe(admin.TabularInline):
 
 class GroupAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,                  {'fields': ['name',
-                                            'plot_is_finished']}),
-        ('Group description',   {'fields': ['group_description',
-                                            'seceret_comments'], 
-                                 'classes': ['collapse']})
+        (None,                      {'fields': ['name',
+                                                'plot_is_finished']}),
+        ('Group description',       {'fields': ['group_description',
+                                                'seceret_comments'], 
+                                     'classes': ['collapse']}),
+        ('Members presentation',    {'fields': ['members_presentation'], 
+                                     'classes': ['collapse']})
     ]
 
     inlines = [CharacterInlineGroupe, PlotInlineGroupe]
@@ -31,6 +33,8 @@ class GroupAdmin(admin.ModelAdmin):
     list_display = ('name', 'no_of_members', 'plot_is_finished')
 
     list_filter = ['plot_is_finished']
+
+    actions = ['make_members_pressentation']
 
 admin.site.register(Group, GroupAdmin)
 

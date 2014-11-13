@@ -72,13 +72,24 @@ class Group(BasicModel):
     group_description = models.TextField(blank=True, default='')
     seceret_comments = models.TextField(blank=True, default='')
     
-        
+    members_presentation = models.TextField(blank=True, default='')    
     
     def members(self):
         return Character.objects.filter(groups=self)
     
     def no_of_members(self):
         return self.members().count()
+
+    def make_members_presentation(self):
+        self.members_presentation = '\n\n'.join( member.name + '\n' + member.presentation
+                                                  for member in self.members() )
+
+
+def make_members_pressentation(modeladmin, request, queryset):
+    for group in queryset:
+        group.make_members_pressentation()
+
+
 
     # def plot_line(self):
     # plot_line.short_description = 'Part of plot line, not including individual character plots'

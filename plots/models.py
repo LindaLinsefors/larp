@@ -13,7 +13,7 @@ class BasicModel(models.Model):
     def __unicode__(self):          # for Python 2 
         return unicode(self.name)
 
-    plot_is_finished = models.BooleanField(default=False)
+    
 
 
 class RelationMeta(models.Model):
@@ -48,21 +48,28 @@ class PlotPice(BasicModel):
                 'PlotThread', null=True, blank=True, through='PlotConection')
 
     plot_pice = models.TextField(blank=True, default='')
+    
+    plot_is_finished = models.BooleanField(default=False)
+    plot_is_finished.verbose_name = 'plot pice is finiched'
+    plot_is_finished.short_description = 'plot is finiched'
 
     def groups_string(self):
         return ', '.join([group.name for group in self.groups.all()])
     groups_string.string = True
     groups_string.verbose_name = 'Groups'
+    groups_string.short_description = 'Groups'
 
     def characters_string(self):
         return ', '.join([character.name for character in self.characters.all()])
     characters_string.string = True
     characters_string.verbose_name = 'Characters'
+    characters_string.short_description = 'Characters'
 
     def plot_lines_string(self):
         return ', '.join([plot_line.name for plot_line in self.plot_lines.all()])
     plot_lines_string.string = True
     plot_lines_string.verbose_name = 'Plot threds'
+    plot_lines_string.short_description = 'Plot threds'
 
 
 
@@ -77,11 +84,15 @@ class Character(BasicModel):
     comments_to_player = models.TextField(blank=True, default='')
     seceret_comments = models.TextField(blank=True, default='')
 
+    plot_is_finished = models.BooleanField(default=False)
+    plot_is_finished.verbose_name = "character's plot is finniched"
+    plot_is_finished.short_description = "plot is finniched"
 
     def groups_string(self):
         return ', '.join([group.name for group in self.groups.all()])
     groups_string.string = True
     groups_string.verbose_name = 'Groups'
+    groups_string.short_description = 'Groups'
 
     # def plot_line(self):
     # plot_line.short_description = 'Part of plot line, not including group plots'
@@ -102,6 +113,9 @@ class Group(BasicModel):
     members_presentations = models.TextField(blank=True, default='')    
     shows_members = models.BooleanField(default=False) 
     shows_members.help_text = 'Members presentation is made public'
+
+    plot_is_finished = models.BooleanField(default=False)
+    plot_is_finished.verbose_name = "group's plot is finniched"
     
     def members(self):
         return self.character_set.all()
@@ -147,6 +161,9 @@ class PlotThread(BasicModel):
         return self.plot_parts().count()
     no_of_plot_parts.verbose_name = 'number of plot parts'
 
+    plot_is_finished = models.BooleanField(default=False)
+    plot_is_finished.verbose_name = "plot thread plot is finniched"
+
 
     def characters(self):
         return Character.objects.filter(plot__in=self.plot_parts() )
@@ -181,7 +198,7 @@ class PlotThread(BasicModel):
                ).distinct()        
     groups_incl_char.help_text = (
         'Groupes that have part in the plot line, including individual character plots')
-    groups_incl_char.short_description = 'Someone in gruop is involved'
+    groups_incl_char.short_description = 'Someone in group is involved'
     groups_incl_char.verbose_name = 'groups incl. personal plots'
     def groups_incl_char_string(self):
         return ', '.join([group.name for group in self.groups_incl_char().all()])

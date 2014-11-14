@@ -65,11 +65,11 @@ class PlotPice(BasicModel):
     characters_string.verbose_name = 'Characters'
     characters_string.short_description = 'Characters'
 
-    def plot_lines_string(self):
-        return ', '.join([plot_line.name for plot_line in self.plot_lines.all()])
-    plot_lines_string.string = True
-    plot_lines_string.verbose_name = 'Plot threds'
-    plot_lines_string.short_description = 'Plot threds'
+    def plot_threads_string(self):
+        return ', '.join([plot_thread.name for plot_thread in self.plot_threads.all()])
+    plot_threads_string.string = True
+    plot_threads_string.verbose_name = 'Plot threds'
+    plot_threads_string.short_description = 'Plot threds'
 
 
 
@@ -155,7 +155,7 @@ class PlotThread(BasicModel):
     summery = models.TextField(blank=True, default='')
 
     def plot_parts(self):
-        return self.plot_set.all()
+        return self.plotpice_set.all()
     
     def no_of_plot_parts(self):
         return self.plot_parts().count()
@@ -166,7 +166,7 @@ class PlotThread(BasicModel):
 
 
     def characters(self):
-        return Character.objects.filter(plot__in=self.plot_parts() )
+        return Character.objects.filter(plotpice__in=self.plot_parts() )
     characters.help_text = (
          'Characters that have part in the plot line, not including group plots')
     characters.short_description = 'Characters involved'
@@ -179,7 +179,7 @@ class PlotThread(BasicModel):
 
 
     def groups(self):
-        return Group.objects.filter(plot__in=self.plot_parts() )
+        return Group.objects.filter(plotpice__in=self.plot_parts() )
     groups.help_text = (
         'Groupes that have part in the plot line, not including individual character plots')
     groups.short_description = 'Groupes involved'
@@ -193,7 +193,7 @@ class PlotThread(BasicModel):
 
     def groups_incl_char(self):
         return Group.objects.filter(
-                    models.Q( plot__in=self.plot_parts() ) | 
+                    models.Q( plotpice__in=self.plot_parts() ) | 
                     models.Q( character__in=self.characters() )
                ).distinct()        
     groups_incl_char.help_text = (

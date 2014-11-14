@@ -160,7 +160,7 @@ class PlotPiceAdmin(admin.ModelAdmin):
     list_display = ('name', 
                     'characters_string',
                     'groups_string',
-                    'plot_lines_string',
+                    'plot_threads_string',
                     'plot_is_finished' )
 
     list_filter = [ 'plot_is_finished',

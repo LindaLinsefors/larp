@@ -173,7 +173,7 @@ class PlotPiceAdmin(admin.ModelAdmin):
     actions = [make_finished, make_unfinished]
 
 
-admin.site.register(Plot, PlotAdmin)
+admin.site.register(PlotPice, PlotPiceAdmin)
 
 
 

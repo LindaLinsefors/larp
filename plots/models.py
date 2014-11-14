@@ -17,33 +17,33 @@ class BasicModel(models.Model):
 
 
 class RelationMeta(models.Model):
-    rank = FloatField( default=0 )
+    rank = models.FloatField( default=0 )
     class Meta:
         abstract = True
         ordering = ['rank']
 
-class Membership(RelationMeta)
-    character = models.ForeginKey('Character')
-    Group = models.ForeginKey('Group')
+class Membership(RelationMeta):
+    character = models.ForeignKey('Character')
+    Group = models.ForeignKey('Group')
 
 class PlotConection(RelationMeta):
-    plot_pice = models.ForeginKey('PlotPice')
-    plot_thread = models.ForeginKey('PlotThread')
+    plot_pice = models.ForeignKey('PlotPice')
+    plot_thread = models.ForeignKey('PlotThread')
 
 class GroupPlotPice(RelationMeta):
-    plot_pice = models.ForeginKey('PlotPice')
-    group = models.ForeginKey('Group')
+    plot_pice = models.ForeignKey('PlotPice')
+    group = models.ForeignKey('Group')
 
 class PersonalPloPice(RelationMeta):
-    plot_pice = models.ForeginKey('PlotPice')
-    character = models.ForeginKey('Character')
+    plot_pice = models.ForeignKey('PlotPice')
+    character = models.ForeignKey('Character')
 
 
 class PlotPice(BasicModel):
     characters = models.ManyToManyField(
                 'Character', null=True, blank=True, through='PersonalPloPice')
     groups = models.ManyToManyField(
-                'Group', null=True, blank=True through='GroupPlotPice')
+                'Group', null=True, blank=True, through='GroupPlotPice')
     plot_thread = models.ManyToManyField( 
                 'PlotThred', null=True, blank=True, through='PlotConection')
 

@@ -85,8 +85,8 @@ class Character(BasicModel):
     seceret_comments = models.TextField(blank=True, default='')
 
     plot_is_finished = models.BooleanField(default=False)
-    plot_is_finished.verbose_name = "character's plot is finniched"
-    plot_is_finished.short_description = "plot is finniched"
+    plot_is_finished.verbose_name = "character's plot is finiched?"
+    plot_is_finished.short_description = "plot is finiched?"
 
     def groups_string(self):
         return ', '.join([group.name for group in self.groups.all()])
@@ -115,7 +115,7 @@ class Group(BasicModel):
     shows_members.help_text = 'Members presentation is made public'
 
     plot_is_finished = models.BooleanField(default=False)
-    plot_is_finished.verbose_name = "group's plot is finniched"
+    plot_is_finished.verbose_name = "group's plot is finiched?"
     
     def members(self):
         return self.character_set.all()
@@ -162,7 +162,7 @@ class PlotThread(BasicModel):
     no_of_plot_parts.verbose_name = 'number of plot parts'
 
     plot_is_finished = models.BooleanField(default=False)
-    plot_is_finished.verbose_name = "plot thread plot is finniched"
+    plot_is_finished.verbose_name = "plot thread plot is finiched?"
 
 
     def characters(self):

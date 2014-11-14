@@ -45,13 +45,10 @@ def make_members_presentations(modeladmin, request, queryset):
 class CharacterInlineGroupe(admin.TabularInline):
     model = Membership
     extra = 0
-    #raw_id_fields = ("character",)
-
 
 class PlotInlineGroupe(admin.TabularInline):
     model = GroupPlotPice
-    extra = 0
-    
+    extra = 0  
 
 class GroupAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -89,7 +86,12 @@ admin.site.register(Group, GroupAdmin)
 
 #Characters
 
-class PlotInlineCharacter(admin.TabularInline):
+class Group_in_Character(admin.TabularInline):
+    model = Membership
+    extra = 0
+    exclude = ('rank',)
+
+class PlotPice_in_Character(admin.TabularInline):
     model = PersonalPlotPice
     extra = 0
 
@@ -106,7 +108,7 @@ class CharacterAdmin(admin.ModelAdmin):
                                      'classes': ['collapse']})
     ]
 
-    inlines = [PlotInlineCharacter]
+    inlines = [Group_in_Character, PlotPice_in_Character]
 
     list_display = ('name', 'character_concept', 'groups_string', 'plot_is_finished')
     list_filter = ['groups','plot_is_finished']
@@ -119,7 +121,7 @@ admin.site.register(Character, CharacterAdmin)
 
 #PlotThread
 
-class PlotPiceInlinePlotThread(admin.TabularInline):
+class PlotPice_in_PlotThread(admin.TabularInline):
     model = PlotConection
     extra = 0
 
@@ -146,7 +148,7 @@ class PlotThreadAdmin(admin.ModelAdmin):
                     #'characters'
                     ]
 
-    inlines = [PlotPiceInlinePlotThread]
+    inlines = [PlotPice_in_PlotThread]
     actions = [make_finished, make_unfinished]
 
 
@@ -154,6 +156,22 @@ admin.site.register(PlotThread, PlotThreadAdmin)
 
 
 #PlotPice
+
+class Character_in_PlotPice(admin.TabularInline):
+    model = PersonalPlotPice
+    extra = 0
+    exclude = ('rank',)
+
+class Group_in_PlotPice(admin.TabularInline):
+    model = GroupPlotPice
+    extra = 0
+    exclude = ('rank',)
+
+class PlotThread_in_PlotPice(admin.TabularInline):
+    model = PlotConection
+    extra = 0
+    exclude = ('rank',)
+
 
 class PlotPiceAdmin(admin.ModelAdmin):
 
@@ -166,10 +184,13 @@ class PlotPiceAdmin(admin.ModelAdmin):
     list_filter = [ 'plot_is_finished',
                     'plot_threads',
                     'groups',
-                    'characters'
-                    ]
+                    'characters'    ]
 
     actions = [make_finished, make_unfinished]
+
+    inlines = [ Character_in_PlotPice, 
+                Group_in_PlotPice, 
+                PlotThread_in_PlotPice  ]
 
 
 admin.site.register(PlotPice, PlotPiceAdmin)

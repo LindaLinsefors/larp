@@ -34,25 +34,25 @@ class GroupPlotPice(RelationMeta):
     plot_pice = models.ForeignKey('PlotPice')
     group = models.ForeignKey('Group')
 
-class PersonalPloPice(RelationMeta):
+class PersonalPlotPice(RelationMeta):
     plot_pice = models.ForeignKey('PlotPice')
     character = models.ForeignKey('Character')
 
 
 class PlotPice(BasicModel):
     characters = models.ManyToManyField(
-                'Character', null=True, blank=True, through='PersonalPloPice')
+                'Character', null=True, blank=True, through='PersonalPlotPice')
     groups = models.ManyToManyField(
                 'Group', null=True, blank=True, through='GroupPlotPice')
-    plot_thread = models.ManyToManyField( 
-                'PlotThred', null=True, blank=True, through='PlotConection')
+    plot_threads = models.ManyToManyField( 
+                'PlotThread', null=True, blank=True, through='PlotConection')
 
     plot_pice = models.TextField(blank=True, default='')
 
-    def grous_string(self):
+    def groups_string(self):
         return ', '.join([group.name for group in self.groups.all()])
-    grous_string.string = True
-    grous_string.verbose_name = 'Groups'
+    groups_string.string = True
+    groups_string.verbose_name = 'Groups'
 
     def characters_string(self):
         return ', '.join([character.name for character in self.characters.all()])

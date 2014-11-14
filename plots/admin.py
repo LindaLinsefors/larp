@@ -90,14 +90,14 @@ admin.site.register(Group, GroupAdmin)
 #Characters
 
 class PlotInlineCharacter(admin.TabularInline):
-    model = PersonalPloPice
+    model = PersonalPlotPice
     extra = 0
 
 class CharacterAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                      {'fields': [('name',
                                                 'character_concept'),
-                                                'groups',
+                                                #'groups',
                                                 'plot_is_finished']}),
         ('Character description',   {'fields': ['presentation',
                                                 'character_description',
@@ -120,7 +120,7 @@ admin.site.register(Character, CharacterAdmin)
 #PlotThread
 
 class PlotPiceInlinePlotThread(admin.TabularInline):
-    model = PersonalPloPice
+    model = PlotConection
     extra = 0
 
 
@@ -157,7 +157,6 @@ admin.site.register(PlotThread, PlotThreadAdmin)
 
 class PlotPiceAdmin(admin.ModelAdmin):
 
-
     list_display = ('name', 
                     'characters_string',
                     'groups_string',
@@ -165,7 +164,7 @@ class PlotPiceAdmin(admin.ModelAdmin):
                     'plot_is_finished' )
 
     list_filter = [ 'plot_is_finished',
-                    'plot_lines',
+                    'plot_threads',
                     'groups',
                     'characters'
                     ]

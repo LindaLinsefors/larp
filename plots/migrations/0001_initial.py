@@ -15,10 +15,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=50)),
-                ('character_concept', models.CharField(max_length=50)),
                 ('plot_is_finished', models.BooleanField(default=False)),
-                ('character_description', models.TextField(default=b'', blank=True)),
-                ('comments_from_God', models.TextField(default=b'', help_text=b'Comments on the character from GM to the player.', blank=True)),
+                ('character_concept', models.CharField(max_length=50, blank=True)),
+                ('presentation', models.TextField(default=b'', max_length=500, blank=True)),
+                ('character_description', models.TextField(default=b'', max_length=5000, blank=True)),
+                ('comments_to_player', models.TextField(default=b'', blank=True)),
+                ('seceret_comments', models.TextField(default=b'', blank=True)),
             ],
             options={
                 'abstract': False,
@@ -30,8 +32,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=50)),
-                ('group_description', models.TextField(default=b'', blank=True)),
                 ('plot_is_finished', models.BooleanField(default=False)),
+                ('is_open', models.BooleanField(default=False, help_text=b'Group is open for self registration by users', verbose_name=b'open')),
+                ('group_description', models.TextField(default=b'', blank=True)),
+                ('seceret_comments', models.TextField(default=b'', blank=True)),
+                ('members_presentations', models.TextField(default=b'', blank=True)),
+                ('shows_members', models.BooleanField(default=False, help_text=b'Members presentation is made public')),
             ],
             options={
                 'abstract': False,
@@ -39,14 +45,66 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Plot',
+            name='GroupPlotPice',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('rank', models.FloatField(default=0)),
+                ('group', models.ForeignKey(to='plots.Group')),
+            ],
+            options={
+                'ordering': ['rank'],
+                'abstract': False,
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Membership',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('rank', models.FloatField(default=0)),
+                ('Group', models.ForeignKey(to='plots.Group')),
+                ('character', models.ForeignKey(to='plots.Character')),
+            ],
+            options={
+                'ordering': ['rank'],
+                'abstract': False,
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='PersonalPlotPice',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('rank', models.FloatField(default=0)),
+                ('character', models.ForeignKey(to='plots.Character')),
+            ],
+            options={
+                'ordering': ['rank'],
+                'abstract': False,
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='PlotConection',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('rank', models.FloatField(default=0)),
+            ],
+            options={
+                'ordering': ['rank'],
+                'abstract': False,
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='PlotPice',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=50)),
                 ('plot_is_finished', models.BooleanField(default=False)),
-                ('plot', models.TextField(default=b'', blank=True)),
-                ('characters', models.ManyToManyField(to='plots.Character', null=True, blank=True)),
-                ('groups', models.ManyToManyField(to='plots.Group', null=True, blank=True)),
+                ('plot_pice', models.TextField(default=b'', blank=True)),
+                ('characters', models.ManyToManyField(to='plots.Character', null=True, through='plots.PersonalPlotPice', blank=True)),
+                ('groups', models.ManyToManyField(to='plots.Group', null=True, through='plots.GroupPlotPice', blank=True)),
             ],
             options={
                 'abstract': False,
@@ -54,7 +112,7 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Plot_line',
+            name='PlotThread',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=50)),
@@ -67,15 +125,39 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.AddField(
-            model_name='plot',
-            name='plot_lines',
-            field=models.ManyToManyField(to='plots.Plot_line', null=True, blank=True),
+            model_name='plotpice',
+            name='plot_threads',
+            field=models.ManyToManyField(to='plots.PlotThread', null=True, through='plots.PlotConection', blank=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='plotconection',
+            name='plot_pice',
+            field=models.ForeignKey(to='plots.PlotPice'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='plotconection',
+            name='plot_thread',
+            field=models.ForeignKey(to='plots.PlotThread'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='personalplotpice',
+            name='plot_pice',
+            field=models.ForeignKey(to='plots.PlotPice'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='groupplotpice',
+            name='plot_pice',
+            field=models.ForeignKey(to='plots.PlotPice'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='character',
             name='groups',
-            field=models.ManyToManyField(to='plots.Group', null=True, blank=True),
+            field=models.ManyToManyField(to='plots.Group', null=True, through='plots.Membership', blank=True),
             preserve_default=True,
         ),
     ]

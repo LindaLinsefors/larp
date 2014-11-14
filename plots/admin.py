@@ -43,13 +43,13 @@ def make_members_presentations(modeladmin, request, queryset):
 #Groups
 
 class CharacterInlineGroupe(admin.TabularInline):
-    model = Character.groups.through
+    model = Membership
     extra = 0
     #raw_id_fields = ("character",)
 
 
 class PlotInlineGroupe(admin.TabularInline):
-    model = Plot.groups.through
+    model = GroupPlotPice
     extra = 0
     
 
@@ -90,7 +90,7 @@ admin.site.register(Group, GroupAdmin)
 #Characters
 
 class PlotInlineCharacter(admin.TabularInline):
-    model = Plot.characters.through
+    model = PersonalPloPice
     extra = 0
 
 class CharacterAdmin(admin.ModelAdmin):
@@ -108,7 +108,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
     inlines = [PlotInlineCharacter]
 
-    list_display = ('name', 'character_concept', 'groupsString', 'plot_is_finished')
+    list_display = ('name', 'character_concept', 'groups_string', 'plot_is_finished')
     list_filter = ['groups','plot_is_finished']
     list_editable = ('character_concept',)
     actions = [make_finished, make_unfinished]
@@ -117,27 +117,27 @@ class CharacterAdmin(admin.ModelAdmin):
 admin.site.register(Character, CharacterAdmin)
 
 
-#Plot_line
+#PlotThread
 
-class PlotInlinePlot_line(admin.TabularInline):
-    model = Plot.plot_lines.through
+class PlotPiceInlinePlotThread(admin.TabularInline):
+    model = PersonalPloPice
     extra = 0
 
 
-class Plot_lineAdmin(admin.ModelAdmin):
+class PlotThreadAdmin(admin.ModelAdmin):
 
     fields =       ('name', 
                     'plot_is_finished',
-                    #'charactersString',
-                    #'groupsString',
-                    #'groups_incl_charString'
+                    #'characters_string',
+                    #'groups_string',
+                    #'groups_incl_char_string'
                     )
 
     list_display = ('name', 
                     'no_of_plot_parts',
-                    'charactersString',
-                    'groupsString',
-                    'groups_incl_charString', 
+                    'characters_string',
+                    'groups_string',
+                    'groups_incl_char_string', 
                     'plot_is_finished' )
 
     list_filter = [ 'plot_is_finished',
@@ -146,22 +146,22 @@ class Plot_lineAdmin(admin.ModelAdmin):
                     #'characters'
                     ]
 
-    inlines = [PlotInlinePlot_line]
+    inlines = [PlotPiceInlinePlotThread]
     actions = [make_finished, make_unfinished]
 
 
-admin.site.register(Plot_line, Plot_lineAdmin)
+admin.site.register(PlotThread, PlotThreadAdmin)
 
 
-#Plot
+#PlotPice
 
-class PlotAdmin(admin.ModelAdmin):
+class PlotPiceAdmin(admin.ModelAdmin):
 
 
     list_display = ('name', 
-                    'charactersString',
-                    'groupsString',
-                    'plot_linesString',
+                    'characters_string',
+                    'groups_string',
+                    'plot_lines_string',
                     'plot_is_finished' )
 
     list_filter = [ 'plot_is_finished',

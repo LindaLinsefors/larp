@@ -16,36 +16,60 @@ class BasicModel(models.Model):
     plot_is_finished = models.BooleanField(default=False)
 
 
+class RelationMeta(models.Model):
+    rank = FloatField( default=0 )
+    class Meta:
+        abstract = True
+        ordering = ['rank']
+
+class Membership(RelationMeta)
+    character = models.ForeginKey('Character')
+    Group = models.ForeginKey('Group')
+
+class PlotConection(RelationMeta):
+    plot_pice = models.ForeginKey('PlotPice')
+    plot_thread = models.ForeginKey('PlotThread')
+
+class GroupPlotPice(RelationMeta):
+    plot_pice = models.ForeginKey('PlotPice')
+    group = models.ForeginKey('Group')
+
+class PersonalPloPice(RelationMeta):
+    plot_pice = models.ForeginKey('PlotPice')
+    character = models.ForeginKey('Character')
 
 
+class PlotPice(BasicModel):
+    characters = models.ManyToManyField(
+                'Character', null=True, blank=True, through='PersonalPloPice')
+    groups = models.ManyToManyField(
+                'Group', null=True, blank=True through='GroupPlotPice')
+    plot_thread = models.ManyToManyField( 
+                'PlotThred', null=True, blank=True, through='PlotConection')
 
+    plot_pice = models.TextField(blank=True, default='')
 
-class Plot(BasicModel):
-    characters = models.ManyToManyField( 'Character', null=True, blank=True)
-    groups = models.ManyToManyField( 'Group', null=True, blank=True)
-    plot_lines = models.ManyToManyField( 'Plot_line', null=True, blank=True)
-
-    plot = models.TextField(blank=True, default='')
-
-    def groupsString(self):
+    def grous_string(self):
         return ', '.join([group.name for group in self.groups.all()])
-    groupsString.string = True
-    groupsString.short_description = 'Groups'
+    grous_string.string = True
+    grous_string.verbose_name = 'Groups'
 
-    def charactersString(self):
+    def characters_string(self):
         return ', '.join([character.name for character in self.characters.all()])
-    charactersString.string = True
-    charactersString.short_description = 'Characters'
+    characters_string.string = True
+    characters_string.verbose_name = 'Characters'
 
-    def plot_linesString(self):
+    def plot_lines_string(self):
         return ', '.join([plot_line.name for plot_line in self.plot_lines.all()])
-    plot_linesString.string = True
-    plot_linesString.short_description = 'Plot lines'
+    plot_lines_string.string = True
+    plot_lines_string.verbose_name = 'Plot threds'
 
 
 
 class Character(BasicModel):
-    groups = models.ManyToManyField( 'Group', null=True, blank=True)
+    groups = models.ManyToManyField( 
+                'Group', null=True, blank=True, through='Membership')
+
     character_concept = models.CharField(max_length=50, blank=True)
 
     presentation = models.TextField(blank=True, default='', max_length=500)
@@ -54,10 +78,10 @@ class Character(BasicModel):
     seceret_comments = models.TextField(blank=True, default='')
 
 
-    def groupsString(self):
+    def groups_string(self):
         return ', '.join([group.name for group in self.groups.all()])
-    groupsString.string = True
-    groupsString.short_description = 'Groups'
+    groups_string.string = True
+    groups_string.verbose_name = 'Groups'
 
     # def plot_line(self):
     # plot_line.short_description = 'Part of plot line, not including group plots'
@@ -69,7 +93,6 @@ class Character(BasicModel):
     
 class Group(BasicModel):
     is_open = models.BooleanField('open', default=False)
-    is_open.short_descripion = 'Open'
     is_open.help_text = 'Group is open for self registration by users'
 
     group_description = models.TextField(blank=True, default='')
@@ -85,7 +108,7 @@ class Group(BasicModel):
     
     def no_of_members(self):
         return self.members().count()
-    no_of_members.short_descripion = '# members'
+    no_of_members.verbose_name = 'number of members'
 
     def make_members_presentations(self):
         characters = []
@@ -114,7 +137,7 @@ class Group(BasicModel):
 
 
 
-class Plot_line(BasicModel):
+class PlotThread(BasicModel):
     summery = models.TextField(blank=True, default='')
 
     def plot_parts(self):
@@ -122,18 +145,20 @@ class Plot_line(BasicModel):
     
     def no_of_plot_parts(self):
         return self.plot_parts().count()
+    no_of_plot_parts.verbose_name = 'number of plot parts'
 
 
     def characters(self):
         return Character.objects.filter(plot__in=self.plot_parts() )
     characters.help_text = (
-         'Characters that have part in the plot line, not including individual group plots')
+         'Characters that have part in the plot line, not including group plots')
     characters.short_description = 'Characters involved'
-    def charactersString(self):
+    def characters_string(self):
         return ', '.join([character.name for character in self.characters().all()])
-    charactersString.string = True
-    charactersString.help_text = characters.help_text
-    charactersString.short_description = characters.short_description
+    characters_string.string = True
+    characters_string.help_text = characters.help_text
+    characters_string.short_description = characters.short_description
+    characters_string.verbose_name = 'characters'
 
 
     def groups(self):
@@ -141,11 +166,12 @@ class Plot_line(BasicModel):
     groups.help_text = (
         'Groupes that have part in the plot line, not including individual character plots')
     groups.short_description = 'Groupes involved'
-    def groupsString(self):
+    def groups_string(self):
         return ', '.join([group.name for group in self.groups().all()])
-    groupsString.string = True
-    groupsString.help_text = groups.help_text
-    groupsString.short_description = groups.short_description
+    groups_string.string = True
+    groups_string.help_text = groups.help_text
+    groups_string.short_description = groups.short_description
+    groups_string.verbose_name = 'groups'
 
 
     def groups_incl_char(self):
@@ -156,11 +182,13 @@ class Plot_line(BasicModel):
     groups_incl_char.help_text = (
         'Groupes that have part in the plot line, including individual character plots')
     groups_incl_char.short_description = 'Someone in gruop is involved'
-    def groups_incl_charString(self):
+    groups_incl_char.verbose_name = 'groups incl. personal plots'
+    def groups_incl_char_string(self):
         return ', '.join([group.name for group in self.groups_incl_char().all()])
-    groups_incl_charString.string = True
-    groups_incl_charString.short_description = groups_incl_char.short_description
-    groups_incl_charString.help_text = groups_incl_char.help_text
+    groups_incl_char_string.string = True
+    groups_incl_char_string.short_description = groups_incl_char.short_description
+    groups_incl_char_string.help_text = groups_incl_char.help_text
+    groups_incl_char_string.verbose_name = groups_incl_char.verbose_name
 
 
 

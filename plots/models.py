@@ -18,6 +18,7 @@ class BasicModel(models.Model):
 
 class RelationMeta(models.Model):
     rank = models.FloatField( default=0 )
+    rank.help_text = 'Arrange in which order objects appear. Lowest to highest'
     class Meta:
         abstract = True
         ordering = ['rank']

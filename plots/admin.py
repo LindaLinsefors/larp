@@ -128,12 +128,18 @@ class PlotPice_in_PlotThread(admin.TabularInline):
 
 class PlotThreadAdmin(admin.ModelAdmin):
 
-    fields =       ('name', 
-                    'plot_is_finished',
-                    #'characters_string',
-                    #'groups_string',
-                    #'groups_incl_char_string'
-                    )
+    readonly_fields = ( 'characters_string',
+                        'groups_string',
+                        'groups_incl_char_string'   )
+
+    fieldsets = [
+        (None,  {'fields': ['name','summery',
+                            (   'characters_string',
+                                'groups_string',
+                                'groups_incl_char_string'   ),
+                            'plot_is_finished'  ] } )
+    ]
+
 
     list_display = ('name', 
                     'no_of_plot_parts',

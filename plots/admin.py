@@ -99,7 +99,6 @@ class CharacterAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                      {'fields': [('name',
                                                 'character_concept'),
-                                                #'groups',
                                                 'plot_is_finished']}),
         ('Character description',   {'fields': ['presentation',
                                                 'character_description',

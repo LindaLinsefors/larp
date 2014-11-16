@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.core import urlresolvers
+
 
 
 # Create your models here.
@@ -12,6 +14,10 @@ class BasicModel(models.Model):
         return self.name
     def __unicode__(self):          # for Python 2 
         return unicode(self.name)
+
+    def get_admin_url(self):
+        return urlresolvers.reverse("admin:%s_%s_change" %
+            (self._meta.app_label, self._meta.module_name), args=(self.id,))
 
     
 

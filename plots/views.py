@@ -7,10 +7,10 @@ from plots.models import Group
 
 
 def groups(request):
-    open_groups = Group.objects.filter(is_open=True)
+    open_groups = Group.objects.filter(is_open=True).exclude(secret=True)
     if open_groups.count() == 0: 
         open_groups = False
-    closed_groups = Group.objects.filter(is_open=False) 
+    closed_groups = Group.objects.filter(is_open=False).exclude(secret=True)
     if closed_groups.count() == 0: 
         closed_groups = False
     return render(request, 
@@ -20,8 +20,14 @@ def groups(request):
 
 
 
-def group(request, group_id):
-    group = get_object_or_404(Group, pk=group_id)
+def group(request, url):
+    name = ''
+    for char in url:
+        if char == '_': name += ' '
+        else:           name += char
+
+    group = get_object_or_404(Group, name=name)
+    if group.secret == True: raise Http404
     return render(request, 'plots/group.html', {'group': group} )
 
 

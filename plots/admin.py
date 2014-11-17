@@ -6,29 +6,37 @@ from django import forms
 
 def make_finished(modeladmin, request, queryset):
     queryset.update(plot_is_finished = True)
-make_finished.short_description = "Mark selected as plot is finished"
+make_finished.short_description = "Mark plots as finished"
 
 def make_unfinished(modeladmin, request, queryset):
     queryset.update(plot_is_finished = False)
-make_unfinished.short_description = "Mark selected as plot is NOT finished"
+make_unfinished.short_description = "Mark plots as not finished"
 
 
 def make_open(modeladmin, request, queryset):
     queryset.update(is_open = True)
-make_open.short_description = "Open selectd groupe for registration"
+make_open.short_description = "Open for registration"
 
 def make_closed(modeladmin, request, queryset):
     queryset.update(is_open = False)
-make_closed.short_description = "Close selectd groupe for registration"
+make_closed.short_description = "Close for registration"
 
 
 def publish_members(modeladmin, request, queryset):
-    queryset.update(shows_members = True)
-publish_members = "Publish members pressentations for selected groups"
+    queryset.update(show_members = True)
+publish_members.short_description = "Publish members pressentations"
 
 def unpublish_members(modeladmin, request, queryset):
-    queryset.update(shows_members = False)
-unpublish_members = "Un-publish members pressentations for selected groups"
+    queryset.update(show_members = False)
+unpublish_members.short_description = "Un-publish members pressentations"
+
+
+def make_secret(modeladmin, request, queryset):
+    queryset.update(secret = True)
+
+
+def make_not_secret(modeladmin, request, queryset):
+    queryset.update(secret = False)
 
 
 
@@ -54,10 +62,11 @@ class GroupAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                      {'fields': ['name',
                                                 ('is_open', 
-                                                 'shows_members'),
+                                                 'show_members',
+                                                 'secret'),
                                                 'plot_is_finished']}),
         ('Group description',       {'fields': ['group_description',
-                                                'seceret_comments'], 
+                                                'secret_comments'], 
                                      'classes': ['collapse']}),
         ('Members presentation',    {'fields': ['members_presentations'], 
                                      'classes': ['collapse']})
@@ -69,17 +78,20 @@ class GroupAdmin(admin.ModelAdmin):
                     'no_of_members',
                     'plot_is_finished', 
                     'is_open', 
-                    'shows_members')
+                    'show_members',
+                    'secret')
 
-    list_filter = ['plot_is_finished', 'is_open', 'shows_members']
+    list_filter = ['plot_is_finished', 'is_open', 'show_members']
 
-    actions = [ make_finished, 
+    actions = [ make_members_presentations,
+                publish_members, 
+                unpublish_members, 
+                make_finished, 
                 make_unfinished, 
-                make_members_presentations,
-                publish_members, #Why does not this show
-                unpublish_members, #Why does not this show
                 make_closed,
-                make_open]
+                make_open,
+                make_secret,
+                make_not_secret]
 
 admin.site.register(Group, GroupAdmin)
 
@@ -121,7 +133,7 @@ admin.site.register(Character, CharacterAdmin)
 #PlotThread
 
 class PlotPice_in_PlotThread(admin.TabularInline):
-    model = PlotConection
+    model = PlotPart
     extra = 0
 
 
@@ -173,7 +185,7 @@ class Group_in_PlotPice(admin.TabularInline):
     exclude = ('rank',)
 
 class PlotThread_in_PlotPice(admin.TabularInline):
-    model = PlotConection
+    model = PlotPart
     extra = 0
     exclude = ('rank',)
 

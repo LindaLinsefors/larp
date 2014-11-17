@@ -1,6 +1,6 @@
 from django.db import models
 
-from django.core import urlresolvers
+from django.core import urlresolvers, validators
 
 
 
@@ -33,7 +33,7 @@ class Membership(RelationMeta):
     character = models.ForeignKey('Character')
     Group = models.ForeignKey('Group')
 
-class PlotConection(RelationMeta):
+class PlotPart(RelationMeta):
     plot_pice = models.ForeignKey('PlotPice')
     plot_thread = models.ForeignKey('PlotThread')
 
@@ -52,7 +52,7 @@ class PlotPice(BasicModel):
     groups = models.ManyToManyField(
                 'Group', null=True, blank=True, through='GroupPlotPice')
     plot_threads = models.ManyToManyField( 
-                'PlotThread', null=True, blank=True, through='PlotConection')
+                'PlotThread', null=True, blank=True, through='PlotPart')
 
     plot_pice = models.TextField(blank=True, default='')
     
@@ -115,23 +115,34 @@ class Character(BasicModel):
 
     # def plot_line_by_groups(self):
     # plot_line_by_groups.short_description = 'Part of plot line, including group plots'
-        
-
+      
+  
     
 class Group(BasicModel):
+
+    def url(self):
+        ret = ''
+        for char in self.name:
+            if char == ' ':  ret += '_'
+            else:           ret += char
+        return ret
+
     is_open = models.BooleanField('open', default=False)
     is_open.help_text = 'Group is open for self registration by users'
-
-    group_description = models.TextField(blank=True, default='')
-
-    seceret_comments = models.TextField(blank=True, default='')
-    
-    members_presentations = models.TextField(blank=True, default='')    
-    shows_members = models.BooleanField(default=False) 
-    shows_members.help_text = 'Members presentation is made public'
+       
+    show_members = models.BooleanField(default=False) 
+    show_members.help_text = 'Members presentation is made public'
 
     plot_is_finished = models.BooleanField(default=False)
     plot_is_finished.verbose_name = "group's plot is finiched"
+
+    secret = models.BooleanField(default=True)
+    secret.help_text = 'Group is not visible on the web page'
+
+    group_description = models.TextField(blank=True, default='')
+    members_presentations = models.TextField(blank=True, default='')
+    secret_comments = models.TextField(blank=True, default='')
+
     
     def members(self):
         return self.character_set.all()

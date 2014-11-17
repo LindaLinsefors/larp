@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib import auth
 from django.core import urlresolvers, validators
 
 
@@ -81,6 +81,9 @@ class PlotPice(BasicModel):
 
 
 class Character(BasicModel):
+    
+    user = models.ForeignKey(auth.models.User, null=True, default=None )  
+    
     groups = models.ManyToManyField( 
                 'Group', null=True, blank=True, through='Membership')
 

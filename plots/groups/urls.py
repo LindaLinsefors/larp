@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from plots import views
+from plots.groups import views
 
 urlpatterns = [
 

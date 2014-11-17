@@ -2,7 +2,7 @@
 {% if open_groups %}
     <ul>
     {% for gruop in open_groups %}
-        <li><a href="{% url 'plots:group' gruop.url %}">{{ gruop.name }}</a></li>
+        <li><a href="{% url 'groups:group' gruop.url %}">{{ gruop.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
@@ -13,7 +13,7 @@
 {% if closed_groups %}
     <ul>
     {% for gruop in closed_groups %}
-        <li><a href="{% url 'plots:group' gruop.url %}">{{ gruop.name }}</a></li>
+        <li><a href="{% url 'groups:group' gruop.url %}">{{ gruop.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

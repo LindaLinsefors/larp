@@ -3,18 +3,28 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
-from django.forms import ModelForm
+from django import forms
 
-from plots.models import Character
+from plots.models import Character, Group
 
 
-class YourCharacterForm(ModelForm):
+class CharacterForm(forms.ModelForm):
     class Meta:
         model = Character
         fields = [  'name', 
                     'character_concept', 
                     'presentation', 
                     'character_description'   ]
+
+
+
+class GroupForm(forms.Form):
+    groups = forms.MultipleChoiceField(
+                    widget  = forms.CheckboxSelectMultiple , 
+                    choices = [ (group, group.name) 
+                                for group
+                                in Group.objects.filter(is_open=True)   ] 
+    ) 
 
 
 def index(request): 
@@ -25,12 +35,13 @@ def index(request):
 def new(request):
     if request.method != 'POST':
         return render(request, 'plots/your_character_edit.html',
-                { 'form': YourCharacterForm()   }
+               {'character_form': CharacterForm(),
+                'group_form': GroupForm()  }
         )
 
     character=Character(user=request.user)
-    form = YourCharacterForm(request.POST, instance=character)
-    form.save()
+    character_form = CharacterForm(request.POST, instance=character)
+    character_form.save()
 
     return HttpResponseRedirect(
             reverse('your_characters:character', args=(character.id,) ))
@@ -42,11 +53,17 @@ def character(request,id):
         raise PermissionDenied
 
     if request.method == 'POST':
-        form = YourCharacterForm(request.POST, instance=character)
-        form.save()
-    
+        character_form = CharacterForm(request.POST, instance=character)
+        character_form.save()
+        group_form = GroupForm(request.POST)
+        
+    else: 
+        group_data = {'groups': character.groups.filter(is_open=True)}        
+        group_form = GroupForm(group_data)
+
     return render(request, 'plots/your_character_edit.html',
-            { 'form': YourCharacterForm(instance=character)   }
+               {'character_form': CharacterForm(instance=character),
+                'group_form': group_form  }   
     )
 
 

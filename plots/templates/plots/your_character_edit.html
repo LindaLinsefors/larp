@@ -1,5 +1,10 @@
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ group_form }}
+    {{ character_form.as_p }}
     <input type="submit" value="Save" />
 </form>
+
+<a href="{% url 'your_characters:index' %}">
+Back to charater list
+</a>

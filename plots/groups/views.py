@@ -16,7 +16,7 @@ def groups(request):
     return render(request, 
                   'plots/groups.html', 
                   {'open_groups': open_groups, 
-                   'closed_groups': closed_groups,} )
+                   'closed_groups': closed_groups} )
 
 
 

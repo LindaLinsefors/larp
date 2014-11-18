@@ -28,7 +28,7 @@ def new(request):
                 { 'form': YourCharacterForm()   }
         )
 
-    character=Character()
+    character=Character(user=request.user)
     form = YourCharacterForm(request.POST, instance=character)
     form.save()
 

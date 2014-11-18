@@ -4,10 +4,7 @@
     {% for character in character_list %}
         <h2>        
         <li><a href="{% url 'your_characters:character' character.id %}">
-        {{ character.name }}
-        {% if not character.character_concept == '' %}
-            , <small>{{ character.character_concept }}</small>
-        {% endif %}
+        {{ character.heading|safe }}
         </a>
         {% if character.groups.all %}
             -

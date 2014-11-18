@@ -84,6 +84,13 @@ class Character(BasicModel):
     
     user = models.ForeignKey(auth.models.User, null=True, blank=True, default=None )  
     
+    def heading(self):
+        if self.character_concept == '':
+            return self.name
+        else: 
+            return self.name + ', <small> ' +  self.character_concept + ' </small>'
+
+    
     groups = models.ManyToManyField( 
                 'Group', null=True, blank=True, through='Membership')
 
@@ -157,17 +164,10 @@ class Group(BasicModel):
     def make_members_presentations(self):
         characters = []
         for member in self.members():
-            if member.character_concept == '':
-                characters.append( 
-                        '<h2>' + member.name + '</h2>' +
+            characters.append( 
+                        '<h2>' + member.heading() + '</h2>' +
                         '\n<p>\n' + member.presentation + '\n</p>')
-            else: 
-                characters.append(  
-                        '<h2>' + member.name + 
-                        ', <small> ' +  member.character_concept + ' </small>'
-                        + '</h2>' +
-                        '\n<p>\n' + member.presentation + '\n</p>')
-     
+
         self.members_presentations = '\n\n'.join( characters )
 
 

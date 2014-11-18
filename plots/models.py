@@ -31,7 +31,7 @@ class RelationMeta(models.Model):
 
 class Membership(RelationMeta):
     character = models.ForeignKey('Character')
-    Group = models.ForeignKey('Group')
+    group = models.ForeignKey('Group')
 
 class PlotPart(RelationMeta):
     plot_pice = models.ForeignKey('PlotPice')

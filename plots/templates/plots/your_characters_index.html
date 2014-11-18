@@ -1,0 +1,30 @@
+<h1> Your characters </h1>
+{% if character_list %}
+    <ul>
+    {% for character in character_list %}
+        <h2>        
+        <li><a href="{% url 'your_characters:character' character.id %}">
+        {{ character.name }}
+        {% if not character.character_concept == '' %}
+            , <small>{{ character.character_concept }}</small>
+        {% endif %}
+        </a>
+        {% if character.groups.all %}
+            -
+            {% for group in character.groups.all %}
+                {% if forloop.counter != 1 %},{% endif %}
+                {% if group.secret = True %}
+                    {{ group.name }}
+                {% else %}
+                    <a href="{% url 'groups:group' group.url %}">{{ group.name }}</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </h2>
+        <p>{{ character.presentation }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no characters.</p>
+{% endif %}

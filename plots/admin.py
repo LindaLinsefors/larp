@@ -101,7 +101,6 @@ admin.site.register(Group, GroupAdmin)
 class Group_in_Character(admin.TabularInline):
     model = Membership
     extra = 0
-    exclude = ('rank',)
 
 class PlotPice_in_Character(admin.TabularInline):
     model = PersonalPlotPice
@@ -110,7 +109,7 @@ class PlotPice_in_Character(admin.TabularInline):
 class CharacterAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                      {'fields': [('name',
-                                                'character_concept'),
+                                                'character_concept','user'),
                                                 'plot_is_finished']}),
         ('Character description',   {'fields': ['presentation',
                                                 'character_description',
@@ -121,7 +120,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
     inlines = [Group_in_Character, PlotPice_in_Character]
 
-    list_display = ('name', 'character_concept', 'groups_string', 'plot_is_finished')
+    list_display = ('name', 'character_concept', 'user', 'groups_string', 'plot_is_finished')
     list_filter = ['groups','plot_is_finished']
     list_editable = ('character_concept',)
     actions = [make_finished, make_unfinished]

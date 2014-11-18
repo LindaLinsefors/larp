@@ -82,7 +82,7 @@ class PlotPice(BasicModel):
 
 class Character(BasicModel):
     
-    user = models.ForeignKey(auth.models.User, null=True, default=None )  
+    user = models.ForeignKey(auth.models.User, null=True, blank=True, default=None )  
     
     groups = models.ManyToManyField( 
                 'Group', null=True, blank=True, through='Membership')

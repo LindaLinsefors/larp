@@ -8,7 +8,7 @@ from django import forms
 from plots.models import Character, Group, Membership
 
 
-class CharacterForm(forms.ModelForm):
+class YourCharacterFormBasic(forms.ModelForm):
     class Meta:
         model = Character
         fields = [  'name', 
@@ -17,16 +17,36 @@ class CharacterForm(forms.ModelForm):
                     'character_description'   ]
 
 
-def GroupForm(*args, **kw):
-    class GroupFormClass(forms.Form):
+def YourCharacterForm(*args, **kw):
+    class YourCharacterFormClass(YourCharacterFormBasic):
         groups = forms.MultipleChoiceField(
                     required = False,
                     widget  = forms.CheckboxSelectMultiple , 
                     choices = [ (group, group.name) 
                                 for group
                                 in Group.objects.filter(is_open=True)   ] 
-        )
-    return GroupFormClass(*args, **kw)
+                    )
+
+        def __init__(self, *args, **kw):
+            YourCharacterFormBasic.__init__(self, *args, **kw)
+            if kw.has_key('instance'):
+                self.fields['groups'].initial = self.instance.groups.filter(is_open=True)
+    
+        def get_initial(self):
+            initial = YourCharacterFormBasic.get_initial(self)
+
+        def save(self):
+            self.is_valid()
+            YourCharacterFormBasic.save(self)
+            old_member_groups = self.instance.groups.filter(is_open=True)
+            new_member_groups = self.cleaned_data['groups']
+            for group in Group.objects.filter(is_open=True):
+                if (group not in old_member_groups) and (group.name in new_member_groups):
+                    Membership(group=group, character=self.instance).save()
+                elif (group in old_member_groups) and (group.name not in new_member_groups):
+                    Membership.objects.get(group=group, character=self.instance).delete()   
+            
+    return YourCharacterFormClass(*args, **kw)
 
 
 def index(request): 
@@ -35,25 +55,21 @@ def index(request):
     )
 
 def new(request):
-    if request.method != 'POST':
-        return render(request, 'plots/your_character_edit.html',
-               {'character_form': CharacterForm(),
-                'group_form': GroupForm()  }
-        )
+    if request.method == 'POST':
+        character_form = YourCharacterForm(request.POST)
+        if character_form.is_valid():
+            character = Character(user=request.user)
+            character.save()
+            character_form = YourCharacterForm(request.POST, instance=character )
+            character_form.save()
+            print character.id
+            return HttpResponseRedirect(            
+                reverse('your_characters:character', args=(character.id,) ))
+    else:
+        character_form = YourCharacterForm()
 
-    character=Character(user=request.user)
-    character_form = CharacterForm(request.POST, instance=character)
-    character_form.save()
-    
-    group_form = GroupForm(request.POST) 
-    group_form.is_valid() 
-    for group in Group.objects.filter(is_open=True):
-        if group.name in group_form.cleaned_data['groups']:
-            Membership(group=group, character=character).save()
-    
-
-    return HttpResponseRedirect(
-            reverse('your_characters:character', args=(character.id,) ))
+    return render(request, 'plots/your_character_edit.html',
+               {'character_form': character_form} )
         
 
 def character(request, id):
@@ -62,27 +78,16 @@ def character(request, id):
         raise PermissionDenied
 
     if request.method == 'POST':
-        character_form = CharacterForm(request.POST, instance=character)
-        character_form.save()
-
-        group_form = GroupForm(request.POST)
-        group_form.is_valid()
-        old_member_groups = character.groups.filter(is_open=True)
-        new_member_groups = group_form.cleaned_data['groups']
-        for group in Group.objects.filter(is_open=True):
-            if (group not in old_member_groups) and (group.name in new_member_groups):
-                Membership(group=group, character=character).save()
-            elif (group.name in old_member_groups) and (group not in new_member_groups):
-                Membership.objects.get(group=group, character=character).delete()
-
+        character_form = YourCharacterForm(request.POST, instance=character)
+        if character_form.is_valid():
+            character_form.save()
     else: 
-        group_data = {'groups': character.groups.filter(is_open=True)}        
-        group_form = GroupForm(group_data)
+        character_form = YourCharacterForm(instance=character)     
 
     return render(request, 'plots/your_character_edit.html',
-               {'character_form': CharacterForm(instance=character),
-                'group_form': group_form  }   
-    )
+           {'character_form': character_form}
+    )     
+
 
 
 

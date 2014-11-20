@@ -34,7 +34,6 @@ class BasicPlotRelation(BasicRelation):
     plot_pice_name = models.ForeignKey('PlotPice')
     def plot_pice(self):
         return self.plot_pice_name.plot_pice
-    #plot_pice.string = True
 
     class Meta(BasicRelation.Meta):
         abstract = True
@@ -47,6 +46,7 @@ class Membership(BasicRelation):
     group = models.ForeignKey('Group')
     class Meta(BasicPlotRelation.Meta):
         unique_together = (("group", "character"),)
+
 
 class PlotPart(BasicPlotRelation):
     plot_thread = models.ForeignKey('PlotThread')
@@ -81,19 +81,16 @@ class PlotPice(BasicModel):
 
     def groups_string(self):
         return ',\n '.join([group.name for group in self.groups.all()])
-    groups_string.string = True
     groups_string.verbose_name = 'Groups'
     groups_string.short_description = 'Groups'
 
     def characters_string(self):
         return ',\n '.join([character.name for character in self.characters.all()])
-    characters_string.string = True
     characters_string.verbose_name = 'Characters'
     characters_string.short_description = 'Characters'
 
     def plot_threads_string(self):
         return ',\n '.join([plot_thread.name for plot_thread in self.plot_threads.all()])
-    plot_threads_string.string = True
     plot_threads_string.verbose_name = 'Plot threds'
     plot_threads_string.short_description = 'Plot threds'
 
@@ -135,7 +132,6 @@ class Character(BasicModel):
 
     def groups_string(self):
         return ', '.join([group.name for group in self.groups.all()])
-    groups_string.string = True
     groups_string.verbose_name = 'Groups'
     groups_string.short_description = 'Groups'
 
@@ -221,7 +217,6 @@ class PlotThread(BasicModel):
     characters.short_description = 'Characters involved'
     def characters_string(self):
         return ',\n '.join([character.name for character in self.characters().all()])
-    characters_string.string = True
     characters_string.help_text = characters.help_text
     characters_string.short_description = characters.short_description
     characters_string.verbose_name = 'characters'
@@ -234,7 +229,6 @@ class PlotThread(BasicModel):
     groups.short_description = 'Groupes involved'
     def groups_string(self):
         return ',\n '.join([group.name for group in self.groups().all()])
-    groups_string.string = True
     groups_string.help_text = groups.help_text
     groups_string.short_description = groups.short_description
     groups_string.verbose_name = 'groups'
@@ -251,7 +245,6 @@ class PlotThread(BasicModel):
     groups_incl_char.verbose_name = 'groups incl. personal plots'
     def groups_incl_char_string(self):
         return ',\n '.join([group.name for group in self.groups_incl_char().all()])
-    groups_incl_char_string.string = True
     groups_incl_char_string.short_description = groups_incl_char.short_description
     groups_incl_char_string.help_text = groups_incl_char.help_text
     groups_incl_char_string.verbose_name = groups_incl_char.verbose_name

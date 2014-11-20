@@ -22,7 +22,7 @@ class BasicModel(models.Model):
     
 
 
-class RelationMeta(models.Model):
+class BasicRelation(models.Model):
     rank = models.FloatField( default=0 )
     rank.help_text = 'Arrange in which order objects appear. Lowest to highest'
     class Meta:
@@ -30,30 +30,38 @@ class RelationMeta(models.Model):
         ordering = ['rank']
 
 
-class PlotRelationMeta(RelationMeta):
+class BasicPlotRelation(BasicRelation):
     plot_pice_name = models.ForeignKey('PlotPice')
     def plot_pice(self):
         return self.plot_pice_name.plot_pice
     #plot_pice.string = True
 
-    class Meta(RelationMeta.Meta):
+    class Meta(BasicRelation.Meta):
         abstract = True
         
     
     
 
-class Membership(RelationMeta):
+class Membership(BasicRelation):
     character = models.ForeignKey('Character')
     group = models.ForeignKey('Group')
+    class Meta(BasicPlotRelation.Meta):
+        unique_together = (("group", "character"),)
 
-class PlotPart(PlotRelationMeta):
+class PlotPart(BasicPlotRelation):
     plot_thread = models.ForeignKey('PlotThread')
+    class Meta(BasicPlotRelation.Meta):
+        unique_together = (("plot_thread", "plot_pice_name"),)
 
-class GroupPlotPice(PlotRelationMeta):
+class GroupPlotPice(BasicPlotRelation):
     group = models.ForeignKey('Group')
+    class Meta(BasicPlotRelation.Meta):
+        unique_together = (("group", "plot_pice_name"),)
 
-class PersonalPlotPice(PlotRelationMeta):
+class PersonalPlotPice(BasicPlotRelation):
     character = models.ForeignKey('Character')
+    class Meta(BasicPlotRelation.Meta):
+        unique_together = (("character", "plot_pice_name"),)
 
 
 

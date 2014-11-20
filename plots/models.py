@@ -29,21 +29,32 @@ class RelationMeta(models.Model):
         abstract = True
         ordering = ['rank']
 
+
+class PlotRelationMeta(RelationMeta):
+    plot_pice_name = models.ForeignKey('PlotPice')
+    def plot_pice(self):
+        return self.plot_pice_name.plot_pice
+    #plot_pice.string = True
+
+    class Meta(RelationMeta.Meta):
+        abstract = True
+        
+    
+    
+
 class Membership(RelationMeta):
     character = models.ForeignKey('Character')
     group = models.ForeignKey('Group')
 
-class PlotPart(RelationMeta):
-    plot_pice = models.ForeignKey('PlotPice')
+class PlotPart(PlotRelationMeta):
     plot_thread = models.ForeignKey('PlotThread')
 
-class GroupPlotPice(RelationMeta):
-    plot_pice = models.ForeignKey('PlotPice')
+class GroupPlotPice(PlotRelationMeta):
     group = models.ForeignKey('Group')
 
-class PersonalPlotPice(RelationMeta):
-    plot_pice = models.ForeignKey('PlotPice')
+class PersonalPlotPice(PlotRelationMeta):
     character = models.ForeignKey('Character')
+
 
 
 class PlotPice(BasicModel):

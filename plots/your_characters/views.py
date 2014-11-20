@@ -24,8 +24,7 @@ def YourCharacterForm(*args, **kw):
                     widget  = forms.CheckboxSelectMultiple , 
                     choices = [ (group, group.name) 
                                 for group
-                                in Group.objects.filter(is_open=True)   ] 
-                    )
+                                in Group.objects.filter(is_open=True)   ] )
 
         def __init__(self, *args, **kw):
             YourCharacterFormBasic.__init__(self, *args, **kw)
@@ -51,8 +50,8 @@ def YourCharacterForm(*args, **kw):
 
 def index(request): 
     return render(request, 'plots/your_characters_index.html',
-            { 'character_list':Character.objects.filter(user=request.user) }
-    )
+            { 'character_list': Character.objects.filter(user=request.user) }    )
+
 
 def new(request):
     if request.method == 'POST':
@@ -64,7 +63,7 @@ def new(request):
             character_form.save()
             print character.id
             return HttpResponseRedirect(            
-                reverse('your_characters:character', args=(character.id,) ))
+                reverse('your_characters:character', args=(character.id,))  )
     else:
         character_form = YourCharacterForm()
 
@@ -85,8 +84,7 @@ def character(request, id):
         character_form = YourCharacterForm(instance=character)     
 
     return render(request, 'plots/your_character_edit.html',
-           {'character_form': character_form}
-    )     
+           {'character_form': character_form}   )     
 
 
 

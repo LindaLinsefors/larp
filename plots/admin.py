@@ -48,13 +48,23 @@ def make_members_presentations(modeladmin, request, queryset):
 
 
 
+
+#PlotPice
+class PlotPiceInline(admin.TabularInline):
+    extra = 0
+    fields = ('plot_pice_name','plot_pice','rank')
+    readonly_fields = ( 'plot_pice', )
+
+
+
+
 #Groups
 
-class CharacterInlineGroupe(admin.TabularInline):
+class Character_in_Groupe(admin.TabularInline):
     model = Membership
     extra = 0
 
-class PlotInlineGroupe(admin.TabularInline):
+class PlotPice_in_Groupe(PlotPiceInline):
     model = GroupPlotPice
     extra = 0  
 
@@ -72,7 +82,7 @@ class GroupAdmin(admin.ModelAdmin):
                                      'classes': ['collapse']})
     ]
 
-    inlines = [CharacterInlineGroupe, PlotInlineGroupe]
+    inlines = [Character_in_Groupe, PlotPice_in_Groupe]
 
     list_display = ('name', 
                     'no_of_members',
@@ -96,15 +106,19 @@ class GroupAdmin(admin.ModelAdmin):
 admin.site.register(Group, GroupAdmin)
 
 
+
+
 #Characters
 
 class Group_in_Character(admin.TabularInline):
     model = Membership
     extra = 0
+    exclude = ('rank',)
 
-class PlotPice_in_Character(admin.TabularInline):
+class PlotPice_in_Character(PlotPiceInline):
     model = PersonalPlotPice
-    extra = 0
+    extra = 0  
+ 
 
 class CharacterAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -124,16 +138,15 @@ class CharacterAdmin(admin.ModelAdmin):
     list_filter = ['groups','plot_is_finished']
     list_editable = ('character_concept',)
     actions = [make_finished, make_unfinished]
-
+ 
 
 admin.site.register(Character, CharacterAdmin)
 
 
 #PlotThread
 
-class PlotPice_in_PlotThread(admin.TabularInline):
+class PlotPice_in_PlotThread(PlotPiceInline):
     model = PlotPart
-    extra = 0
 
 
 class PlotThreadAdmin(admin.ModelAdmin):
@@ -148,7 +161,7 @@ class PlotThreadAdmin(admin.ModelAdmin):
                                 'groups_string',
                                 'groups_incl_char_string'   ),
                             'plot_is_finished'  ] } )
-    ]
+                ]
 
 
     list_display = ('name', 

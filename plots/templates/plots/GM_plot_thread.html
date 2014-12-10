@@ -1,4 +1,4 @@
-<h1> {{ plot_thread.name }} </h1>
+<h1> Plot thread: {{ plot_thread.name }} </h1>
 
 <form method="post" >
     {% csrf_token %}
@@ -21,7 +21,16 @@
 {% for character in plot_thread.characters %}
     <li>{{ character.name }}</li>
 {% endfor %}
+
+{% for plot_part_form in plot_part_forms %}
+<form method="post" >
+    {% csrf_token %}
     
+        {{ plot_part_form.as_p }}
+    
+    <input type="submit" value="Save" />
+</form>    
+{% endfor %}
 
 <a href="{% url 'GM:index' %}">
 Back to plot therad list

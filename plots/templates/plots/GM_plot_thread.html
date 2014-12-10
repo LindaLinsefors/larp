@@ -27,7 +27,7 @@
         Characters: {{ plot_part_form.instance.plot_pice.characters_string }}<br>
         Groups: {{ plot_part_form.instance.plot_pice.groups_string }}
         {{ plot_part_form.as_p }}
-        <input type="submit" value="Edit" action="{% url 'GM:index' %}" />
+        <input type="submit" value="Edit" formaction="{% url 'GM:plot_pice' plot_part_form.instance.plot_pice.id %}" />
     </fieldset>
 {% endfor %}
 

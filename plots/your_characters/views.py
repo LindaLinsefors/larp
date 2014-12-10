@@ -16,15 +16,24 @@ class YourCharacterFormBasic(forms.ModelForm):
                     'presentation', 
                     'character_description'   ]
 
+def checkboxes(choice_list):
+    return forms.MultipleChoiceField(
+                    required = False,
+                    widget  = forms.CheckboxSelectMultiple , 
+                    choices = [ (choice, choice.name) 
+                                for choice
+                                in choice_list   ] )
+
 
 def YourCharacterForm(*args, **kw):
     class YourCharacterFormClass(YourCharacterFormBasic):
-        groups = forms.MultipleChoiceField(
-                    required = False,
-                    widget  = forms.CheckboxSelectMultiple , 
-                    choices = [ (group, group.name) 
-                                for group
-                                in Group.objects.filter(is_open=True)   ] )
+    #    groups = forms.MultipleChoiceField(
+     #               required = False,
+      #              widget  = forms.CheckboxSelectMultiple , 
+       #             choices = [ (group, group.name) 
+        #                        for group
+         #                       in Group.objects.filter(is_open=True)   ] )
+        groups = checkboxes( Group.objects.filter(is_open=True) )
 
         def __init__(self, *args, **kw):
             YourCharacterFormBasic.__init__(self, *args, **kw)

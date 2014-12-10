@@ -22,6 +22,10 @@ class PlotThreadForm(forms.ModelForm):
                     'summery', 
                     'plot_is_finished'     ]
 
+
+
+#Plot Thread
+
 class PlotPartForm(forms.ModelForm):
     class Meta:
         model = PlotPart
@@ -58,5 +62,25 @@ def plot_thread(request, id):
     return render(request, 'plots/GM_plot_thread.html',
            {'plot_thread_form': plot_thread_form,
             'plot_thread': plot_thread ,
-            'plot_part_forms': plot_part_forms}   )       
+            'plot_part_forms': plot_part_forms}   )      
+
+
+
+
+#Plot Pice
+
+class PlotPiceFormBasic(forms.ModelForm):
+    class Meta:
+        model=PlotPice
+        fields = [ 'plot_pice' ]
+
+def PlotPiceForm(*args, *kw):
+    class PlotPiceFrom(PlotPiceFormBasic):
+
+
+
+def plot_pice(request, id):  
+    plot_pice = get_object_or_404(PlotThread, pk=id)
+    return render(request, 'plots/GM_plot_pice.html')
+
 

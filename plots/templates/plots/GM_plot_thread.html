@@ -1,0 +1,28 @@
+<h1> {{ plot_thread.name }} </h1>
+
+<form method="post" >
+    {% csrf_token %}
+    {{ plot_thread_form.as_p }}
+    <input type="submit" value="Save" />
+</form>
+
+
+<h2> Groups involved <small>(not including personal plots)</small> </h2>
+{% for group in plot_thread.groups %}
+    <li>{{ gorup.name }}</li>
+{% endfor %}
+
+<h2> Groups involved <small>(including personal plots)</small> </h2>
+{% for group in plot_thread.groups_incl_char %}
+    <li>{{ group.name }}</li>
+{% endfor %}
+
+<h2> Characters involved </h2>
+{% for character in plot_thread.characters %}
+    <li>{{ character.name }}</li>
+{% endfor %}
+    
+
+<a href="{% url 'GM:index' %}">
+Back to plot therad list
+</a>

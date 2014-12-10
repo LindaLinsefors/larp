@@ -6,8 +6,8 @@
 {% if character_list %}
     <ul>
     {% for character in character_list %}
-        <h2>        
-        <li><a href="{% url 'your_characters:character' character.id %}">
+        <li>        
+        <h2><a href="{% url 'your_characters:character' character.id %}">
         {{ character.heading|safe }}
         </a>
         {% if character.groups.all %}

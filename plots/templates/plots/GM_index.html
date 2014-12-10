@@ -1,0 +1,14 @@
+<h1> Plot threads </h1>
+{% if plot_threads %}
+    <ul>
+    {% for plot_thread in plot_threads %} 
+        <li>
+        <h2> <a href="{% url 'GM:plot_line' plot_thread.id %}"> 
+        {{ plot_thread.name }} </a> </h2> 
+        <p>{{ plot_thread.summery }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>There are no plot threads yet.</p>
+{% endif %}

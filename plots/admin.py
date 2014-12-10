@@ -204,7 +204,8 @@ class PlotThread_in_PlotPice(admin.TabularInline):
 
 class PlotPiceAdmin(admin.ModelAdmin):
 
-    list_display = ('name', 
+    list_display = ('id',
+                    'name', 
                     'characters_string',
                     'groups_string',
                     'plot_threads_string',

@@ -31,9 +31,7 @@ class BasicRelation(models.Model):
 
 
 class BasicPlotRelation(BasicRelation):
-    plot_pice_name = models.ForeignKey('PlotPice')
-    def plot_pice(self):
-        return self.plot_pice_name.plot_pice
+    plot_pice = models.ForeignKey('PlotPice')
 
     class Meta(BasicRelation.Meta):
         abstract = True
@@ -51,17 +49,17 @@ class Membership(BasicRelation):
 class PlotPart(BasicPlotRelation):
     plot_thread = models.ForeignKey('PlotThread')
     class Meta(BasicPlotRelation.Meta):
-        unique_together = (("plot_thread", "plot_pice_name"),)
+        unique_together = (("plot_thread", "plot_pice"),)
 
 class GroupPlotPice(BasicPlotRelation):
     group = models.ForeignKey('Group')
     class Meta(BasicPlotRelation.Meta):
-        unique_together = (("group", "plot_pice_name"),)
+        unique_together = (("group", "plot_pice"),)
 
 class PersonalPlotPice(BasicPlotRelation):
     character = models.ForeignKey('Character')
     class Meta(BasicPlotRelation.Meta):
-        unique_together = (("character", "plot_pice_name"),)
+        unique_together = (("character", "plot_pice"),)
 
 
 

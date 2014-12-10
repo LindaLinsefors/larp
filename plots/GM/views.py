@@ -49,6 +49,7 @@ def plot_thread(request, id):
         plot_thread_form = PlotThreadForm(request.POST, instance=plot_thread)
         if plot_thread_form.is_valid():
             plot_thread_form.save()
+
     else: 
         plot_thread_form = PlotThreadForm(instance=plot_thread)    
 

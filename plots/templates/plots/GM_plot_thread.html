@@ -3,8 +3,7 @@
 <form method="post" >
     {% csrf_token %}
     {{ plot_thread_form.as_p }}
-    <input type="submit" value="Save" />
-</form>
+    <input type="submit" value="Save all" />
 
 
 <h2> Groups involved <small>(not including personal plots)</small> </h2>
@@ -22,15 +21,20 @@
     <li>{{ character.name }}</li>
 {% endfor %}
 
+<h2> Plot Parts </h2>
 {% for plot_part_form in plot_part_forms %}
-<form method="post" >
-    {% csrf_token %}
-    
+    <fieldset>
+        Characters: {{ plot_part_form.instance.plot_pice.characters_string }}<br>
+        Groups: {{ plot_part_form.instance.plot_pice.groups_string }}
         {{ plot_part_form.as_p }}
-    
-    <input type="submit" value="Save" />
-</form>    
+        <input type="submit" value="Edit" action="{% url 'GM:index' %}" />
+    </fieldset>
 {% endfor %}
+
+    
+    <input type="submit" value="Save all" />
+</form>    
+
 
 <a href="{% url 'GM:index' %}">
 Back to plot therad list

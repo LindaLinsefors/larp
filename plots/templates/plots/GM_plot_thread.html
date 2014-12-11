@@ -21,30 +21,8 @@
     <li>{{ character.name }}</li>
 {% endfor %}
 
-<h2> Plot Parts </h2>
-{{ plot_part_forms.management_form }}
-<table style="width:100%">
-    {% for plot_part_form in plot_part_forms %}
-    <tr>
-        <td>
-            Characters: {{ plot_part_form.instance.plot_pice.characters_string }}<br>
-            Groups: {{ plot_part_form.instance.plot_pice.groups_string }}<br>
-            Plot Threads: {{ plot_part_form.instance.plot_pice.plot_threads_string }}<br>
-            <input  type="submit" value="Edit" 
-                    formaction="{% url 'GM:plot_pice' plot_part_form.instance.plot_pice.id %}"  
-                    formmethod='GET' />
-        </td>
-        <td>
-            {{ plot_part_form.plot_pice }}
-        </td>
-        <td>
-            Rank: <br>
-            {{ plot_part_form.rank }}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
 
+{% include "plots/GM_plot_pices.html" %}
 
     
     <input type="submit" value="Save all" />

@@ -40,7 +40,6 @@ class PlotPartForm(forms.ModelForm):
             self.fields['plot_pice'].initial = self.instance.plot_pice.plot_pice
 
     def save(self):
-        print 'plot thread saved'
         self.is_valid()
         forms.ModelForm.save(self)
         self.instance.plot_pice.plot_pice = self.cleaned_data['plot_pice']
@@ -67,8 +66,6 @@ def plot_thread(request, id):
         plot_part_forms = PlotPartForms(request.POST, instance=plot_thread)
         if plot_part_forms.is_valid():
             save_formset(plot_part_forms)
-        else: 
-            print 'Errors: ' +  plot_part_forms.errors
 
     else: 
         plot_thread_form = PlotThreadForm(instance=plot_thread)   
@@ -79,7 +76,7 @@ def plot_thread(request, id):
     return render(request, 'plots/GM_plot_thread.html',
            {'plot_thread_form': plot_thread_form,
             'plot_thread': plot_thread ,
-            'plot_part_forms': plot_part_forms}   )      
+            'plot_pice_forms': plot_part_forms}   )      
 
 
 

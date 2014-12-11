@@ -74,8 +74,21 @@ class PlotPiceFormBasic(forms.ModelForm):
         model=PlotPice
         fields = [ 'plot_pice' ]
 
-def PlotPiceForm(*args, *kw):
+def PlotPiceForm(*args, **kw):
     class PlotPiceFrom(PlotPiceFormBasic):
+        characters = forms.MultipleChoiceField(
+                    required = False,
+                    widget  = forms.CheckboxSelectMultiple , 
+                    choices = [ (character, character.name) 
+                                for character
+                                in Character.objects.all() ] )
+
+        groups = forms.MultipleChoiceField(
+                    required = False,
+                    widget  = forms.CheckboxSelectMultiple , 
+                    choices = [ (group, group.name) 
+                                for group
+                                in Group.objects.all() ] )
 
 
 

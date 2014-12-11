@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django import forms
 
 from plots.models import Character, Group, Membership
+from plots import for_views
 
 
 class YourCharacterFormBasic(forms.ModelForm):
@@ -16,24 +17,11 @@ class YourCharacterFormBasic(forms.ModelForm):
                     'presentation', 
                     'character_description'   ]
 
-def checkboxes(choice_list):
-    return forms.MultipleChoiceField(
-                    required = False,
-                    widget  = forms.CheckboxSelectMultiple , 
-                    choices = [ (choice, choice.name) 
-                                for choice
-                                in choice_list   ] )
-
 
 def YourCharacterForm(*args, **kw):
     class YourCharacterFormClass(YourCharacterFormBasic):
-    #    groups = forms.MultipleChoiceField(
-     #               required = False,
-      #              widget  = forms.CheckboxSelectMultiple , 
-       #             choices = [ (group, group.name) 
-        #                        for group
-         #                       in Group.objects.filter(is_open=True)   ] )
-        groups = checkboxes( Group.objects.filter(is_open=True) )
+
+        groups = for_views.checkboxes( Group.objects.filter(is_open=True) )
 
         def __init__(self, *args, **kw):
             YourCharacterFormBasic.__init__(self, *args, **kw)
@@ -41,19 +29,18 @@ def YourCharacterForm(*args, **kw):
                 self.fields['groups'].initial = self.instance.groups.filter(is_open=True)
     
         def get_initial(self):  #What is the pupous of this function?
-            initial = YourCharacterFormBasic.get_initial(self) 
-
+            initial = YourCharacterFormBasic.get_initial(self)   
+            
         def save(self):
             self.is_valid()
             YourCharacterFormBasic.save(self)
-            old_member_groups = self.instance.groups.filter(is_open=True)
-            new_member_groups = self.cleaned_data['groups']
-            for group in Group.objects.filter(is_open=True):
-                if (group not in old_member_groups) and (group.name in new_member_groups):
-                    Membership(group=group, character=self.instance).save()
-                elif (group in old_member_groups) and (group.name not in new_member_groups):
-                    Membership.objects.get(group=group, character=self.instance).delete()   
-            
+            for_views.save_relations(   self.instance,
+                                        Group.objects.filter(is_open=True),
+                                        self.instance.groups.filter(is_open=True), 
+                                        self.cleaned_data['groups'],
+                                        Membership, 'character', 'group' )
+
+
     return YourCharacterFormClass(*args, **kw)
 
 

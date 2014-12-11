@@ -5,7 +5,8 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 from django import forms
 
-from plots.models import PlotThread, PlotPart, PlotPice
+from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart
+from plots import for_views
 
 
 def index(request): 
@@ -75,25 +76,56 @@ class PlotPiceFormBasic(forms.ModelForm):
         fields = [ 'plot_pice' ]
 
 def PlotPiceForm(*args, **kw):
-    class PlotPiceFrom(PlotPiceFormBasic):
-        characters = forms.MultipleChoiceField(
-                    required = False,
-                    widget  = forms.CheckboxSelectMultiple , 
-                    choices = [ (character, character.name) 
-                                for character
-                                in Character.objects.all() ] )
 
-        groups = forms.MultipleChoiceField(
-                    required = False,
-                    widget  = forms.CheckboxSelectMultiple , 
-                    choices = [ (group, group.name) 
-                                for group
-                                in Group.objects.all() ] )
+    class PlotPiceFromClass(PlotPiceFormBasic):
+        characters = for_views.checkboxes( Character.objects.all() )
+        groups = for_views.checkboxes( Group.objects.all() )
+        plot_threads = for_views.checkboxes( PlotThread.objects.all() )
+
+        def __init__(self, *args, **kw):
+            PlotPiceFormBasic.__init__(self, *args, **kw)
+            if kw.has_key('instance'):
+                self.fields['groups'].initial = self.instance.groups.all()
+                self.fields['characters'].initial = self.instance.characters.all()
+                self.fields['plot_threads'].initial = self.instance.plot_threads.all()
+
+        def save(self):
+            self.is_valid()
+            PlotPiceFormBasic.save(self)
+            for_views.save_relations(   self.instance,
+                                        Group.objects.all(),
+                                        self.instance.groups.all(), 
+                                        self.cleaned_data['groups'],
+                                        GroupPlotPice, 'plot_pice', 'group' )
+         
+            for_views.save_relations(   self.instance,
+                                        Character.objects.filter(),
+                                        self.instance.characters.filter(), 
+                                        self.cleaned_data['characters'],
+                                        PersonalPlotPice, 'plot_pice', 'character' )
+
+            for_views.save_relations(   self.instance,
+                                        PlotThread.objects.all(),
+                                        self.instance.plot_threads.all(), 
+                                        self.cleaned_data['plot_threads'],
+                                        PlotPart, 'plot_pice', 'plot_thread' )
+
+    return PlotPiceFromClass(*args, **kw)
+
 
 
 
 def plot_pice(request, id):  
-    plot_pice = get_object_or_404(PlotThread, pk=id)
-    return render(request, 'plots/GM_plot_pice.html')
+    plot_pice = get_object_or_404(PlotPice, pk=id)
+
+    if request.method == 'POST':
+        plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
+        if plot_pice_form.is_valid():
+            plot_pice_form.save()
+    else:
+        plot_pice_form = PlotPiceForm(instance=plot_pice)
+    
+    return render(request, 'plots/GM_plot_pice.html',
+            {'plot_pice_form': plot_pice_form} )
 
 

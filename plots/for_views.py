@@ -15,6 +15,7 @@ def save_relations( instance,
     for choice in choice_list:
         if (        (choice not in old_relations) 
                 and (choice.name in new_relation_names) ):
+            print choice.name
             RelationClass(**{choice_type:choice, instance_type:instance}).save()
         elif (      (choice in old_relations) 
                 and (choice.name not in new_relation_names) ):

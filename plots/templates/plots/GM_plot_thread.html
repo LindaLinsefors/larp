@@ -1,6 +1,6 @@
 <h1> Plot thread: {{ plot_thread.name }} </h1>
 
-<form method="post" >
+<form method="POST" >
     {% csrf_token %}
     {{ plot_thread_form.as_p }}
     <input type="submit" value="Save all" />
@@ -27,7 +27,9 @@
         Characters: {{ plot_part_form.instance.plot_pice.characters_string }}<br>
         Groups: {{ plot_part_form.instance.plot_pice.groups_string }}
         {{ plot_part_form.as_p }}
-        <input type="submit" value="Edit" formaction="{% url 'GM:plot_pice' plot_part_form.instance.plot_pice.id %}" />
+        <input  type="submit" value="Edit" 
+                formaction="{% url 'GM:plot_pice' plot_part_form.instance.plot_pice.id %}"  
+                formmethod='GET' />
     </fieldset>
 {% endfor %}
 

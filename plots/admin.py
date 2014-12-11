@@ -52,8 +52,8 @@ def make_members_presentations(modeladmin, request, queryset):
 #PlotPice
 class PlotPiceInline(admin.TabularInline):
     extra = 0
-    fields = ('plot_pice_name','plot_pice','rank')
-    readonly_fields = ( 'plot_pice', )
+    fields = ('plot_pice','rank')
+
 
 
 

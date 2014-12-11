@@ -1,34 +1,52 @@
-<h1> Plot thread: {{ plot_thread.name }} </h1>
+{% extends "plots/GM_plot_pices.html" %}
 
-<form method="POST" >
-    {% csrf_token %}
-    {{ plot_thread_form.as_p }}
-    <input type="submit" value="Save all" />
+{% block top %}
 
+    <h1> Plot thread: {{ plot_thread.name }} </h1>
 
-<h2> Groups involved <small>(not including personal plots)</small> </h2>
-{% for group in plot_thread.groups %}
-    <li>{{ gorup.name }}</li>
-{% endfor %}
-
-<h2> Groups involved <small>(including personal plots)</small> </h2>
-{% for group in plot_thread.groups_incl_char %}
-    <li>{{ group.name }}</li>
-{% endfor %}
-
-<h2> Characters involved </h2>
-{% for character in plot_thread.characters %}
-    <li>{{ character.name }}</li>
-{% endfor %}
+    <form method="POST" >
+        {% csrf_token %}
+        <table> 
+            <tr> <td>Name: </td><td> {{ plot_thread_form.name }}</td> </tr>
+            <tr> <td>Summery: </td><td> {{ plot_thread_form.summery }}</td> </tr>
+        </table>
+        <p>Plot thread is finished: {{ plot_thread_form.plot_is_finished }}</p>
+        <input type="submit" value="Save all" />
 
 
-{% include "plots/GM_plot_pices.html" %}
+    <h2> Groups involved <small>(not including personal plots)</small> </h2>
+    {% for group in plot_thread.groups %}
+        <li>{{ gorup.name }}</li>
+    {% endfor %}
 
+    <h2> Groups involved <small>(including personal plots)</small> </h2>
+    {% for group in plot_thread.groups_incl_char %}
+        <li>{{ group.name }}</li>
+    {% endfor %}
+
+    <h2> Characters involved </h2>
+    {% for character in plot_thread.characters %}
+        <li>{{ character.name }}</li>
+    {% endfor %}
+
+{% endblock %}
+
+
+{# here be plots/GM_plot_pices.html #}
+
+    {% block selfinfo %}
+        <a href="{% url 'GM:plot_pice' 'plot_thread' plot_thread.id  plot_pice_form.instance.plot_pice.id %}">
+    {% endblock %}
+
+
+
+{% block end %}
     
-    <input type="submit" value="Save all" />
-</form>    
+        <input type="submit" value="Save all" />
+    </form>  
 
+    <a href="{% url 'GM:index' %}">
+    Back to plot therad list
+    </a>
 
-<a href="{% url 'GM:index' %}">
-Back to plot therad list
-</a>
+{% endblock %}  

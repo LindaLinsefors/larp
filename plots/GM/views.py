@@ -128,7 +128,7 @@ def PlotPiceForm(*args, **kw):
 
 
 
-def plot_pice(request, id):  
+def plot_pice(request, parent_type, parent_id, id):  
     plot_pice = get_object_or_404(PlotPice, pk=id)
 
     if request.method == 'POST':
@@ -139,6 +139,8 @@ def plot_pice(request, id):
         plot_pice_form = PlotPiceForm(instance=plot_pice)
     
     return render(request, 'plots/GM_plot_pice.html',
-            {'plot_pice_form': plot_pice_form} )
+            {   'plot_pice_form': plot_pice_form,
+                'parent_url': 'GM:'+parent_type,
+                'parent_id': parent_id                  }   )
 
 

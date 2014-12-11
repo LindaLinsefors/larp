@@ -205,7 +205,7 @@ class PlotThread(BasicModel):
     no_of_plot_parts.verbose_name = 'number of plot parts'
 
     plot_is_finished = models.BooleanField(default=False)
-    plot_is_finished.verbose_name = "plot thread plot is finiched"
+    plot_is_finished.verbose_name = "plot thread is finiched"
 
 
     def characters(self):

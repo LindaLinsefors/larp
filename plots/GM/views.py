@@ -32,7 +32,7 @@ class PlotPartForm(forms.ModelForm):
         model = PlotPart
         fields = [ 'rank' ]
 
-    plot_pice = forms.CharField(widget = forms.Textarea)
+    plot_pice = forms.CharField(widget=forms.Textarea, required=False)
 
     def __init__(self, *args, **kw):
         forms.ModelForm.__init__(self, *args, **kw)
@@ -40,11 +40,20 @@ class PlotPartForm(forms.ModelForm):
             self.fields['plot_pice'].initial = self.instance.plot_pice.plot_pice
 
     def save(self):
+        print 'plot thread saved'
         self.is_valid()
         forms.ModelForm.save(self)
         self.instance.plot_pice.plot_pice = self.cleaned_data['plot_pice']
-        self.instance.plot_pice.plot_pice.save()
+        self.instance.plot_pice.save()
 
+
+PlotPartForms = forms.inlineformset_factory(PlotThread, PlotPart, 
+                                            form=PlotPartForm, 
+                                            can_delete=False,
+                                            extra=0 )
+def save_formset(formset):
+    for form in formset:
+        form.save()
 
 
 def plot_thread(request, id): 
@@ -55,10 +64,17 @@ def plot_thread(request, id):
         if plot_thread_form.is_valid():
             plot_thread_form.save()
 
-    else: 
-        plot_thread_form = PlotThreadForm(instance=plot_thread)    
+        plot_part_forms = PlotPartForms(request.POST, instance=plot_thread)
+        if plot_part_forms.is_valid():
+            save_formset(plot_part_forms)
+        else: 
+            print 'Errors: ' +  plot_part_forms.errors
 
-    plot_part_forms = [ PlotPartForm(instance=plot_part) for plot_part in plot_thread.plotpart_set.all()]
+    else: 
+        plot_thread_form = PlotThreadForm(instance=plot_thread)   
+    plot_part_forms = PlotPartForms(instance=plot_thread) 
+
+    #plot_part_forms = [ PlotPartForm(instance=plot_part) for plot_part in plot_thread.plotpart_set.all()]
 
     return render(request, 'plots/GM_plot_thread.html',
            {'plot_thread_form': plot_thread_form,

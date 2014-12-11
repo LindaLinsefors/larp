@@ -57,7 +57,6 @@ def new(request):
             character.save()
             character_form = YourCharacterForm(request.POST, instance=character )
             character_form.save()
-            print character.id
             return HttpResponseRedirect(            
                 reverse('your_characters:character', args=(character.id,))  )
     else:

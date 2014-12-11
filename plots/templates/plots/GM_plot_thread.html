@@ -23,9 +23,9 @@
 
 <h2> Plot Parts </h2>
 {{ plot_part_forms.management_form }}
-{% for plot_part_form in plot_part_forms %}
-    <fieldset>
-    <table style="width:100%">
+<table style="width:100%">
+    {% for plot_part_form in plot_part_forms %}
+    <tr>
         <td>
             Characters: {{ plot_part_form.instance.plot_pice.characters_string }}<br>
             Groups: {{ plot_part_form.instance.plot_pice.groups_string }}<br>
@@ -35,11 +35,16 @@
                     formmethod='GET' />
         </td>
         <td>
-            {{ plot_part_form.as_p }}
+            {{ plot_part_form.plot_pice }}
         </td>
-    </table>
-    </fieldset>
-{% endfor %}
+        <td>
+            Rank: <br>
+            {{ plot_part_form.rank }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
 
     
     <input type="submit" value="Save all" />

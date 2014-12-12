@@ -51,7 +51,7 @@ PlotPartForms = forms.inlineformset_factory(PlotThread, PlotPart,
                                             can_delete=False,
                                             extra=0 )
 
-def update_plot_forms(request, Class, id, ClassForm, InlineFormset):
+def plots(request, Class, id, ClassForm, InlineFormset, template='plots/GM_plots.html'):
     class_instance = get_object_or_404(Class, pk=id)
 
     if request.method == 'POST':
@@ -64,23 +64,43 @@ def update_plot_forms(request, Class, id, ClassForm, InlineFormset):
         if inline_formset.is_valid():
             inline_formset.save()
 
-    return (    class_instance,    
-                ClassForm(instance=class_instance), 
-                InlineFormset(instance=class_instance)  )
+    class_form = ClassForm(instance=class_instance)
+    inline_formset = InlineFormset(instance=class_instance)
+
+    return render(request, template,
+           {'class_form': class_form,
+            'class_instance': class_instance ,
+            'plot_pice_forms': inline_formset}   )   
+
            
 
 
-def plot_thread(request, id): 
-    (   plot_thread,
-        plot_thread_form,
-        plot_pice_forms     ) = update_plot_forms(request, PlotThread, id, PlotThreadForm, PlotPartForms)
+def plot_thread_new(request, id): 
+    return plots(   request, PlotThread, id, PlotThreadForm, PlotPartForms, 
+                    template='plots/GM_plot_thread.html'        )
 
+
+
+
+def plot_thread(request, id):
+    plot_thread = get_object_or_404(PlotThread, pk=id)
+
+    if request.method == 'POST':
+        plot_thread_form = PlotThreadForm(request.POST, instance=plot_thread)
+        if plot_thread_form.is_valid():
+            plot_thread_form.save()
+
+        plot_part_forms = PlotPartForms(request.POST, instance=plot_thread)
+        if plot_part_forms.is_valid():
+            plot_part_forms.save()
+    else:
+        plot_thread_form = PlotThreadForm(instance=plot_thread)
+    plot_part_forms = PlotPartForms(instance=plot_thread)
+    
     return render(request, 'plots/GM_plot_thread.html',
-           {'plot_thread_form': plot_thread_form,
-            'plot_thread': plot_thread ,
-            'plot_pice_forms': plot_pice_forms}   )   
-
-
+            {'class_form': plot_thread_form,
+            'class_instance': plot_thread ,
+            'plot_pice_forms': plot_part_forms}     ) 
 
 
 # Group Plot

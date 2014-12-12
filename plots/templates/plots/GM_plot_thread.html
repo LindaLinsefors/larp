@@ -2,37 +2,37 @@
 
 {% block top %}
 
-    <h1> Plot thread: {{ plot_thread.name }} </h1>
+    <h1> Plot thread: {{ class_instance.name }} </h1>
 
     <form method="POST" >
         {% csrf_token %}
         <table> 
-            <tr> <td>Name: </td><td> {{ plot_thread_form.name }}</td> </tr>
-            <tr> <td>Summery: </td><td> {{ plot_thread_form.summery }}</td> </tr>
+            <tr> <td>Name: </td><td> {{ class_form.name }}</td> </tr>
+            <tr> <td>Summery: </td><td> {{ class_form.summery }}</td> </tr>
         </table>
-        <p>Plot thread is finished: {{ plot_thread_form.plot_is_finished }}</p>
+        <p>Plot thread is finished: {{ class_form.plot_is_finished }}</p>
         <input type="submit" value="Save all" />
 
 
     <h2> Groups involved <small>(not including personal plots)</small> </h2>
-    {% for group in plot_thread.groups %}
+    {% for group in class_instance.groups %}
         <li>{{ gorup.name }}</li>
     {% endfor %}
 
     <h2> Groups involved <small>(including personal plots)</small> </h2>
-    {% for group in plot_thread.groups_incl_char %}
+    {% for group in class_instance.groups_incl_char %}
         <li>{{ group.name }}</li>
     {% endfor %}
 
     <h2> Characters involved </h2>
-    {% for character in plot_thread.characters %}
+    {% for character in class_instance.characters %}
         <li>{{ character.name }}</li>
     {% endfor %}
 
 {% endblock %}
 
 
-{# here be plots/GM_plot_pices.html #}
+{# here be plots/GM_plots.html #}
 
 
 

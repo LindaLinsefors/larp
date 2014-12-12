@@ -29,14 +29,14 @@
                 <tr>
                     <td>Plot Threads: </td>
                     <td>
-                        {% for plot_thread_link in plot_pice_form.instance.plot_pice.plot_threads.all %}
-                        {% if plot_thread_link != plot_thread %}  
-                        <a href="{% url 'GM:plot_thread' plot_thread_link.id %}">
+                        {% for plot_thread in plot_pice_form.instance.plot_pice.plot_threads.all %}
+                        {% if plot_thread != class_instance %}  
+                        <a href="{% url 'GM:plot_thread' plot_thread.id %}">
                         {% endif %}
                         {% if forloop.counter = plot_pice_form.instance.plot_pice.plot_threads.count %}
-                            {{ plot_thread_link }}</a>
+                            {{ plot_thread }}</a>
                         {% else %}
-                            {{ plot_thread_link }}</a>,
+                            {{ plot_thread }}</a>,
                         {% endif %}
                         {% endfor %}
                     </td>

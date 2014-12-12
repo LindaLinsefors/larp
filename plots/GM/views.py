@@ -50,9 +50,6 @@ PlotPartForms = forms.inlineformset_factory(PlotThread, PlotPart,
                                             form=PlotPartForm, 
                                             can_delete=False,
                                             extra=0 )
-def save_formset(formset):
-    for form in formset:
-        form.save()
 
 def update_plot_forms(request, Class, id, ClassForm, InlineFormset):
     class_instance = get_object_or_404(Class, pk=id)
@@ -63,6 +60,7 @@ def update_plot_forms(request, Class, id, ClassForm, InlineFormset):
             class_form.save()
 
         inline_formset = InlineFormset(request.POST, instance=class_instance)
+        import pdb; pdb.set_trace()
         if inline_formset.is_valid():
             inline_formset.save()
 
@@ -83,29 +81,6 @@ def plot_thread(request, id):
             'plot_pice_forms': plot_pice_forms}   )   
 
 
-
-def plot_thread_old(request, id): 
-    plot_thread = get_object_or_404(PlotThread, pk=id)
-
-    if request.method == 'POST':
-        plot_thread_form = PlotThreadForm(request.POST, instance=plot_thread)
-        if plot_thread_form.is_valid():
-            plot_thread_form.save()
-
-        plot_part_forms = PlotPartForms(request.POST, instance=plot_thread)
-        if plot_part_forms.is_valid():
-            plot_part_forms.save()
-
-    else: 
-        plot_thread_form = PlotThreadForm(instance=plot_thread)   
-    plot_part_forms = PlotPartForms(instance=plot_thread) 
-
-    #plot_part_forms = [ PlotPartForm(instance=plot_part) for plot_part in plot_thread.plotpart_set.all()]
-
-    return render(request, 'plots/GM_plot_thread.html',
-           {'plot_thread_form': plot_thread_form,
-            'plot_thread': plot_thread ,
-            'plot_pice_forms': plot_part_forms}   )      
 
 
 # Group Plot

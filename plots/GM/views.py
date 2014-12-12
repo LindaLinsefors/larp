@@ -11,106 +11,9 @@ from plots import for_views
 
 def index(request): 
     return render(request, 'plots/GM_index.html',
-            { 'plot_threads': PlotThread.objects.all() }    )
-
-
-
-
-class PlotThreadForm(forms.ModelForm):
-    class Meta:
-        model = PlotThread
-        fields = [  'name', 
-                    'summery', 
-                    'plot_is_finished'     ]
-
-
-
-#Plot Thread
-
-class PlotPartForm(forms.ModelForm):
-    class Meta:
-        model = PlotPart
-        fields = [ 'rank' ]
-
-    plot_pice = forms.CharField(widget=forms.Textarea, required=False)
-
-    def __init__(self, *args, **kw):
-        forms.ModelForm.__init__(self, *args, **kw)
-        if kw.has_key('instance'):
-            self.fields['plot_pice'].initial = self.instance.plot_pice.plot_pice
-
-    def save(self):
-        self.is_valid()
-        forms.ModelForm.save(self)
-        self.instance.plot_pice.plot_pice = self.cleaned_data['plot_pice']
-        self.instance.plot_pice.save()
-
-
-PlotPartForms = forms.inlineformset_factory(PlotThread, PlotPart, 
-                                            form=PlotPartForm, 
-                                            can_delete=False,
-                                            extra=0 )
-
-
-def save_formset(formset): 
-    for form in formset:
-        form.save()           
-
-
-def plots(request, Class, id, ClassForm, InlineFormset, template='plots/GM_plots.html'):
-    class_instance = get_object_or_404(Class, pk=id)
-
-    if request.method == 'POST':
-        class_form = ClassForm(request.POST, instance=class_instance)
-        if class_form.is_valid():
-            class_form.save()
-
-        inline_formset = InlineFormset(request.POST, instance=class_instance)
-        if inline_formset.is_valid():
-            save_formset(inline_formset)
-
-    class_form = ClassForm(instance=class_instance)
-    inline_formset = InlineFormset(instance=class_instance)
-
-    return render(request, template,
-           {'class_form': class_form,
-            'class_instance': class_instance ,
-            'plot_pice_forms': inline_formset}   )   
-
-
-
-
-
-def plot_thread(request, id): 
-    return plots(   request, PlotThread, id, PlotThreadForm, PlotPartForms, 
-                    template='plots/GM_plot_thread.html'        )
-
-
-
-
-def plot_thread_old(request, id):
-    plot_thread = get_object_or_404(PlotThread, pk=id)
-
-    if request.method == 'POST':
-        plot_thread_form = PlotThreadForm(request.POST, instance=plot_thread)
-        if plot_thread_form.is_valid():
-            plot_thread_form.save()
-
-        plot_part_forms = PlotPartForms(request.POST, instance=plot_thread)
-        if plot_part_forms.is_valid():
-            save_formset(plot_part_forms)
-    else:
-        plot_thread_form = PlotThreadForm(instance=plot_thread)
-    plot_part_forms = PlotPartForms(instance=plot_thread)
-    
-    return render(request, 'plots/GM_plot_thread.html',
-           {'plot_thread_form': plot_thread_form,
-            'plot_thread': plot_thread ,
-            'plot_pice_forms': plot_part_forms}     ) 
-
-
-# Group Plot
-
+              { 'plot_threads': PlotThread.objects.all(),
+                'groups': Group.objects.all(),
+                'characters': Character.objects.all(),      } )
 
 
 
@@ -176,4 +79,125 @@ def plot_pice(request, parent_type, parent_id, id):
                 'parent_url': 'GM:'+parent_type,
                 'parent_id': parent_id                  }   )
 
+
+
+
+#Plot Pice Inline
+
+def save_formset(formset): 
+    for form in formset:
+        form.save()           
+
+
+def plots(request, Class, id, ClassForm, InlineFormset, template='plots/GM_plots.html'):
+    class_instance = get_object_or_404(Class, pk=id)
+
+    if request.method == 'POST':
+        class_form = ClassForm(request.POST, instance=class_instance)
+        if class_form.is_valid():
+            class_form.save()
+
+        inline_formset = InlineFormset(request.POST, instance=class_instance)
+        if inline_formset.is_valid():
+            save_formset(inline_formset)
+
+    class_form = ClassForm(instance=class_instance)
+    inline_formset = InlineFormset(instance=class_instance)
+
+    return render(request, template,
+           {'class_form': class_form,
+            'class_instance': class_instance ,
+            'plot_pice_forms': inline_formset}   )   
+
+class PlotPiceInlineForm(forms.ModelForm):
+    class Meta:
+        fields = [ 'rank' ]
+
+    plot_pice = forms.CharField(widget=forms.Textarea, required=False)
+
+    def __init__(self, *args, **kw):
+        forms.ModelForm.__init__(self, *args, **kw)
+        if kw.has_key('instance'):
+            self.fields['plot_pice'].initial = self.instance.plot_pice.plot_pice
+
+    def save(self):
+        self.is_valid()
+        forms.ModelForm.save(self)
+        self.instance.plot_pice.plot_pice = self.cleaned_data['plot_pice']
+        self.instance.plot_pice.save()
+
+
+#Plot Thread
+
+class PlotThreadForm(forms.ModelForm):
+    class Meta:
+        model = PlotThread
+        fields = [  'name', 
+                    'summery', 
+                    'plot_is_finished'     ]
+
+class PlotPartForm(PlotPiceInlineForm):
+    class Meta(PlotPiceInlineForm.Meta):
+        model=PlotPart
+
+PlotPartForms = forms.inlineformset_factory(PlotThread, PlotPart, 
+                                            form=PlotPartForm, 
+                                            can_delete=False,
+                                            extra=0             )
+
+def plot_thread(request, id): 
+    return plots(   request, PlotThread, id, PlotThreadForm, PlotPartForms, 
+                    template='plots/GM_plot_thread.html'        )
+
+
+
+
+
+# Group Plot
+
+class GroupPlotForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = [  'secret_comments',   
+                    'plot_is_finished'     ]
+
+class GroupPlotPiceForm(PlotPiceInlineForm):
+    class Meta(PlotPiceInlineForm.Meta):
+        model=PlotPart
+
+GroupPlotPiceForms = forms.inlineformset_factory(   Group, GroupPlotPice, 
+                                                    form=GroupPlotPiceForm, 
+                                                    can_delete=False,
+                                                    extra=0                 )
+
+def group_plot(request, id): 
+    return plots(   request, Group, id, GroupPlotForm, GroupPlotPiceForms, 
+                    template='plots/GM_plots.html'        )
+
+
+# Personal Plot
+
+class PersonalPlotForm(forms.ModelForm):
+    class Meta:
+        model = Character
+        fields = [  'name',
+                    'character_concept',
+                    'presentation',
+                    'character_description',
+                    'comments_to_player',
+                    'secret_comments',   
+                    'plot_is_finished'     ]
+
+class PersonalPlotPiceForm(PlotPiceInlineForm):
+    class Meta(PlotPiceInlineForm.Meta):
+        model=PersonalPlotPice
+
+PersonalPlotPiceForms = forms.inlineformset_factory(Character, PersonalPlotPice, 
+                                                    form=GroupPlotPiceForm, 
+                                                    can_delete=False,
+                                                    extra=0                 )
+
+def personal_plot(request, id): 
+    return plots(   request, Character, id, PersonalPlotForm, PersonalPlotPiceForms, 
+                    template='plots/GM_plots.html'        )
 

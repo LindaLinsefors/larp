@@ -121,8 +121,8 @@ class Character(BasicModel):
     comments_to_player = models.TextField(blank=True, default='')
     comments_to_player.help_text = '<i>Player can read but not write.</i>'
     
-    seceret_comments = models.TextField(blank=True, default='')
-    seceret_comments.help_text = '<i>Player can nether read nor write.</i>'
+    secret_comments = models.TextField(blank=True, default='')
+    secret_comments.help_text = '<i>Player can nether read nor write.</i>'
 
     plot_is_finished = models.BooleanField(default=False)
     plot_is_finished.verbose_name = "character's plot is finiched"

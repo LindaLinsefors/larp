@@ -12,3 +12,32 @@
 {% else %}
     <p>There are no plot threads yet.</p>
 {% endif %}
+
+<h1> Groups </h1>
+{% if groups %}
+    <ul>
+    {% for group in groups %} 
+        <li>
+        <h2> <a href="{% url 'GM:group_plot' group.id %}"> 
+        {{ group.name }} </a> </h2> 
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>There are no plot groups yet.</p>
+{% endif %}
+
+
+<h1> Characters </h1>
+{% if characters %}
+    <ul>
+    {% for character in characters %} 
+        <li>
+        <h2> <a href="{% url 'GM:personal_plot' character.id %}"> 
+        {{ character.heading|safe }} </a> </h2> 
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>There are no plot characters yet.</p>
+{% endif %}

@@ -1,3 +1,6 @@
+<form method="POST" >
+        {% csrf_token %}
+
 {% block top %}
 {{ class_form.as_p }}
 {% endblock %}
@@ -10,12 +13,6 @@
 
 {{ plot_pice_forms.management_form }}
 
-{% comment %}
-    {% for plot_pice_form in plot_pice_forms %}
-    {{ plot_pice_form.as_p }}
-    {% endfor %}
-{% endcomment %}
-
 <table>
     {% for plot_pice_form in plot_pice_forms %}
     {{ plot_pice_form.id }}
@@ -26,13 +23,31 @@
                 <tr>
                     <td>Characters: </td>
                     <td>
-                        {{ plot_pice_form.instance.plot_pice.characters_string }}
+                        {% for character in plot_pice_form.instance.plot_pice.characters.all %}
+                        {% if character != class_instance %}  
+                        <a href="{% url 'GM:personal_plot' character.id %}">
+                        {% endif %}
+                        {% if forloop.counter = plot_pice_form.instance.plot_pice.characters.count %}
+                            {{ character.name }}</a>
+                        {% else %}
+                            {{ character.name }}</a>,
+                        {% endif %}
+                        {% endfor %}
                     </td>
                 <tr>
                 <tr>
                     <td>Groups: </td>
                     <td>
-                        {{ plot_pice_form.instance.plot_pice.groups_string }}
+                        {% for groups in plot_pice_form.instance.plot_pice.groups.all %}
+                        {% if groups != class_instance %}  
+                        <a href="{% url 'GM:group_plot' group.id %}">
+                        {% endif %}
+                        {% if forloop.counter = plot_pice_form.instance.plot_pice.groups.count %}
+                            {{ groups.name }}</a>
+                        {% else %}
+                            {{ groups.name }}</a>,
+                        {% endif %}
+                        {% endfor %}
                     </td>
                 <tr>
                 <tr>
@@ -43,9 +58,9 @@
                         <a href="{% url 'GM:plot_thread' plot_thread.id %}">
                         {% endif %}
                         {% if forloop.counter = plot_pice_form.instance.plot_pice.plot_threads.count %}
-                            {{ plot_thread }}</a>
+                            {{ plot_thread.name }}</a>
                         {% else %}
-                            {{ plot_thread }}</a>,
+                            {{ plot_thread.name }}</a>,
                         {% endif %}
                         {% endfor %}
                     </td>
@@ -70,6 +85,12 @@
 <input type="submit" value="Save all" />
 <a href="plot_pice/new"> Add new </a>
 
+
 {% block end %}
-{% endblock %}
+    </form> 
+    
+    <p> <BIG> <a href="{% url 'GM:index' %}">
+    Back to GM index
+    </a> </BIG> </p>
+{% endblock %}  
 

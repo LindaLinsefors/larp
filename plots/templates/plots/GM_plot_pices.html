@@ -1,9 +1,12 @@
 {% block top %}
+{{ class_form.as_p }}
 {% endblock %}
 
 
 <h2> Plot Pices </h2>
+
 <input type="submit" value="Save all" />
+<a href="plot_pice/new"> Add new </a>
 
 {{ plot_pice_forms.management_form }}
 <table>
@@ -39,11 +42,7 @@
                     </td>
                 <tr>
             </table>
-            <br>
-            {% block selfinfo %}
-                <a href="{% url 'GM:plot_pice' 'foo' 13  plot_pice_form.instance.plot_pice.id %}"> 
-            {% endblock %}
-            Edit </a>
+            <p><a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}"> Edit </a></p>
 
         </td>
         <td>
@@ -56,6 +55,9 @@
     </tr>
     {% endfor %}
 </table>
+
+<input type="submit" value="Save all" />
+<a href="plot_pice/new"> Add new </a>
 
 {% block end %}
 {% endblock %}

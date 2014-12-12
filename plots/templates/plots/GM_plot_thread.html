@@ -34,19 +34,14 @@
 
 {# here be plots/GM_plot_pices.html #}
 
-    {% block selfinfo %}
-        <a href="{% url 'GM:plot_pice' 'plot_thread' plot_thread.id  plot_pice_form.instance.plot_pice.id %}">
-    {% endblock %}
-
 
 
 {% block end %}
-    
-        <input type="submit" value="Save all" />
-    </form>  
 
-    <a href="{% url 'GM:index' %}">
-    Back to plot therad list
-    </a>
+    </form> 
+    
+    <p> <BIG> <a href="{% url 'GM:index' %}">
+    Back to GM index
+    </a> </BIG> </p>
 
 {% endblock %}  

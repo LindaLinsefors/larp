@@ -4,8 +4,6 @@
 
     <h1> Plot thread: {{ class_instance.name }} </h1>
 
-    <form method="POST" >
-        {% csrf_token %}
         <table> 
             <tr> <td>Name: </td><td> {{ class_form.name }}</td> </tr>
             <tr> <td>Summery: </td><td> {{ class_form.summery }}</td> </tr>
@@ -34,12 +32,4 @@
 
 
 
-{% block end %}
 
-    </form> 
-    
-    <p> <BIG> <a href="{% url 'GM:index' %}">
-    Back to GM index
-    </a> </BIG> </p>
-
-{% endblock %}  

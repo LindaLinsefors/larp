@@ -1,0 +1,33 @@
+{% extends "plots/GM_plots.html" %}
+
+{% block top %}
+
+    <h1> Personal plot for {{ class_instance.name }} </h1>
+
+    <h2> Groups </h2>
+    {% for group in class_instance.groups.all %}
+        <li>{{ gorup.name }}</li>
+    {% endfor %}
+    
+    
+    <h2> Character description </h2>
+    <p>{{ class_instance.character_description }}</p>
+
+    <h2> Other info </h2>
+    <p>{{ class_instance.other_info }}</p>
+
+    <h2> Plot </h2>
+    <p>Secret comments:<br>
+    {{ class_form.secret_comments }}</p>
+
+    <p>Plot thread is finished: {{ class_form.plot_is_finished }}</p>
+    <input type="submit" value="Save all" />
+
+
+
+{% endblock %}
+
+
+
+
+

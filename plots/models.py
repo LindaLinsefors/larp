@@ -118,8 +118,7 @@ class Character(BasicModel):
     character_description.help_text = (
         'Character description is usually provided by the player but can also be written by Game Master. Do not change a character description written by a player. <br><i>Player can read and write.</i>')
 
-    comments_to_player = models.TextField(blank=True, default='')
-    comments_to_player.help_text = '<i>Player can read but not write.</i>'
+    other_info = models.TextField(blank=True, default='')
     
     secret_comments = models.TextField(blank=True, default='')
     secret_comments.help_text = '<i>Player can nether read nor write.</i>'

@@ -180,12 +180,7 @@ def group_plot(request, id):
 class PersonalPlotForm(forms.ModelForm):
     class Meta:
         model = Character
-        fields = [  'name',
-                    'character_concept',
-                    'presentation',
-                    'character_description',
-                    'comments_to_player',
-                    'secret_comments',   
+        fields = [  'secret_comments',   
                     'plot_is_finished'     ]
 
 class PersonalPlotPiceForm(PlotPiceInlineForm):
@@ -199,5 +194,5 @@ PersonalPlotPiceForms = forms.inlineformset_factory(Character, PersonalPlotPice,
 
 def personal_plot(request, id): 
     return plots(   request, Character, id, PersonalPlotForm, PersonalPlotPiceForms, 
-                    template='plots/GM_plots.html'        )
+                    template='plots/GM_personal_plot.html'        )
 

@@ -9,8 +9,17 @@
 <a href="plot_pice/new"> Add new </a>
 
 {{ plot_pice_forms.management_form }}
+
+{% comment %}
+    {% for plot_pice_form in plot_pice_forms %}
+    {{ plot_pice_form.as_p }}
+    {% endfor %}
+{% endcomment %}
+
 <table>
     {% for plot_pice_form in plot_pice_forms %}
+    {{ plot_pice_form.id }}
+    {{ plot_pice_form.plot_thread }}
     <tr>
         <td>
             <table>
@@ -55,6 +64,8 @@
     </tr>
     {% endfor %}
 </table>
+
+
 
 <input type="submit" value="Save all" />
 <a href="plot_pice/new"> Add new </a>

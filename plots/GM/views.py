@@ -98,8 +98,8 @@ def plot_thread(request, id):
     plot_part_forms = PlotPartForms(instance=plot_thread)
     
     return render(request, 'plots/GM_plot_thread.html',
-            {'class_form': plot_thread_form,
-            'class_instance': plot_thread ,
+           {'plot_thread_form': plot_thread_form,
+            'plot_thread': plot_thread ,
             'plot_pice_forms': plot_part_forms}     ) 
 
 

@@ -63,7 +63,14 @@ class PersonalPlotPice(BasicPlotRelation):
 
 
 
-class PlotPice(BasicModel):
+class PlotPice(models.Model):
+
+    def __str__(self):
+        return self.plot_pice[0:50]+'...' 
+    def __unicode__(self):          # for Python 2 
+        return unicode(self.plot_pice[0:50])+'...' 
+    __str__.short_description = 'str'
+
     characters = models.ManyToManyField(
                 'Character', null=True, blank=True, through='PersonalPlotPice')
     groups = models.ManyToManyField(

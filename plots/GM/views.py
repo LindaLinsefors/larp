@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 from django import forms
 
-from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart
+from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership
 from plots import for_views
 
 
@@ -13,7 +13,11 @@ def index(request):
     return render(request, 'plots/GM_index.html',
               { 'plot_threads': PlotThread.objects.all(),
                 'groups': Group.objects.all(),
-                'characters': Character.objects.all(),      } )
+                'characters': Character.objects.all(),  
+                'characters_without_group': 
+                       [character for character 
+                        in Character.objects.all() 
+                        if list( character.membership_set.all() )==[] ]     } )
 
 
 
@@ -80,7 +84,8 @@ def plot_pice(request, parent_type, parent_id, id):
                 'parent_id': parent_id                  }   )
 
 
-
+def new_plot_pice(request, parent_type, parent_id):  
+    pass
 
 #Plot Pice Inline
 
@@ -108,6 +113,7 @@ def plots(request, Class, id, ClassForm, InlineFormset, template='plots/GM_plots
            {'class_form': class_form,
             'class_instance': class_instance ,
             'plot_pice_forms': inline_formset}   )   
+
 
 class PlotPiceInlineForm(forms.ModelForm):
     class Meta:
@@ -149,7 +155,8 @@ def plot_thread(request, id):
     return plots(   request, PlotThread, id, PlotThreadForm, PlotPartForms, 
                     template='plots/GM_plot_thread.html'        )
 
-
+def new_plot_thread(request):
+    pass 
 
 
 
@@ -181,7 +188,20 @@ class PersonalPlotForm(forms.ModelForm):
     class Meta:
         model = Character
         fields = [  'secret_comments',   
-                    'plot_is_finished'     ]
+                    'plot_is_finished',
+                    'character_description',
+                    'other_info'             ]
+
+    character_description = forms.CharField(
+            widget=forms.Textarea(attrs={'readonly':'readonly'}), 
+            required=False,      )
+
+    other_info = forms.CharField(
+            widget=forms.Textarea(attrs={'readonly':'readonly'}), 
+            required=False,      )
+
+
+
 
 class PersonalPlotPiceForm(PlotPiceInlineForm):
     class Meta(PlotPiceInlineForm.Meta):
@@ -196,3 +216,60 @@ def personal_plot(request, id):
     return plots(   request, Character, id, PersonalPlotForm, PersonalPlotPiceForms, 
                     template='plots/GM_personal_plot.html'        )
 
+
+def new_personal_plot(request): 
+    pass
+
+
+# Group
+def group(request, id): 
+    pass
+
+def new_group(request): 
+    pass
+
+# Character
+
+class CharacterFormBasic(forms.ModelForm):
+    class Meta:
+        model = Character
+        fields = [  'name', 
+                    'character_concept', 
+                    'presentation', 
+                    'character_description',
+                    'other_info',
+                    'secret_comments'       ]
+   
+    
+def CharacterForm(*args, **kw):
+    class CharacterFormClass(CharacterFormBasic):
+
+        groups = for_views.checkboxes( Group.objects.all() )
+
+        def __init__(self, *args, **kw):
+            CharacterFormBasic.__init__(self, *args, **kw)
+            if kw.has_key('instance'):
+                self.fields['groups'].initial = self.instance.groups.all()
+            
+        def save(self):
+            self.is_valid()
+            CharacterFormBasic.save(self)
+            for_views.save_relations(   self.instance,
+                                        Group.objects.all(),
+                                        self.instance.groups.all(), 
+                                        self.cleaned_data['groups'],
+                                        Membership, 'character', 'group' )
+
+    return CharacterFormClass(*args, **kw)
+
+
+
+def character(request, id): 
+    return for_views.form_view( request, Character, id, CharacterForm, 
+                                template='plots/GM_character.html'      )
+
+
+def new_character(request): 
+    return for_views.new_view(  request, Character, CharacterForm, 
+                                url='GM:character',
+                                template='plots/GM_character.html'  )

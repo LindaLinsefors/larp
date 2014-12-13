@@ -1,4 +1,7 @@
 from django import forms
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 def checkboxes(choice_list):
     return forms.MultipleChoiceField(
@@ -22,4 +25,31 @@ def save_relations( instance,
             RelationClass.objects.get(**{choice_type:choice, instance_type:instance}).delete()        
             
 
+def form_view(request, Class, id, ClassForm, template='plots/form_template'):
+    class_instance = get_object_or_404(Class, pk=id)
 
+    if request.method == 'POST':
+        class_form = ClassForm(request.POST, instance=class_instance)
+        if class_form.is_valid():
+            class_form.save()
+    else:
+        class_form = ClassForm(instance=class_instance)     
+
+    return render(  request, template,
+                   {'class_form': class_form,
+                    'class_instance': class_instance}   )   
+
+
+def new_view(request, Class, ClassForm, url='GM:stuff', template='plots/form_template'):
+    if request.method == 'POST':
+        class_form = ClassForm(request.POST)
+        if class_form.is_valid():
+            class_form.save()
+            return HttpResponseRedirect(            
+                reverse(url, args=(class_form.instance.id,))  )
+    else:
+        class_form = ClassForm()
+
+    return render(  request, template,
+                   {'class_form': class_form}   )   
+        

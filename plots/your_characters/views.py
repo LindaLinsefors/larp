@@ -15,8 +15,8 @@ class YourCharacterFormBasic(forms.ModelForm):
         fields = [  'name', 
                     'character_concept', 
                     'presentation', 
-                    'character_description'   ]
-
+                    'character_description',
+                    'other_info'   ]
 
 def YourCharacterForm(*args, **kw):
     class YourCharacterFormClass(YourCharacterFormBasic):
@@ -27,9 +27,6 @@ def YourCharacterForm(*args, **kw):
             YourCharacterFormBasic.__init__(self, *args, **kw)
             if kw.has_key('instance'):
                 self.fields['groups'].initial = self.instance.groups.filter(is_open=True)
-    
-#        def get_initial(self):  #What is the pupous of this function?
-#            initial = YourCharacterFormBasic.get_initial(self)   
             
         def save(self):
             self.is_valid()

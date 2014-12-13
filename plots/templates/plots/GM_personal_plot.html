@@ -1,29 +1,36 @@
 {% extends "plots/GM_plots.html" %}
 
+
 {% block top %}
 
-    <h1> Personal plot for {{ class_instance.name }} </h1>
+    <h1> Personal plot for: {{ class_instance.name }} </h1>
+    
+    <p>
+    Character description:<br>
+    {{ class_form.character_description }}
+    </p>
+    
+    <p>
+    Other info:<br>
+    {{ class_form.other_info }}
+    </p>
+
+    <p> 
+    Secret comments:<br>
+    {{ class_form.secret_comments }}
+    </p>
+
+    <p>
+    Plot thread is finished: {{ class_form.plot_is_finished }}
+    </p>
+    
+    <input type="submit" value="Save all" />
+    <a href="{% url 'GM:character' class_instance.id %}"> Edit character </a>
 
     <h2> Groups </h2>
     {% for group in class_instance.groups.all %}
-        <li>{{ gorup.name }}</li>
+        <a href="{% url 'GM:group_plot' group.id %}">{{ group.name }}</a><br>
     {% endfor %}
-    
-    
-    <h2> Character description </h2>
-    <p>{{ class_instance.character_description }}</p>
-
-    <h2> Other info </h2>
-    <p>{{ class_instance.other_info }}</p>
-
-    <h2> Plot </h2>
-    <p>Secret comments:<br>
-    {{ class_form.secret_comments }}</p>
-
-    <p>Plot thread is finished: {{ class_form.plot_is_finished }}</p>
-    <input type="submit" value="Save all" />
-
-
 
 {% endblock %}
 

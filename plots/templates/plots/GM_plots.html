@@ -1,5 +1,7 @@
-<form method="POST" >
-        {% csrf_token %}
+<!DOCTYPE html>
+
+<form method="POST">
+{% csrf_token %}
 
 {% block top %}
 {{ class_form.as_p }}

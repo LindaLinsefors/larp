@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<form method="POST">
+{% csrf_token %}
+    
+    {% if class_instance %}
+        <h1> Character: {{ class_instance.name }} </h1>
+        <p><i>Think verry carefylly before changing anything that was written by the player!</i></p>
+    {% else %}
+        <h1> New Character </h1>
+    {% endif %}
+
+    <table>
+        <tr><td>Name: </td><td>{{ class_form.name }}</td></tr>
+        <tr><td>Character concept: </td><td> {{ class_form.character_concept }}</td></tr>
+    <table>
+
+    <p>
+    Character description:<br>
+    {{ class_form.character_description }}
+    </p>
+
+    <p>
+    Other info:<br>
+    {{ class_form.other_info }}
+    </p>
+
+    <p> 
+    Secret comments:<br>
+    {{ class_form.secret_comments }}
+    </p>
+
+    <input type="submit" value="Save all" />
+
+    <h2>Groups</h2>
+    {{ class_form.groups }}
+
+    <input type="submit" value="Save all" />
+
+</form>
+
+{% if class_instance %}
+    <p> <a href="{% url 'GM:personal_plot' class_instance.id %}">
+    To Character Plot
+    </a> </p>
+{% endif %}
+
+<p> <a href="{% url 'GM:new_character' %}">
+New Character
+</a> </p>
+
+<p> <a href="{% url 'GM:index' %}">
+To GM index
+</a> </p>
+

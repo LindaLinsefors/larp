@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 
-<h1> Plot Pice </h1>
-
 <form method="POST" >
     {% csrf_token %}
-    {{ plot_pice_form.as_p }}
+    {{ class_form.as_p }}
     <input type="submit" value="Save" />
 </form>
-
-<a href="{% url parent_url parent_id %}">
-    Back
-</a>

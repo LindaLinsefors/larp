@@ -127,8 +127,8 @@ class CharacterAdmin(admin.ModelAdmin):
                                                 'plot_is_finished']}),
         ('Character description',   {'fields': ['presentation',
                                                 'character_description',
-                                                'comments_to_player',
-                                                'seceret_comments'], 
+                                                'other_info',
+                                                'secret_comments'], 
                                      'classes': ['collapse']})
     ]
 
@@ -226,6 +226,31 @@ class PlotPiceAdmin(admin.ModelAdmin):
 admin.site.register(PlotPice, PlotPiceAdmin)
 
 
+
+#Relations
+
+class MembershipAdmin(admin.ModelAdmin):
+    list_display = ('id', 'character', 'group')
+
+admin.site.register(Membership, MembershipAdmin)
+
+
+class PlotPartAdmin(admin.ModelAdmin):
+    list_display = ('id', 'plot_pice', 'plot_thread')
+
+admin.site.register(PlotPart, PlotPartAdmin)
+
+
+class GroupPlotPiceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'plot_pice', 'group')
+
+admin.site.register(GroupPlotPice, GroupPlotPiceAdmin)
+
+
+class PersonalPlotPiceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'plot_pice', 'character')
+
+admin.site.register(PersonalPlotPice, PersonalPlotPiceAdmin)
 
 
 

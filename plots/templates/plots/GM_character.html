@@ -36,7 +36,6 @@
     {{ class_form.groups }}
 
     <input type="submit" value="Save all" />
-
 </form>
 
 
@@ -48,11 +47,11 @@
     <p> <a href="{% url 'GM:delete' 'character' id %}">
     Delete Charactet
     </a> </p>
-{% endif %}
 
-<p> <a href="{% url 'GM:new_character' %}">
-New Character
-</a> </p>
+    <p> <a href="{% url 'GM:new_character' %}">
+    New Character
+    </a> </p>
+{% endif %}
 
 <p> <a href="{% url 'GM:index' %}">
 To GM index

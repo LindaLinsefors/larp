@@ -36,7 +36,7 @@ def form_view(request, Class, id, ClassForm, template='plots/form_template'):
         class_form = ClassForm(instance=class_instance)     
 
     return render(  request, template,
-                   {'class_form': class_form,
+                   {'class_form': class_form, 'id':id,
                     'class_instance': class_instance}   )   
 
 

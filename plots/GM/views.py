@@ -273,3 +273,19 @@ def new_character(request):
     return for_views.new_view(  request, Character, CharacterForm, 
                                 url='GM:character',
                                 template='plots/GM_character.html'  )
+
+#Delete
+
+class_dict = {  'group': Group,
+                'character': Character,
+                'plot_thread': PlotThread   }
+
+def delete(request, class_name, id):
+    class_instance = get_object_or_404(class_dict[class_name], pk=id)
+    if request.method == 'POST':
+        class_instance.delete()
+        return HttpResponseRedirect( reverse('GM:index') )
+    
+    return render(  request, 'plots/GM_delete.html',
+                    {'name': class_instance.name}   )
+        

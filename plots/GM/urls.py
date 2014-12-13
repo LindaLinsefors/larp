@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^plot_thread/new/$', views.new_plot_thread, name='new_plot_thread'),
     url(r'^group/new/$', views.new_group, name='new_group'),
     url(r'^character/new/$', views.new_character, name='new_character'),
+
+    url(r'^(?P<class_name>\w+)/(?P<id>[0-9]+)/delete$', views.delete, name='delete'),
 ]

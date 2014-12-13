@@ -39,9 +39,14 @@
 
 </form>
 
-{% if class_instance %}
-    <p> <a href="{% url 'GM:personal_plot' class_instance.id %}">
+
+{% if id %}
+    <p> <a href="{% url 'GM:personal_plot' id %}">
     To Character Plot
+    </a> </p>
+
+    <p> <a href="{% url 'GM:delete' 'character' id %}">
+    Delete Charactet
     </a> </p>
 {% endif %}
 

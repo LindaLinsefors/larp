@@ -27,6 +27,8 @@ class PlotPiceFormBasic(forms.ModelForm):
     class Meta:
         model=PlotPice
         fields = [ 'plot_pice' ]
+    
+    new_plot_thread_name = forms.CharField(required=False, max_length=50)
 
 def PlotPiceForm(*args, **kw):
 
@@ -62,6 +64,15 @@ def PlotPiceForm(*args, **kw):
                                         self.instance.plot_threads.all(), 
                                         self.cleaned_data['plot_threads'],
                                         PlotPart, 'plot_pice', 'plot_thread' )
+            
+            if self.cleaned_data['new_plot_thread_name']:
+                new_plot_thread = PlotThread(
+                        name=self.cleaned_data['new_plot_thread_name'] )
+                new_plot_thread.save()
+                PlotPart(   plot_pice=self.instance,
+                            plot_thread=new_plot_thread ).save()
+                
+
 
     return PlotPiceFromClass(*args, **kw)
 
@@ -75,8 +86,8 @@ def plot_pice(request, parent_type, parent_id, id):
         plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
         if plot_pice_form.is_valid():
             plot_pice_form.save()
-    else:
-        plot_pice_form = PlotPiceForm(instance=plot_pice)
+
+    plot_pice_form = PlotPiceForm(instance=plot_pice)
     
     return render(request, 'plots/GM_plot_pice.html',
             {   'plot_pice_form': plot_pice_form,

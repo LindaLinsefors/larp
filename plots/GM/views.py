@@ -28,7 +28,24 @@ class PlotPiceFormBasic(forms.ModelForm):
         model=PlotPice
         fields = [ 'plot_pice' ]
     
+    new_character_name = forms.CharField(required=False, max_length=50)
+    new_group_name = forms.CharField(required=False, max_length=50)    
     new_plot_thread_name = forms.CharField(required=False, max_length=50)
+
+    def save_new_relation(self, Class, class_name, RelationClass):
+        if self.cleaned_data['new_'+class_name+'_name']:
+            new = Class( name=self.cleaned_data['new_'+class_name+'_name'] )
+            new.save()
+            RelationClass( plot_pice=self.instance, plot_thread=new ).save()
+
+        def save(self):
+            self.is_valid()
+            forms.ModelForm.save(self)
+            self.save_new_relation(Character, character, CharacterPlotPice)
+            self.save_new_relation(Group, group, GroupPlotPice)
+            self.save_new_relation(PlotThread, PlotThread, PlotPart)
+
+
 
 def PlotPiceForm(*args, **kw):
 
@@ -65,15 +82,6 @@ def PlotPiceForm(*args, **kw):
                                         self.cleaned_data['plot_threads'],
                                         PlotPart, 'plot_pice', 'plot_thread' )
             
-            if self.cleaned_data['new_plot_thread_name']:
-                new_plot_thread = PlotThread(
-                        name=self.cleaned_data['new_plot_thread_name'] )
-                new_plot_thread.save()
-                PlotPart(   plot_pice=self.instance,
-                            plot_thread=new_plot_thread ).save()
-                
-
-
     return PlotPiceFromClass(*args, **kw)
 
 

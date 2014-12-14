@@ -85,7 +85,26 @@ def plot_pice(request, parent_type, parent_id, id):
 
 
 def new_plot_pice(request, parent_type, parent_id):  
-    pass
+    
+    if request.method == 'POST':
+        plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
+        if plot_pice_form.is_valid():
+            plot_pice_form.save()
+            return HttpResponseRedirect(            
+                reverse('GM:plot_pice', 
+                        args=(parent_type, parent_id, 
+                              class_plot_form.instance.id,))  )
+    else:
+        plot_pice_form = PlotPiceForm()
+    
+    return render(request, 'plots/GM_plot_pice.html',
+            {   'plot_pice_form': plot_pice_form,
+                'parent_url': 'GM:'+parent_type,
+                'parent_id': parent_id                  }   )
+
+
+
+
 
 #Plot Pice Inline
 

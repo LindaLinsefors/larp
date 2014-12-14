@@ -4,7 +4,8 @@
 {% csrf_token %}
 
 {% block top %}
-{{ class_form.as_p }}
+    <h1>{{ class_instance.name }}</h1>
+    {{ class_form.as_p }}
 {% endblock %}
 
 

@@ -87,13 +87,13 @@ def plot_pice(request, parent_type, parent_id, id):
 def new_plot_pice(request, parent_type, parent_id):  
     
     if request.method == 'POST':
-        plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
+        plot_pice_form = PlotPiceForm(request.POST)
         if plot_pice_form.is_valid():
             plot_pice_form.save()
             return HttpResponseRedirect(            
                 reverse('GM:plot_pice', 
                         args=(parent_type, parent_id, 
-                              class_plot_form.instance.id,))  )
+                              plot_pice_form.instance.id,))  )
     else:
         plot_pice_form = PlotPiceForm()
     

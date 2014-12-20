@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+
+
+<h1> {{ group.name }}, Members </h1>
+
+<form method="POST" >
+    {% csrf_token %}
+    {{ members_form.characters }}
+
+    <input type="submit" value="Save" />
+</form>
+
+<p> <a href="{% url 'GM:index' %}">
+Cancel
+</a> </p>

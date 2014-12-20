@@ -35,5 +35,8 @@ urlpatterns = [
             views.delete_plot_pice, name='delete'),
 
     # Members
-    url(r'^group_members/(?P<id>[0-9]+)$', views.members, name='members'),
+    url(r'^group_members/(?P<id>[0-9]+)$', 
+            views.members_from_index, name='members'),
+    url(r'^(?P<parent_type>\w+)/(?P<id>[0-9]+)/members$', 
+            views.members_from_parent, name='members'),
 ]

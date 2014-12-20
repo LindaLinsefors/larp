@@ -299,8 +299,8 @@ class GroupForm(forms.ModelForm):
                     'secret_comments',       ]
 
 
-def GroupMembersForm(*args, **kw):
-    class GroupMembersFormClass(forms.ModelForm):
+def MembersForm(*args, **kw):
+    class MembersFormClass(forms.ModelForm):
         class Meta:
             model = Group
             fields = []
@@ -310,7 +310,7 @@ def GroupMembersForm(*args, **kw):
         def __init__(self, *args, **kw):
             forms.ModelForm.__init__(self, *args, **kw)
             if kw.has_key('instance'):
-                self.fields['characters'].initial = self.instance.characters.all()
+                self.fields['characters'].initial = self.instance.character_set.all()
 
         def save(self):
             self.is_valid()
@@ -318,11 +318,11 @@ def GroupMembersForm(*args, **kw):
          
             for_views.save_relations(   self.instance,
                                         Character.objects.all(),
-                                        self.instance.characters_set.all(), 
+                                        self.instance.character_set.all(), 
                                         self.cleaned_data['characters'],
                                         Membership, 'character', 'group' )
 
-    return GroupMembersFormClass(*args, **kw)
+    return MembersFormClass(*args, **kw)
         
 
 
@@ -335,8 +335,30 @@ def new_group(request):
     return for_views.new(  request, Group, GroupForm, 
                            url='GM:group',       )
 
-def members(request, id):
-    return for_views.edit( request, Group, id, GroupMembersForm,   )
+def members_old(request, id, back): # This one works
+    return for_views.edit( request, Group, id, MembersForm  )
+
+def members(request, id, back):
+    group = get_object_or_404(Group, pk=id)
+
+    if request.method == 'POST':
+        members_form = MembersForm(request.POST, instance=group)
+        if members_form.is_valid():
+            members_form.save()
+            return HttpResponseRedirect( back )
+
+    members_form = MembersForm(instance=group)
+    
+    return render(request, 'plots/GM_members',
+            {   'members_form': members_form,
+                'group': group,                 }   )
+
+def members_from_index(request, id):
+    return members(request, id, reverse('GM:index') )
+
+def members_from_parent(request, id, parent_type ):
+    return members( request, id, 
+                    reverse('GM:'+parent_type, args=(id,)) )
 
 # Character
 

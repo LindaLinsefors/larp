@@ -33,4 +33,7 @@ urlpatterns = [
     url(r'^(?P<class_name>\w+)/(?P<id>[0-9]+)/delete$', views.delete, name='delete'),
     url(r'^(?P<parent_type>\w+)/(?P<parent_id>[0-9]+)/plot_pice/(?P<id>[0-9]+)/delete$', 
             views.delete_plot_pice, name='delete'),
+
+    # Members
+    url(r'^group_members/(?P<id>[0-9]+)$', views.members, name='members'),
 ]

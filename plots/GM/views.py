@@ -299,7 +299,7 @@ class GroupForm(forms.ModelForm):
                     'secret_comments',       ]
 
 
-def GroupMemnersForm(*args, **kw):
+def GroupMembersForm(*args, **kw):
     class GroupMembersFormClass(forms.ModelForm):
         class Meta:
             model = Group
@@ -320,9 +320,9 @@ def GroupMemnersForm(*args, **kw):
                                         Character.objects.all(),
                                         self.instance.characters_set.all(), 
                                         self.cleaned_data['characters'],
-                                        PersonalPlotPice, 'plot_pice', 'character' )
+                                        Membership, 'character', 'group' )
 
-    return GroupMemnersFormClass(*args, **kw)
+    return GroupMembersFormClass(*args, **kw)
         
 
 
@@ -335,7 +335,7 @@ def new_group(request):
     return for_views.new(  request, Group, GroupForm, 
                            url='GM:group',       )
 
-def group_members(request, id):
+def members(request, id):
     return for_views.edit( request, Group, id, GroupMembersForm,   )
 
 # Character

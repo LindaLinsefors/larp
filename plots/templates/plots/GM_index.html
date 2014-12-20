@@ -53,7 +53,8 @@
         <h2> 
         {{ group.name }}  
         (<a href="{% url 'GM:group_plot' group.id %}">Plot</a>,
-         <a href="{% url 'GM:group' group.id %}">Edit</a>)
+         <a href="{% url 'GM:group' group.id %}">Edit</a>,
+         <a href="{% url 'GM:members' group.id %}">Members</a>)
         </h2> 
         
         <ul>

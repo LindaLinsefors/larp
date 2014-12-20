@@ -13,19 +13,31 @@
 
 
     <h2> Groups involved <small>(not including personal plots)</small> </h2>
+    <ul>    
     {% for group in class_instance.groups %}
-        <li>{{ gorup.name }}</li>
+        <li>
+        <a href="{% url 'GM:group_plot' group.id %}"> {{ gorup.name }} </a>
+        </li>
     {% endfor %}
+    </ul>
 
     <h2> Groups involved <small>(including personal plots)</small> </h2>
+    <ul>
     {% for group in class_instance.groups_incl_char %}
-        <li>{{ group.name }}</li>
+        <li>
+        <a href="{% url 'GM:group_plot' group.id %}"> {{ gorup.name }} </a>
+        </li>
     {% endfor %}
+    </ul>
 
-    <h2> Characters involved </h2>
+    <h2> Characters involved <small>(not including group plots)</small> </h2>
+    <ul>
     {% for character in class_instance.characters %}
-        <li>{{ character.name }}</li>
+        <li>
+        <a href="{% url 'GM:personal_plot' group.id %}"> {{ character.name }} </a>
+        </li>
     {% endfor %}
+    </ul>
 
 {% endblock %}
 

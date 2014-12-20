@@ -82,8 +82,8 @@ def PlotPiceForm(*args, **kw):
                                         GroupPlotPice, 'plot_pice', 'group' )
          
             for_views.save_relations(   self.instance,
-                                        Character.objects.filter(),
-                                        self.instance.characters.filter(), 
+                                        Character.objects.all(),
+                                        self.instance.characters.all(), 
                                         self.cleaned_data['characters'],
                                         PersonalPlotPice, 'plot_pice', 'character' )
 
@@ -288,11 +288,55 @@ def new_personal_plot(request):
 
 
 # Group
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = [  'name',
+                    'is_open',
+                    'show_members',
+                    'group_description',
+                    'secret_comments',       ]
+
+
+def GroupMemnersForm(*args, **kw):
+    class GroupMembersFormClass(forms.ModelForm):
+        class Meta:
+            model = Group
+            fields = []
+
+        characters = for_views.checkboxes( Character.objects.all() )
+
+        def __init__(self, *args, **kw):
+            forms.ModelForm.__init__(self, *args, **kw)
+            if kw.has_key('instance'):
+                self.fields['characters'].initial = self.instance.characters.all()
+
+        def save(self):
+            self.is_valid()
+            forms.ModelForm.save(self)
+         
+            for_views.save_relations(   self.instance,
+                                        Character.objects.all(),
+                                        self.instance.characters_set.all(), 
+                                        self.cleaned_data['characters'],
+                                        PersonalPlotPice, 'plot_pice', 'character' )
+
+    return GroupMemnersFormClass(*args, **kw)
+        
+
+
+
 def group(request, id): 
-    pass
+    return for_views.edit( request, Group, id, GroupForm,   )
+
 
 def new_group(request): 
-    pass
+    return for_views.new(  request, Group, GroupForm, 
+                           url='GM:group',       )
+
+def group_members(request, id)
+    return for_views.edit( request, Group, id, GroupMembersForm,   )
 
 # Character
 
@@ -331,12 +375,12 @@ def CharacterForm(*args, **kw):
 
 
 def character(request, id): 
-    return for_views.form_view( request, Character, id, CharacterForm, 
+    return for_views.edit( request, Character, id, CharacterForm, 
                                 template='plots/GM_character.html'      )
 
 
 def new_character(request): 
-    return for_views.new_view(  request, Character, CharacterForm, 
+    return for_views.new(  request, Character, CharacterForm, 
                                 url='GM:character',
                                 template='plots/GM_character.html'  )
 

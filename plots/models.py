@@ -9,6 +9,7 @@ from django.core import urlresolvers, validators
 class BasicModel(models.Model):
     class Meta:
         abstract = True
+        ordering = ['name']
     name = models.CharField(max_length=50)
     def __str__(self):
         return self.name

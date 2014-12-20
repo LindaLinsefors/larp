@@ -25,7 +25,7 @@ def save_relations( instance,
             RelationClass.objects.get(**{choice_type:choice, instance_type:instance}).delete()        
             
 
-def form_view(request, Class, id, ClassForm, template='plots/form_template'):
+def edit(request, Class, id, ClassForm, template='plots/form_template'):
     class_instance = get_object_or_404(Class, pk=id)
 
     if request.method == 'POST':
@@ -40,7 +40,7 @@ def form_view(request, Class, id, ClassForm, template='plots/form_template'):
                     'class_instance': class_instance}   )   
 
 
-def new_view(request, Class, ClassForm, url='GM:stuff', template='plots/form_template'):
+def new(request, Class, ClassForm, url='GM:stuff', template='plots/form_template'):
     if request.method == 'POST':
         class_form = ClassForm(request.POST)
         if class_form.is_valid():

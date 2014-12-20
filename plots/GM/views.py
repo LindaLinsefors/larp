@@ -14,10 +14,21 @@ def index(request):
               { 'plot_threads': PlotThread.objects.all(),
                 'groups': Group.objects.all(),
                 'characters': Character.objects.all(),  
+                # There is probably a better way to do this with filter
                 'characters_without_group': 
-                       [character for character 
-                        in Character.objects.all() 
-                        if list( character.membership_set.all() )==[] ]     } )
+                   [character for character 
+                    in Character.objects.all() 
+                    if list( character.membership_set.all() )==[] ],
+                'plot_pices_without_character_or_group':
+                   [plot_pice for plot_pice
+                    in PlotPice.objects.all()
+                    if (list( plot_pice.characters.all() )==[]
+                        and list( plot_pice.groups.all() )==[] ) ],   
+                'plot_pices_without_plot_thread':
+                   [plot_pice for plot_pice
+                    in PlotPice.objects.all()
+                    if list( plot_pice.plot_threads.all() )==[] ],       
+                } )
 
 
 
@@ -101,6 +112,22 @@ def plot_pice(request, parent_type, parent_id, id):
             {   'plot_pice_form': plot_pice_form,
                 'parent_url': 'GM:'+parent_type,
                 'parent_id': parent_id                  }   )
+
+
+def plot_pice_no_parent(request, id):  
+    plot_pice = get_object_or_404(PlotPice, pk=id)
+
+    if request.method == 'POST':
+        plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
+        if plot_pice_form.is_valid():
+            plot_pice_form.save()
+
+    plot_pice = PlotPiceForm(instance=plot_pice)
+    
+    return render(request, 'plots/GM_plot_pice.html',
+            {   'plot_pice_form': plot_pice_form,
+                'parent_url': 'GM:index'         }   )
+
 
 
 def new_plot_pice(request, parent_type, parent_id):  

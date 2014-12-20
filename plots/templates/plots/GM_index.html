@@ -15,6 +15,36 @@
     <p>There are no plot threads yet.</p>
 {% endif %}
 
+<h1> Plot Pices without Character or Group </h1>
+{% if plot_pices_without_character_or_group %}
+    <ul>
+    {% for plot_pice in plot_pices_without_character_or_group %} 
+        <li>
+        <h3> <a href="{% url 'GM:plot_pice_no_parent' plot_pice.id %}"> 
+        {{ plot_pice }} </a> </h3> 
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>There are no such plot pices.</p>
+{% endif %}
+
+<h1> Plot Pices without Plot Thread </h1>
+{% if plot_pices_without_plot_thread %}
+    <ul>
+    {% for plot_pice in plot_pices_without_plot_thread %} 
+        <li>
+        <h3> <a href="{% url 'GM:plot_pice_no_parent' plot_pice.id %}"> 
+        {{ plot_pice }} </a> </h3> 
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>There are no such plot pices.</p>
+{% endif %}
+
+
+
 <h1> Groups <small>(<a href="{% url 'GM:new_group' %}">New</a>)</small> </h1>
 {% if groups %}
     <ul>

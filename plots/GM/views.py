@@ -105,6 +105,8 @@ def plot_pice(request, parent_type, parent_id, id):
         plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
         if plot_pice_form.is_valid():
             plot_pice_form.save()
+            return HttpResponseRedirect(            
+                reverse('GM:'+parent_type, args=( parent_id,))  )
 
     plot_pice_form = PlotPiceForm(instance=plot_pice)
     
@@ -121,13 +123,14 @@ def plot_pice_no_parent(request, id):
         plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
         if plot_pice_form.is_valid():
             plot_pice_form.save()
+            return HttpResponseRedirect(            
+                reverse('GM:index', args=( parent_id,))  )
 
     plot_pice_form = PlotPiceForm(instance=plot_pice)
     
     return render(request, 'plots/GM_plot_pice.html',
             {   'plot_pice_form': plot_pice_form,
                 'parent_url': 'GM:index'         }   )
-
 
 
 def new_plot_pice(request, parent_type, parent_id):  
@@ -137,9 +140,7 @@ def new_plot_pice(request, parent_type, parent_id):
         if plot_pice_form.is_valid():
             plot_pice_form.save()
             return HttpResponseRedirect(            
-                reverse('GM:plot_pice', 
-                        args=(parent_type, parent_id, 
-                              plot_pice_form.instance.id,))  )
+                reverse('GM:'+parent_type, args=( parent_id,))  )
     else:
         plot_pice_form = PlotPiceForm()
     
@@ -352,11 +353,14 @@ def delete(request, class_name, id):
         class_instance.delete()
         return HttpResponseRedirect( reverse('GM:index') )
     
-    if class_name == 'plot_pice': name = 'Plot Pice'
-    else: name = class_instance.name
+    if class_name == 'plot_pice': 
+        name = 'Plot Pice'
+    else: 
+        name = class_instance.name
         
     return render(  request, 'plots/GM_delete.html',
-                    {'name': name}   )
+                   {'name': name,
+                    'back': reverse('GM:'+class_name, args=(id,)) })
         
 
 def delete_plot_pice(request, parent_type, parent_id, id):
@@ -367,6 +371,9 @@ def delete_plot_pice(request, parent_type, parent_id, id):
                 reverse('GM:'+parent_type, args=(parent_id,) ))
 
     return render( request, 'plots/GM_delete.html',
-                   {'name': 'Plot Pice'}            )
+                   {'name': 'Plot Pice',
+                    'back': reverse('GM:'+class_name, 
+                                    args=(parent_type, parent_id, id)) 
+                    })
 
 

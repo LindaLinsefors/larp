@@ -154,7 +154,7 @@ def new_plot_pice(request, parent_type, parent_id):
 
 #Plot Pice Inline
 
-def save_formset(formset): 
+def save_formset(formset): #Is this needed?
     for form in formset:
         form.save()           
 
@@ -213,7 +213,7 @@ class PlotPartForm(PlotPiceInlineForm):
 
 PlotPartForms = forms.inlineformset_factory(PlotThread, PlotPart, 
                                             form=PlotPartForm, 
-                                            can_delete=False,
+                                            can_delete=False, #Look in to this
                                             extra=0             )
 
 def plot_thread(request, id): 
@@ -362,7 +362,7 @@ def delete(request, class_name, id):
 def delete_plot_pice(request, parent_type, parent_id, id):
     plot_pice = get_object_or_404(PlotPice, pk=id)
     if request.method == 'POST':
-        class_instance.delete()
+        plot_pice.delete()
         return HttpResponseRedirect( 
                 reverse('GM:'+parent_type, args=(parent_id,) ))
 

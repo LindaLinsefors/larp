@@ -123,8 +123,7 @@ def plot_pice_no_parent(request, id):
         plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
         if plot_pice_form.is_valid():
             plot_pice_form.save()
-            return HttpResponseRedirect(            
-                reverse('GM:index', args=( parent_id,))  )
+            return HttpResponseRedirect( reverse('GM:index') )
 
     plot_pice_form = PlotPiceForm(instance=plot_pice)
     
@@ -296,6 +295,7 @@ class GroupForm(forms.ModelForm):
                     'is_open',
                     'show_members',
                     'group_description',
+                    'members_presentations',
                     'secret_comments',       ]
 
 
@@ -335,7 +335,7 @@ def new_group(request):
     return for_views.new(  request, Group, GroupForm, 
                            url='GM:group',       )
 
-def group_members(request, id)
+def group_members(request, id):
     return for_views.edit( request, Group, id, GroupMembersForm,   )
 
 # Character

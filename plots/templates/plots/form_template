@@ -1,7 +1,21 @@
 <!DOCTYPE html>
 
+{% if class_form.instance %}
+    <h1> {{ class_form.instance }} </h1>
+{% else %}
+    <h1> New </h1>
+{% endif %}
+
 <form method="POST" >
     {% csrf_token %}
     {{ class_form.as_p }}
     <input type="submit" value="Save" />
 </form>
+
+<p> <BIG> <a href="delete">
+Delete
+</a> </BIG> </p>
+
+<p> <BIG> <a href="{% url 'GM:index' %}">
+Back to GM index
+</a> </BIG> </p>

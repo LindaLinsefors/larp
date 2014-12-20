@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^(?P<parent_type>\w+)/(?P<parent_id>[0-9]+)/plot_pice/new/$', 
             views.new_plot_pice, name='new_plot_pice'),
     url(r'^plot_pice/(?P<id>[0-9]+)/$', 
-            views.plot_pice_no_parent, name='plot_pice_no_parent'),
+            views.plot_pice_no_parent, name='plot_pice'),
 
     # Edit groups and characters
     url(r'^group/(?P<id>[0-9]+)/$', views.group, name='group'),

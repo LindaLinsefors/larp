@@ -343,7 +343,8 @@ def new_character(request):
 
 class_dict = {  'group': Group,
                 'character': Character,
-                'plot_thread': PlotThread   }
+                'plot_thread': PlotThread,
+                'plot_pice': PlotPice   }
 
 def delete(request, class_name, id):
     class_instance = get_object_or_404(class_dict[class_name], pk=id)
@@ -351,6 +352,21 @@ def delete(request, class_name, id):
         class_instance.delete()
         return HttpResponseRedirect( reverse('GM:index') )
     
-    return render(  request, 'plots/GM_delete.html',
-                    {'name': class_instance.name}   )
+    if class_name == 'plot_pice': name = 'Plot Pice'
+    else: name = class_instance.name
         
+    return render(  request, 'plots/GM_delete.html',
+                    {'name': name}   )
+        
+
+def delete_plot_pice(request, parent_type, parent_id, id):
+    plot_pice = get_object_or_404(PlotPice, pk=id)
+    if request.method == 'POST':
+        class_instance.delete()
+        return HttpResponseRedirect( 
+                reverse('GM:'+parent_type, args=(parent_id,) ))
+
+    return render( request, 'plots/GM_delete.html',
+                   {'name': 'Plot Pice'}            )
+
+

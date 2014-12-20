@@ -11,25 +11,27 @@
     {{ plot_pice_form.plot_pice }}<br>
 
     <h3> Plot Threads </h3>
-    New: {{ plot_pice_form.new_plot_thread_name}}<br>
-    {{ plot_pice_form.plot_threads }}<br>
+    {{ plot_pice_form.plot_threads }}
+    New: {{ plot_pice_form.new_plot_thread_name}}
 
     <h3> Groups </h3>
-    New: {{ plot_pice_form.new_group_name }}<br>
-    {{ plot_pice_form.groups }}<br>
+    {{ plot_pice_form.groups }}
+    New: {{ plot_pice_form.new_group_name }}
 
     <h3> Characters </h3>
-    {{ plot_pice_form.characters }}<br>
-    New: {{ plot_pice_form.new_character_name }}<br>
+    {{ plot_pice_form.characters }}
+    New: {{ plot_pice_form.new_character_name }}
 
-    <input type="submit" value="Save" />
-    <input type="submit" href="delete" value="Delete" />
-</form>
+    <p> <input type="submit" value="Save" /> </p>
+</form> 
+
+
+<p> <a href="delete"> Delete </a> </p>
 
 {% if parent_id %}
-    <a href="{% url parent_url parent_id %}">
+    <p> <a href="{% url parent_url parent_id %}"> </p>
 {% else %}
-    <a href="{% url parent_url %}">
+    <p> <a href="{% url parent_url %}"> </p>
 {% endif %}
 
 

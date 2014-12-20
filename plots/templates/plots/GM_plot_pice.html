@@ -8,10 +8,30 @@
 
 <form method="POST" >
     {% csrf_token %}
-    {{ plot_pice_form.as_p }}
+    {{ plot_pice_form.plot_pice }}<br>
+
+    <h3> Plot Threads </h3>
+    New: {{ plot_pice_form.new_plot_thread_name}}<br>
+    {{ plot_pice_form.plot_threads }}<br>
+
+    <h3> Groups </h3>
+    New: {{ plot_pice_form.new_group_name }}<br>
+    {{ plot_pice_form.groups }}<br>
+
+    <h3> Characters </h3>
+    {{ plot_pice_form.characters }}<br>
+    New: {{ plot_pice_form.new_character_name }}<br>
+
     <input type="submit" value="Save" />
+    <input type="submit" href="delete" value="Delete" />
 </form>
 
-<a href="{% url parent_url parent_id %}">
-    Back
-</a>
+{% if parent_id %}
+    <a href="{% url parent_url parent_id %}">
+{% else %}
+    <a href="{% url parent_url %}">
+{% endif %}
+
+
+
+Back </a>

@@ -122,7 +122,7 @@ def plot_pice_no_parent(request, id):
         if plot_pice_form.is_valid():
             plot_pice_form.save()
 
-    plot_pice = PlotPiceForm(instance=plot_pice)
+    plot_pice_form = PlotPiceForm(instance=plot_pice)
     
     return render(request, 'plots/GM_plot_pice.html',
             {   'plot_pice_form': plot_pice_form,

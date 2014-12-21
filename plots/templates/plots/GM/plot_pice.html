@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+{% extends "plots/GM/basic.html" %}
+
+{% block body %}
+
+
 
 {% if plot_pice_form.instance %}
     <h1> Edit Plot Pice </h1>
@@ -35,3 +39,5 @@
     <p> <a href="{% url parent_url %}"> </p>
 {% endif %}
 Cancel </a>
+
+{% endblock %}

@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+{% extends "plots/GM/basic.html" %}
+
+{% block body %}
 
 <form method="POST">
 {% csrf_token %}
@@ -56,4 +58,6 @@
 <p> <a href="{% url 'GM:index' %}">
 To GM index
 </a> </p>
+
+{% endblock %}
 

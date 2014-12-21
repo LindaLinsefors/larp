@@ -1,6 +1,7 @@
-{% extends "plots/GM_basic.html" %}
+{% extends "plots/GM/basic.html" %}
 
 {% block body %}
+
 
 <form method="POST">
 {% csrf_token %}
@@ -94,9 +95,10 @@
 </table>
 
 
-
+<p>
 <input type="submit" value="Save all" />
 <a href="plot_pice/new"> Add new </a>
+</p>
 
 </form>
 

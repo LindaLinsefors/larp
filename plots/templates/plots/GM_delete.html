@@ -1,7 +1,0 @@
-<!DOCTYPE html>
-
-<h2> Do you realy want to deltete {{ name }}?</h2>
-<form method="POST">
-{% csrf_token %}
-<input type="submit" value="Yes" /> <a href="{{ back }}"> No </a>
-</form>

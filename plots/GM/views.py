@@ -10,7 +10,7 @@ from plots import for_views
 
 
 def index(request): 
-    return render(request, 'plots/GM_index.html',
+    return render(request, 'plots/GM/index.html',
               { 'plot_threads': PlotThread.objects.all(),
                 'groups': Group.objects.all(),
                 'characters': Character.objects.all(),  
@@ -110,7 +110,7 @@ def plot_pice(request, parent_type, parent_id, id):
 
     plot_pice_form = PlotPiceForm(instance=plot_pice)
     
-    return render(request, 'plots/GM_plot_pice.html',
+    return render(request, 'plots/GM/plot_pice.html',
             {   'plot_pice_form': plot_pice_form,
                 'parent_url': 'GM:'+parent_type,
                 'parent_id': parent_id                  }   )
@@ -127,7 +127,7 @@ def plot_pice_no_parent(request, id):
 
     plot_pice_form = PlotPiceForm(instance=plot_pice)
     
-    return render(request, 'plots/GM_plot_pice.html',
+    return render(request, 'plots/GM/plot_pice.html',
             {   'plot_pice_form': plot_pice_form,
                 'parent_url': 'GM:index'         }   )
 
@@ -143,7 +143,7 @@ def new_plot_pice(request, parent_type, parent_id):
     else:
         plot_pice_form = PlotPiceForm()
     
-    return render(request, 'plots/GM_plot_pice.html',
+    return render(request, 'plots/GM/plot_pice.html',
             {   'plot_pice_form': plot_pice_form,
                 'parent_url': 'GM:'+parent_type,
                 'parent_id': parent_id                  }   )
@@ -159,7 +159,7 @@ def save_formset(formset): #Is this needed?
         form.save()           
 
 
-def plots(request, Class, id, ClassForm, InlineFormset, template='plots/GM_plots.html'):
+def plots(request, Class, id, ClassForm, InlineFormset, template='plots/GM/plots.html'):
     class_instance = get_object_or_404(Class, pk=id)
 
     if request.method == 'POST':
@@ -222,7 +222,7 @@ PlotPartForms = forms.inlineformset_factory(PlotThread, PlotPart,
 
 def plot_thread(request, id): 
     return plots(   request, PlotThread, id, PlotThreadForm, PlotPartForms, 
-                    template='plots/GM_plot_thread.html'        )
+                    template='plots/GM/plot_thread.html'        )
 
 def new_plot_thread(request):
     pass 
@@ -248,7 +248,7 @@ GroupPlotPiceForms = forms.inlineformset_factory(   Group, GroupPlotPice,
 
 def group_plot(request, id): 
     return plots(   request, Group, id, GroupPlotForm, GroupPlotPiceForms, 
-                    template='plots/GM_plots.html'        )
+                    template='plots/GM/plots.html'        )
 
 
 # Personal Plot
@@ -283,7 +283,7 @@ PersonalPlotPiceForms = forms.inlineformset_factory(Character, PersonalPlotPice,
 
 def personal_plot(request, id): 
     return plots(   request, Character, id, PersonalPlotForm, PersonalPlotPiceForms, 
-                    template='plots/GM_personal_plot.html'        )
+                    template='plots/GM/personal_plot.html'        )
 
 
 def new_personal_plot(request): 
@@ -353,7 +353,7 @@ def members(request, id, back):
 
     members_form = MembersForm(instance=group)
     
-    return render(request, 'plots/GM_members',
+    return render(request, 'plots/GM/members',
             {   'members_form': members_form,
                 'group': group,                 }   )
 
@@ -402,13 +402,13 @@ def CharacterForm(*args, **kw):
 
 def character(request, id): 
     return for_views.edit( request, Character, id, CharacterForm, 
-                                template='plots/GM_character.html'      )
+                                template='plots/GM/character.html'      )
 
 
 def new_character(request): 
     return for_views.new(  request, Character, CharacterForm, 
                                 url='GM:character',
-                                template='plots/GM_character.html'  )
+                                template='plots/GM/character.html'  )
 
 #Delete
 
@@ -428,7 +428,7 @@ def delete(request, class_name, id):
     else: 
         name = class_instance.name
         
-    return render(  request, 'plots/GM_delete.html',
+    return render(  request, 'plots/GM/delete.html',
                    {'name': name,
                     'back': reverse('GM:'+class_name, args=(id,)) })
         
@@ -440,7 +440,7 @@ def delete_plot_pice(request, parent_type, parent_id, id):
         return HttpResponseRedirect( 
                 reverse('GM:'+parent_type, args=(parent_id,) ))
 
-    return render( request, 'plots/GM_delete.html',
+    return render( request, 'plots/GM/delete.html',
                    {'name': 'Plot Pice',
                     'back': reverse('GM:'+class_name, 
                                     args=(parent_type, parent_id, id)) 

@@ -297,6 +297,7 @@ class GroupForm(forms.ModelForm):
         model = Group
         fields = [  'name',
                     'is_open',
+                    'show_group',
                     'show_members',
                     'group_description',
                     'members_presentations',
@@ -353,7 +354,7 @@ def members(request, id, back):
 
     members_form = MembersForm(instance=group)
     
-    return render(request, 'plots/GM/members',
+    return render(request, 'plots/GM/members.html',
             {   'members_form': members_form,
                 'group': group,                 }   )
 

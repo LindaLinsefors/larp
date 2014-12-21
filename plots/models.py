@@ -158,16 +158,16 @@ class Group(BasicModel):
         return ret
 
     is_open = models.BooleanField('open', default=False)
-    is_open.help_text = 'Group is open for self registration by users'
+    is_open.help_text = 'Group is open for self registration by users.'
        
     show_members = models.BooleanField(default=False) 
-    show_members.help_text = 'Members presentation is made public'
+    show_members.help_text = 'Members presentation is made public.'
 
     plot_is_finished = models.BooleanField(default=False)
-    plot_is_finished.verbose_name = "group's plot is finiched"
+    plot_is_finished.verbose_name = "group's plot is finiched."
 
-    secret = models.BooleanField(default=True)
-    secret.help_text = 'Group is not visible on the web page'
+    show_group = models.BooleanField(default=False)
+    show_group.help_text = 'Group description is made public.'
 
     group_description = models.TextField(blank=True, default='')
     members_presentations = models.TextField(blank=True, default='')

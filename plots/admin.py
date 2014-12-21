@@ -22,21 +22,23 @@ def make_closed(modeladmin, request, queryset):
 make_closed.short_description = "Close for registration"
 
 
-def publish_members(modeladmin, request, queryset):
+def show_members(modeladmin, request, queryset):
     queryset.update(show_members = True)
-publish_members.short_description = "Publish members pressentations"
+show_members.short_description = "Show members pressentations"
 
-def unpublish_members(modeladmin, request, queryset):
+def hide_members(modeladmin, request, queryset):
     queryset.update(show_members = False)
-unpublish_members.short_description = "Un-publish members pressentations"
+hide_members.short_description = "Hide members pressentations"
 
 
-def make_secret(modeladmin, request, queryset):
-    queryset.update(secret = True)
+def show_group(modeladmin, request, queryset):
+    queryset.update(show_group = True)
+show_members.short_description = "Show group description"
 
 
-def make_not_secret(modeladmin, request, queryset):
-    queryset.update(secret = False)
+def hide_group(modeladmin, request, queryset):
+    queryset.update(show_group = False)
+hide_members.short_description = "Hide group description"
 
 
 
@@ -73,7 +75,7 @@ class GroupAdmin(admin.ModelAdmin):
         (None,                      {'fields': ['name',
                                                 ('is_open', 
                                                  'show_members',
-                                                 'secret'),
+                                                 'show_group'),
                                                 'plot_is_finished']}),
         ('Group description',       {'fields': ['group_description',
                                                 'secret_comments'], 
@@ -89,19 +91,19 @@ class GroupAdmin(admin.ModelAdmin):
                     'plot_is_finished', 
                     'is_open', 
                     'show_members',
-                    'secret')
+                    'show_group')
 
     list_filter = ['plot_is_finished', 'is_open', 'show_members']
 
     actions = [ make_members_presentations,
-                publish_members, 
-                unpublish_members, 
+                show_members, 
+                hide_members, 
                 make_finished, 
                 make_unfinished, 
                 make_closed,
                 make_open,
-                make_secret,
-                make_not_secret]
+                show_group,
+                hide_group]
 
 admin.site.register(Group, GroupAdmin)
 

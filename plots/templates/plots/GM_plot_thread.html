@@ -16,7 +16,7 @@
     <ul>    
     {% for group in class_instance.groups %}
         <li>
-        <a href="{% url 'GM:group_plot' group.id %}"> {{ gorup.name }} </a>
+        <a href="{% url 'GM:group_plot' group.id %}"> {{ group.name }} </a>
         </li>
     {% endfor %}
     </ul>
@@ -25,7 +25,7 @@
     <ul>
     {% for group in class_instance.groups_incl_char %}
         <li>
-        <a href="{% url 'GM:group_plot' group.id %}"> {{ gorup.name }} </a>
+        <a href="{% url 'GM:group_plot' group.id %}"> {{ group.name }} </a>
         </li>
     {% endfor %}
     </ul>
@@ -34,7 +34,7 @@
     <ul>
     {% for character in class_instance.characters %}
         <li>
-        <a href="{% url 'GM:personal_plot' group.id %}"> {{ character.name }} </a>
+        <a href="{% url 'GM:personal_plot' character.id %}"> {{ character.name }} </a>
         </li>
     {% endfor %}
     </ul>
@@ -42,6 +42,10 @@
 {% endblock %}
 
 
-
+{% block end %}     
+    <p> <a href="delete">
+        Delete Plot Thread
+    </a> </p>
+{% endblock %} 
 
 

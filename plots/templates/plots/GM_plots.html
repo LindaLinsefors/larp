@@ -41,14 +41,14 @@
                 <tr>
                     <td>Groups: </td>
                     <td>
-                        {% for groups in plot_pice_form.instance.plot_pice.groups.all %}
-                        {% if groups != class_instance %}  
+                        {% for group in plot_pice_form.instance.plot_pice.groups.all %}
+                        {% if group != class_instance %}  
                         <a href="{% url 'GM:group_plot' group.id %}">
                         {% endif %}
                         {% if forloop.counter = plot_pice_form.instance.plot_pice.groups.count %}
-                            {{ groups.name }}</a>
+                            {{ group.name }}</a>
                         {% else %}
-                            {{ groups.name }}</a>,
+                            {{ group.name }}</a>,
                         {% endif %}
                         {% endfor %}
                     </td>
@@ -91,12 +91,17 @@
 <input type="submit" value="Save all" />
 <a href="plot_pice/new"> Add new </a>
 
+</form>
 
-{% block end %}
-    </form> 
+
+{% block end %}     
+    <p> <a href="delete">
+        Delete
+    </a> </p>
+{% endblock %} 
     
-    <p> <BIG> <a href="{% url 'GM:index' %}">
+    <p> <a href="{% url 'GM:index' %}">
     Back to GM index
-    </a> </BIG> </p>
-{% endblock %}  
+    </a> </p>
+ 
 

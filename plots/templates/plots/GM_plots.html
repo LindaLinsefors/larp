@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+{% extends "plots/GM_basic.html" %}
+
+{% block body %}
 
 <form method="POST">
 {% csrf_token %}
@@ -79,8 +81,13 @@
             {{ plot_pice_form.plot_pice }}
         </td>
         <td>
-            Rank: <br>
-            {{ plot_pice_form.rank }}
+            <p>
+                Rank: <br>
+                {{ plot_pice_form.rank }}
+            </p>
+            <p>
+                Finished: {{ plot_pice_form.plot_is_finished }}
+            </p>
         </td>
     </tr>
     {% endfor %}
@@ -104,4 +111,5 @@
     Back to GM index
     </a> </p>
  
+{% endblock %}
 

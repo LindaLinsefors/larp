@@ -37,7 +37,7 @@ def index(request):
 class PlotPiceFormBasic(forms.ModelForm):
     class Meta:
         model=PlotPice
-        fields = [ 'plot_pice' ]
+        fields = [ 'plot_pice', 'plot_is_finished' ]
     
     new_character_name = forms.CharField(required=False, max_length=50)
     new_group_name = forms.CharField(required=False, max_length=50)    
@@ -168,6 +168,7 @@ def plots(request, Class, id, ClassForm, InlineFormset, template='plots/GM_plots
             class_form.save()
 
         inline_formset = InlineFormset(request.POST, instance=class_instance)
+        #import pdb; pdb.set_trace()
         if inline_formset.is_valid():
             save_formset(inline_formset)
 
@@ -185,16 +186,19 @@ class PlotPiceInlineForm(forms.ModelForm):
         fields = [ 'rank' ]
 
     plot_pice = forms.CharField(widget=forms.Textarea, required=False)
+    plot_is_finished = forms.BooleanField(required=False) 
 
     def __init__(self, *args, **kw):
         forms.ModelForm.__init__(self, *args, **kw)
         if kw.has_key('instance'):
             self.fields['plot_pice'].initial = self.instance.plot_pice.plot_pice
+            self.fields['plot_is_finished'].initial = self.instance.plot_pice.plot_is_finished
 
     def save(self):
         self.is_valid()
         forms.ModelForm.save(self)
         self.instance.plot_pice.plot_pice = self.cleaned_data['plot_pice']
+        self.instance.plot_pice.plot_is_finished = self.cleaned_data['plot_is_finished']
         self.instance.plot_pice.save()
 
 

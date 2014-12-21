@@ -1,17 +1,28 @@
 {% extends "plots/GM/plots.html" %}
 
+
+{% block title %}
+    Plot thread: {{ class_instance.name }}
+{% endblock %}
+
 {% block top %}
-
-    <h1> Plot thread: {{ class_instance.name }} </h1>
-
-        <table> 
-            <tr> <td>Name: </td><td> {{ class_form.name }}</td> </tr>
-            <tr> <td>Summery: </td><td> {{ class_form.summery }}</td> </tr>
-        </table>
-        <p>Plot thread is finished: {{ class_form.plot_is_finished }}</p>
-        <input type="submit" value="Save all" />
+    <table> 
+        <tr> <td>Name: </td><td> {{ class_form.name }}</td> </tr>
+        <tr> <td>Summery: </td><td> {{ class_form.summery }}</td> </tr>
+    </table>
+    <p>Plot thread is finished: {{ class_form.plot_is_finished }}</p>
+    <input type="submit" value="Save all" />
+{% endblock %}
 
 
+{% block end %}     
+    <p> <a href="delete">
+        Delete Plot Thread
+    </a> </p>
+{% endblock %} 
+
+
+{% block display %}
     <h2> Groups involved <small>(not including personal plots)</small> </h2>
     <ul>    
     {% for group in class_instance.groups %}
@@ -38,14 +49,4 @@
         </li>
     {% endfor %}
     </ul>
-
 {% endblock %}
-
-
-{% block end %}     
-    <p> <a href="delete">
-        Delete Plot Thread
-    </a> </p>
-{% endblock %} 
-
-

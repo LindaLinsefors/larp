@@ -3,115 +3,138 @@
 {% block body %}
 
 
-<form method="POST">
-{% csrf_token %}
+<div class="container-fluid">
 
-{% block top %}
-    <h1>{{ class_instance.name }}</h1>
-    {{ class_form.as_p }}
-{% endblock %}
+    <h1>
+        {% block title %}
+        {{ class_instance.name }}
+        {% endblock %}
+    </h1>
+
+    <div class="row">
+        <div class="col-sm-6">
 
 
-<h2> Plot Pices </h2>
+            <form method="POST">
+            {% csrf_token %}
 
-<input type="submit" value="Save all" />
-<a href="plot_pice/new"> Add new </a>
+            {% block top %}
+            {{ class_form.as_p }}
+            {% endblock %}
 
-{{ plot_pice_forms.management_form }}
 
-<table>
-    {% for plot_pice_form in plot_pice_forms %}
-    {{ plot_pice_form.id }}
-    {{ plot_pice_form.plot_thread }}
-    <tr>
-        <td>
+            <h2> Plot Pices </h2>
+
+            <input type="submit" value="Save all" />
+            <a href="plot_pice/new"> Add new </a>
+
+            {{ plot_pice_forms.management_form }}
+
             <table>
+                {% for plot_pice_form in plot_pice_forms %}
+                {{ plot_pice_form.id }}
+                {{ plot_pice_form.plot_thread }}
                 <tr>
-                    <td>Characters: </td>
                     <td>
-                        {% for character in plot_pice_form.instance.plot_pice.characters.all %}
-                        {% if character != class_instance %}  
-                        <a href="{% url 'GM:personal_plot' character.id %}">
-                        {% endif %}
-                        {% if forloop.counter = plot_pice_form.instance.plot_pice.characters.count %}
-                            {{ character.name }}</a>
-                        {% else %}
-                            {{ character.name }}</a>,
-                        {% endif %}
-                        {% endfor %}
+                        <table>
+                            <tr>
+                                <td>Characters: </td>
+                                <td>
+                                    {% for character in plot_pice_form.instance.plot_pice.characters.all %}
+                                    {% if character != class_instance %}  
+                                    <a href="{% url 'GM:personal_plot' character.id %}">
+                                    {% endif %}
+                                    {% if forloop.counter = plot_pice_form.instance.plot_pice.characters.count %}
+                                        {{ character.name }}</a>
+                                    {% else %}
+                                        {{ character.name }}</a>,
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                            <tr>
+                            <tr>
+                                <td>Groups: </td>
+                                <td>
+                                    {% for group in plot_pice_form.instance.plot_pice.groups.all %}
+                                    {% if group != class_instance %}  
+                                    <a href="{% url 'GM:group_plot' group.id %}">
+                                    {% endif %}
+                                    {% if forloop.counter = plot_pice_form.instance.plot_pice.groups.count %}
+                                        {{ group.name }}</a>
+                                    {% else %}
+                                        {{ group.name }}</a>,
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                            <tr>
+                            <tr>
+                                <td>Plot Threads: </td>
+                                <td>
+                                    {% for plot_thread in plot_pice_form.instance.plot_pice.plot_threads.all %}
+                                    {% if plot_thread != class_instance %}  
+                                    <a href="{% url 'GM:plot_thread' plot_thread.id %}">
+                                    {% endif %}
+                                    {% if forloop.counter = plot_pice_form.instance.plot_pice.plot_threads.count %}
+                                        {{ plot_thread.name }}</a>
+                                    {% else %}
+                                        {{ plot_thread.name }}</a>,
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                            <tr>
+                        </table>
+                        <p>
+                        <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}"> Edit </a>
+                        <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}/delete"> Delete </a>            
+                        </p>
+
                     </td>
-                <tr>
-                <tr>
-                    <td>Groups: </td>
                     <td>
-                        {% for group in plot_pice_form.instance.plot_pice.groups.all %}
-                        {% if group != class_instance %}  
-                        <a href="{% url 'GM:group_plot' group.id %}">
-                        {% endif %}
-                        {% if forloop.counter = plot_pice_form.instance.plot_pice.groups.count %}
-                            {{ group.name }}</a>
-                        {% else %}
-                            {{ group.name }}</a>,
-                        {% endif %}
-                        {% endfor %}
+                        {{ plot_pice_form.plot_pice }}
                     </td>
-                <tr>
-                <tr>
-                    <td>Plot Threads: </td>
                     <td>
-                        {% for plot_thread in plot_pice_form.instance.plot_pice.plot_threads.all %}
-                        {% if plot_thread != class_instance %}  
-                        <a href="{% url 'GM:plot_thread' plot_thread.id %}">
-                        {% endif %}
-                        {% if forloop.counter = plot_pice_form.instance.plot_pice.plot_threads.count %}
-                            {{ plot_thread.name }}</a>
-                        {% else %}
-                            {{ plot_thread.name }}</a>,
-                        {% endif %}
-                        {% endfor %}
+                        <p>
+                            Rank: <br>
+                            {{ plot_pice_form.rank }}
+                        </p>
+                        <p>
+                            Finished: {{ plot_pice_form.plot_is_finished }}
+                        </p>
                     </td>
-                <tr>
+                </tr>
+                {% endfor %}
             </table>
+
+
             <p>
-            <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}"> Edit </a>
-            <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}/delete"> Delete </a>            
+            <input type="submit" value="Save all" />
+            <a href="plot_pice/new"> Add new </a>
             </p>
 
-        </td>
-        <td>
-            {{ plot_pice_form.plot_pice }}
-        </td>
-        <td>
-            <p>
-                Rank: <br>
-                {{ plot_pice_form.rank }}
-            </p>
-            <p>
-                Finished: {{ plot_pice_form.plot_is_finished }}
-            </p>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+            </form>
 
 
-<p>
-<input type="submit" value="Save all" />
-<a href="plot_pice/new"> Add new </a>
-</p>
+            {% block end %}     
+                <p> <a href="delete">
+                    Delete
+                </a> </p>
+            {% endblock %} 
+                
+            <p> <a href="{% url 'GM:index' %}">
+            Back to GM index
+            </a> </p>
 
-</form>
+        </div>
+
+        <div class="col-sm-6">
+            {% block display %}
+            {% endblock %}
+        </div>
+
+    </div>
+</div>
 
 
-{% block end %}     
-    <p> <a href="delete">
-        Delete
-    </a> </p>
-{% endblock %} 
-    
-    <p> <a href="{% url 'GM:index' %}">
-    Back to GM index
-    </a> </p>
  
 {% endblock %}
 

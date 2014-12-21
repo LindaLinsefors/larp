@@ -333,7 +333,7 @@ def MembersForm(*args, **kw):
 
 
 def group(request, id): 
-    return for_views.edit( request, Group, id, GroupForm,   )
+    return render(request, 'plots/GM/group.html')
 
 
 def new_group(request): 
@@ -403,7 +403,7 @@ def CharacterForm(*args, **kw):
 
 def character(request, id): 
     return for_views.edit( request, Character, id, CharacterForm, 
-                                template='plots/GM/character.html'      )
+                                template='plots/GM/character.html'   )
 
 
 def new_character(request): 

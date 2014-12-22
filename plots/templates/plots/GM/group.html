@@ -5,13 +5,15 @@
     //$('textarea').autoResize(); 
 
     $("#show_select_members").click(function(){
-        $(".show_select_members").show();
-        $(".hide_select_members").hide();
+        $("#show_select_members").hide();
+        $("#hide_select_members").show();
+        $("#select_members").slideDown();
     });
 
     $("#hide_select_members").click(function(){
-        $(".show_select_members").hide();
-        $(".hide_select_members").show();
+        $("#show_select_members").show();
+        $("#hide_select_members").hide();
+        $("#select_members").slideUp();
     });
 
 {% endblock %}
@@ -69,23 +71,34 @@
 
                 <p><input type="submit" value="Save all"></p>  
 
-                <button type="button" id="show_select_members" class="hide_select_members"
+                <button type="button" id="show_select_members"
                     >Show select members</button>
-                <button type="button" id="hide_select_members" class="show_select_members" 
-                    hidden="hidden"
+                <button type="button" id="hide_select_members" hidden="hidden"
                     >Hide select members</button>
-                <div class="show_select_members" hidden="hidden"> 
-                    <ul class=checkboxes >
-                    {% for character in characters %}
-                        <li>
-                        <label>{{ character.name }} 
-                            <input type="checkbox" name="character-{{ character.id }}" 
-                                {% if character in members %} checked="checked" {% endif %}>
-                        </label>
-                    {% endfor %}
-                    <ul>
-                </div>
-              
+                <div class="row" id="select_members" hidden="hidden"> 
+                    <div class="col-xs-6">
+                        <ul class=checkboxes >
+                        {% for character in characters_fist_half %}
+                            <li>
+                            <label>{{ character.name }} 
+                                <input type="checkbox" name="character-{{ character.id }}" 
+                                    {% if character in members %} checked="checked" {% endif %}>
+                            </label>
+                        {% endfor %}
+                        <ul>
+                    </div>
+                    <div class="col-xs-6">
+                        <ul class=checkboxes >
+                        {% for character in characters_second_half %}
+                            <li>
+                            <label>{{ character.name }} 
+                                <input type="checkbox" name="character-{{ character.id }}" 
+                                    {% if character in members %} checked="checked" {% endif %}>
+                            </label>
+                        {% endfor %}
+                        <ul>
+                    </div>
+                </div>              
             </form>
 
             <p><a href="{% url 'GM:index' %}">Back to GM index</a></p>

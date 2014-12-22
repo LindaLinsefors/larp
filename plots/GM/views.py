@@ -334,10 +334,12 @@ def MembersForm(*args, **kw):
 
 def group(request, id): 
     group = get_object_or_404(Group, pk=id)
+    half = ( Character.objects.count()+1 )/2
     return render(request, 'plots/GM/group.html',
             {   'group': group, 
                 'members': group.character_set.all(),
-                'characters': Character.objects.all(),
+                'characters_fist_half': Character.objects.all()[:half],
+                'characters_second_half': Character.objects.all()[half:],
             }   )
 
 def new_group(request): 

@@ -333,8 +333,12 @@ def MembersForm(*args, **kw):
 
 
 def group(request, id): 
-    return render(request, 'plots/GM/group.html')
-
+    group = get_object_or_404(Group, pk=id)
+    return render(request, 'plots/GM/group.html',
+            {   'group': group, 
+                'members': group.character_set.all(),
+                'characters': Character.objects.all(),
+            }   )
 
 def new_group(request): 
     return for_views.new(  request, Group, GroupForm, 

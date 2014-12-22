@@ -1,5 +1,22 @@
 {% extends "plots/GM/basic.html" %}
 
+<script>
+{% block script %}
+    //$('textarea').autoResize(); 
+
+    $("#show_select_members").click(function(){
+        $(".show_select_members").show();
+        $(".hide_select_members").hide();
+    });
+
+    $("#hide_select_members").click(function(){
+        $(".show_select_members").hide();
+        $(".hide_select_members").show();
+    });
+
+{% endblock %}
+</script>
+
 
 {% block body %}
 
@@ -13,38 +30,49 @@
             <form>
                 <p><label>Name: <input type="text" id="name" name="name"></label></p>
 
+
+                <ul class=checkboxes_inlie >
+                    <li>
+                    <label for="open">
+                        <abbr title="Group is open for self registration by users."
+                            >Open:</abbr>
+                    </label> 
+                    <input type="checkbox" id="open" name="open">
+
+                    <li>
+                    <label for="show_group">
+                        <abbr title="Group description is made public."
+                            >Show group:</abbr>
+                    </label> 
+                    <input type="checkbox" id="show_group" name="show_group">
+
+                    <li>
+                    <label for="show_members">
+                        <abbr title="Members presentation is made public."
+                            >Show members:</abbr>
+                    </label> 
+                    <input type="checkbox" id="show_members" name="show_members">
+                </ul>
+
+
                 <p>
-                    <ul class=checkboxes_inlie >
-                        <li>
-                        <label for="open">
-                            <abbr title="Group is open for self registration by users."
-                                >Open:</abbr>
-                        </label> 
-                        <input type="checkbox" id="open" name="open">
-
-                        <li>
-                        <label for="show_group">
-                            <abbr title="Members presentation is made public."
-                                >Show group:</abbr>
-                        </label> 
-                        <input type="checkbox" id="show_group" name="show_group">
-
-                        <li>
-                        <label for="show_members">
-                            <abbr title="Group description is made public."
-                                >Show members:</abbr>
-                        </label> 
-                        <input type="checkbox" id="show_members" name="show_members">
-                    </ul>
-                </p>
-
-                <p>
-                    <label for="group_description">Group description:</label></br>
+                    <label for="group_description">Group description:</label><br>
                     <textarea id="group_description" name="group_description" rows="10"
                         >Lorem ipsum </textarea>
                 </p>
 
+                <p><input type="submit" value="Save all"></p>                
+
             </form>
+
+            <!--The hide show buttons must be outside the form. I do not know why.-->
+            <button id="show_select_members" class="hide_select_members">Show select members</button>
+            <button id="hide_select_members" class="show_select_members" hidden="hidden">Hide select members</button>
+            <div class="show_select_members" hidden="hidden"> 
+                <p>Select members form stuf...</p>
+            </div>
+
+            <p><a href="{% url 'GM:index' %}">Back to GM index</a></p>
         </div>
 
         <div class="col-sm-6">

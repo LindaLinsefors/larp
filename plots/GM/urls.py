@@ -39,4 +39,7 @@ urlpatterns = [
             views.members_from_index, name='members'),
     url(r'^(?P<parent_type>\w+)/(?P<id>[0-9]+)/members$', 
             views.members_from_parent, name='members'),
+
+    # Save Group
+    url(r'^save_group/$', views.save_group, name='save_group')
 ]

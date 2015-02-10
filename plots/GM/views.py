@@ -330,7 +330,8 @@ def MembersForm(*args, **kw):
     return MembersFormClass(*args, **kw)
         
 
-
+def save_group(request):
+    print request.POST
 
 def group(request, id): 
     group = get_object_or_404(Group, pk=id)

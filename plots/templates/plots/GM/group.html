@@ -16,6 +16,13 @@
         $("#select_members").slideUp();
     });
 
+    $(".save").click(function(){
+        $.post("{% url 'GM:save_group' %}",
+        {
+            name: $("#name").value()
+        });
+    });
+
 {% endblock %}
 </script>
 
@@ -69,7 +76,7 @@
                         >{{ gorup.group_description }}</textarea>
                 </p>
 
-                <p><input type="submit" value="Save all"></p>  
+                <p><button type="button" class="save">Save all</button></p>  
 
                 <button type="button" id="show_select_members"
                     >Show select members</button>

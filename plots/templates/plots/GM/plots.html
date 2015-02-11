@@ -1,7 +1,71 @@
 {% extends "plots/GM/basic.html" %}
 
-{% block body %}
+{% block script %}
+    $("#sortable").sortable();
+{% endblock %}
 
+
+{% block style %}
+
+		.connected, .sortable, .exclude, .handles {
+			margin: auto;
+			padding: 0;
+			width: 310px;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+		.sortable.grid {
+			overflow: hidden;
+		}
+		.connected li, .sortable li, .exclude li, .handles li {
+			list-style: none;
+			border: 1px solid #CCC;
+			background: #F6F6F6;
+			font-family: "Tahoma";
+			color: #1C94C4;
+			margin: 5px;
+			padding: 5px;
+			height: 22px;
+		}
+		.handles span {
+			cursor: move;
+		}
+		li.disabled {
+			opacity: 0.5;
+		}
+		.sortable.grid li {
+			line-height: 80px;
+			float: left;
+			width: 80px;
+			height: 80px;
+			text-align: center;
+		}
+		li.highlight {
+			background: #FEE25F;
+		}
+		#connected {
+			width: 440px;
+			overflow: hidden;
+			margin: auto;
+		}
+		.connected {
+			float: left;
+			width: 200px;
+		}
+		.connected.no2 {
+			float: right;
+		}
+		li.sortable-placeholder {
+			border: 1px dashed #CCC;
+			background: none;
+		}
+{% endblock %}
+
+{% block body %}
 
 <div class="container-fluid">
 
@@ -30,68 +94,69 @@
 
             {{ plot_pice_forms.management_form }}
 
-            <ul class="sortable">
+            <ul class="sortable list">
                 {% for plot_pice_form in plot_pice_forms %}
                 <li>
-                <div class="row">
-                    <div class="col-sm-4">
-                        {{ plot_pice_form.id }}
-                        {{ plot_pice_form.plot_thread }}
-                        <p>
-                            Rank: <br>
-                            {{ plot_pice_form.rank }}
-                        </p>
-                        <p>
-                            Finished: {{ plot_pice_form.plot_is_finished }}
-                        </p>
-                        <p>
-                            <b>Characters: </b>
-                            {% for character in plot_pice_form.instance.plot_pice.characters.all %}
-                            {% if character != class_instance %}  
-                            <a href="{% url 'GM:personal_plot' character.id %}">
-                            {% endif %}
-                            {% if forloop.counter = plot_pice_form.instance.plot_pice.characters.count %}
-                                {{ character.name }}</a>
-                            {% else %}
-                                {{ character.name }}</a>,
-                            {% endif %}
-                            {% endfor %}
-                        </p>
-                        <p>
-                            <b>Groups: </b>
-                            {% for group in plot_pice_form.instance.plot_pice.groups.all %}
-                            {% if group != class_instance %}  
-                            <a href="{% url 'GM:group_plot' group.id %}">
-                            {% endif %}
-                            {% if forloop.counter = plot_pice_form.instance.plot_pice.groups.count %}
-                                {{ group.name }}</a>
-                            {% else %}
-                                {{ group.name }}</a>,
-                            {% endif %}
-                            {% endfor %}
-                        </p>
-                        <p>
-                            <b>Plot Threads: </b>
-                            {% for plot_thread in plot_pice_form.instance.plot_pice.plot_threads.all %}
-                            {% if plot_thread != class_instance %}  
-                            <a href="{% url 'GM:plot_thread' plot_thread.id %}">
-                            {% endif %}
-                            {% if forloop.counter = plot_pice_form.instance.plot_pice.plot_threads.count %}
-                                {{ plot_thread.name }}</a>
-                            {% else %}
-                                {{ plot_thread.name }}</a>,
-                            {% endif %}
-                            {% endfor %}
-                        </p>
-                        <p>
-                            <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}"> Edit </a>
-                            <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}/delete"> Delete </a>            
-                        </p>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{ plot_pice_form.id }}
+                            {{ plot_pice_form.plot_thread }}
+                            <p>
+                                Rank: <br>
+                                {{ plot_pice_form.rank }}
+                            </p>
+                            <p>
+                                Finished: {{ plot_pice_form.plot_is_finished }}
+                            </p>
+                            <p>
+                                <b>Characters: </b>
+                                {% for character in plot_pice_form.instance.plot_pice.characters.all %}
+                                {% if character != class_instance %}  
+                                <a href="{% url 'GM:personal_plot' character.id %}">
+                                {% endif %}
+                                {% if forloop.counter = plot_pice_form.instance.plot_pice.characters.count %}
+                                    {{ character.name }}</a>
+                                {% else %}
+                                    {{ character.name }}</a>,
+                                {% endif %}
+                                {% endfor %}
+                            </p>
+                            <p>
+                                <b>Groups: </b>
+                                {% for group in plot_pice_form.instance.plot_pice.groups.all %}
+                                {% if group != class_instance %}  
+                                <a href="{% url 'GM:group_plot' group.id %}">
+                                {% endif %}
+                                {% if forloop.counter = plot_pice_form.instance.plot_pice.groups.count %}
+                                    {{ group.name }}</a>
+                                {% else %}
+                                    {{ group.name }}</a>,
+                                {% endif %}
+                                {% endfor %}
+                            </p>
+                            <p>
+                                <b>Plot Threads: </b>
+                                {% for plot_thread in plot_pice_form.instance.plot_pice.plot_threads.all %}
+                                {% if plot_thread != class_instance %}  
+                                <a href="{% url 'GM:plot_thread' plot_thread.id %}">
+                                {% endif %}
+                                {% if forloop.counter = plot_pice_form.instance.plot_pice.plot_threads.count %}
+                                    {{ plot_thread.name }}</a>
+                                {% else %}
+                                    {{ plot_thread.name }}</a>,
+                                {% endif %}
+                                {% endfor %}
+                            </p>
+                            <p>
+                                <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}"> Edit </a>
+                                <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}/delete"> Delete </a>            
+                            </p>
+                        </div>
+                        <div class="col-sm-8">
+                            {{ plot_pice_form.plot_pice }}
+                        </div>
                     </div>
-                    <div class="col-sm-8">
-                        {{ plot_pice_form.plot_pice }}
-                    </div>
-                </div>
+                </li>
                 {% endfor %}
             </ul>
 

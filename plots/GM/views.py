@@ -331,7 +331,9 @@ def MembersForm(*args, **kw):
         
 
 def save_group(request):
+    # import pdb; pdb.set_trace()
     print request.POST
+    return HttpResponse('saved')
 
 def group(request, id): 
     group = get_object_or_404(Group, pk=id)

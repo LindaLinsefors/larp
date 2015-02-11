@@ -17,10 +17,14 @@
     });
 
     $(".save").click(function(){
+        alert('hej');
         $.post("{% url 'GM:save_group' %}",
-        {
-            name: $("#name").value()
-        });
+            {
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
+                data: 'data'
+            },
+            function(){alert('hejdå');}
+        );
     });
 
 {% endblock %}
@@ -37,6 +41,8 @@
         <div class="col-sm-6">
 
             <form>
+                {% csrf_token %}
+
                 <p><label>Name:
                     <input type="text" id="name" name="name" required="required" 
                         value="{{ group.name }}">
@@ -92,7 +98,7 @@
                                     {% if character in members %} checked="checked" {% endif %}>
                             </label>
                         {% endfor %}
-                        <ul>
+                        </ul>
                     </div>
                     <div class="col-xs-6">
                         <ul class=checkboxes >
@@ -103,7 +109,7 @@
                                     {% if character in members %} checked="checked" {% endif %}>
                             </label>
                         {% endfor %}
-                        <ul>
+                        </ul>
                     </div>
                 </div>              
             </form>

@@ -10,17 +10,22 @@
 
 <style>
 {% block style %}
+    .sortable {
+        list-style-type: none;
+        padding: 0;
+    }
     .sortable li {
         padding: 5px;
 	    border: 1px solid gray;
         margin: 5px;
     }
-
-    .sortable {
-        list-style-type: none;
-    }
 	.sortable span {
 		cursor: move;
+	}
+	li.sortable-placeholder {
+		border: 1px dashed #CCC;
+		background: none;
+        height: 240px;
 	}
 {% endblock %}
 </style>

@@ -1,10 +1,11 @@
 {% extends "plots/GM/basic.html" %}
 
 <script>
-{% block script %}
     $(".sortable").sortable({
 		handle: 'span'
 	});
+{% block script %}
+    $(".sortable").sortable();
 {% endblock %}
 </script>
 
@@ -63,15 +64,14 @@
                 {% for plot_pice_form in plot_pice_forms %}
                 <li>
                     <div class="row">
-                        <div class="col-sm-4">
-                            <span>: :</span>
+                        <span><div class="col-sm-4">
                             {{ plot_pice_form.id }}
                             {{ plot_pice_form.plot_thread }}
                             <p>
-                                Finished: {{ plot_pice_form.plot_is_finished }}
+                                <b>Finished:</b> {{ plot_pice_form.plot_is_finished }}
                             </p>
                             <p>
-                                <b>Characters: </b>
+                                <b>Characters:</b>
                                 {% for character in plot_pice_form.instance.plot_pice.characters.all %}
                                 {% if character != class_instance %}  
                                 <a href="{% url 'GM:personal_plot' character.id %}">
@@ -84,7 +84,7 @@
                                 {% endfor %}
                             </p>
                             <p>
-                                <b>Groups: </b>
+                                <b>Groups:</b>
                                 {% for group in plot_pice_form.instance.plot_pice.groups.all %}
                                 {% if group != class_instance %}  
                                 <a href="{% url 'GM:group_plot' group.id %}">
@@ -97,7 +97,7 @@
                                 {% endfor %}
                             </p>
                             <p>
-                                <b>Plot Threads: </b>
+                                <b>Plot Threads:</b>
                                 {% for plot_thread in plot_pice_form.instance.plot_pice.plot_threads.all %}
                                 {% if plot_thread != class_instance %}  
                                 <a href="{% url 'GM:plot_thread' plot_thread.id %}">
@@ -113,7 +113,7 @@
                                 <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}"> Edit </a>
                                 <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}/delete"> Delete </a>            
                             </p>
-                        </div>
+                        </div></span>
                         <div class="col-sm-8">
                             {{ plot_pice_form.plot_pice }}
                         </div>

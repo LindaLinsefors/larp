@@ -27,7 +27,7 @@
 	li.sortable-placeholder {
 		border: 1px dashed #CCC;
 		background: none;
-        height: 240px;
+        height: 223px;
 	}
 
     .no-pading {
@@ -37,42 +37,23 @@
     .col-xs-height{
         margin: 0;
         padding: 5px;
-        border: 1px dashed #CCC;
     }
 
-
-
-/* vertical alignment styles */
-
-.col-top {
-  vertical-align: top;
-}
-.col-middle {
-  vertical-align: middle;
-}
-.col-bottom {
-  vertical-align: bottom;
-}
-
-/* columns of same height styles */
-
-.row-full-height {
-  height: 100%;
-}
-.col-full-height {
-  height: 100%;
-  vertical-align: middle;
-}
-.row-same-height {
-  display: table;
-  width: 100%;
-  /* fix overflow */
-  table-layout: fixed;
-}
-.col-xs-height {
-  display: table-cell;
-  float: none !important;
-}
+    /* columns of same height styles */
+    /* from http://www.minimit.com/demos/bootstrap-3-responsive-columns-of-same-height */
+    .col-top {
+      vertical-align: top;
+    }
+    .row-same-height {
+      display: table;
+      width: 100%;
+      /* fix overflow */
+      table-layout: fixed;
+    }
+    .col-xs-height {
+      display: table-cell;
+      float: none !important;
+    }
 
 {% endblock %}
 </style>

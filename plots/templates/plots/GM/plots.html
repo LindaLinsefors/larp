@@ -1,11 +1,11 @@
 {% extends "plots/GM/basic.html" %}
 
 <script>
+    $(".sortable").sortable();
+{% block script %}
     $(".sortable").sortable({
 		handle: 'span'
 	});
-{% block script %}
-    $(".sortable").sortable();
 {% endblock %}
 </script>
 
@@ -115,7 +115,7 @@
                             </p>
                         </div></span>
                         <div class="col-sm-8">
-                            {{ plot_pice_form.plot_pice }}
+                            {{ plot_pice_form.plot_pice_text }}
                         </div>
                     </div>
                 </li>

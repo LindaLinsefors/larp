@@ -39,6 +39,41 @@
         padding: 5px;
         border: 1px dashed #CCC;
     }
+
+
+
+/* vertical alignment styles */
+
+.col-top {
+  vertical-align: top;
+}
+.col-middle {
+  vertical-align: middle;
+}
+.col-bottom {
+  vertical-align: bottom;
+}
+
+/* columns of same height styles */
+
+.row-full-height {
+  height: 100%;
+}
+.col-full-height {
+  height: 100%;
+  vertical-align: middle;
+}
+.row-same-height {
+  display: table;
+  width: 100%;
+  /* fix overflow */
+  table-layout: fixed;
+}
+.col-xs-height {
+  display: table-cell;
+  float: none !important;
+}
+
 {% endblock %}
 </style>
 
@@ -74,8 +109,9 @@
             <ul class="sortable">
                 {% for plot_pice_form in plot_pice_forms %}
                 <li>
-                    <div class="container-fluid no-pading"><div class="row-same-height no-pading">
-                        <div class="col-xs-4 col-xs-height handle">
+                    <div class="row no-pading">
+                    <div class="row-same-height no-pading">
+                        <div class="col-xs-4 col-xs-height col-top handle">
                             {{ plot_pice_form.id }}
                             {{ plot_pice_form.plot_thread }}
                             <p>

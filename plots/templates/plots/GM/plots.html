@@ -1,11 +1,13 @@
 {% extends "plots/GM/basic.html" %}
 
 <script>
+
     $(".sortable").sortable();
+
 {% block script %}
     $(".sortable").sortable({
-		handle: 'span'
-	});
+		handle: '.handle'
+	});    
 {% endblock %}
 </script>
 
@@ -20,7 +22,7 @@
 	    border: 1px solid gray;
         margin: 5px;
     }
-	.sortable span {
+	.handle {
 		cursor: move;
 	}
 	li.sortable-placeholder {
@@ -64,7 +66,7 @@
                 {% for plot_pice_form in plot_pice_forms %}
                 <li>
                     <div class="row">
-                        <span><div class="col-sm-4">
+                        <div class="col-sm-4 handle">
                             {{ plot_pice_form.id }}
                             {{ plot_pice_form.plot_thread }}
                             <p>
@@ -113,7 +115,7 @@
                                 <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}"> Edit </a>
                                 <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}/delete"> Delete </a>            
                             </p>
-                        </div></span>
+                        </div>
                         <div class="col-sm-8">
                             {{ plot_pice_form.plot_pice_text }}
                         </div>

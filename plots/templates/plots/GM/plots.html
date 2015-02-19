@@ -8,6 +8,22 @@
     $(".sortable").sortable({
 		handle: '.handle'
 	});    
+
+var checkboxes = $('input:checkbox')
+
+$('input:checkbox').change(function(){
+	for (var i=1; i<checkboxes.length; i++){
+		if (!checkboxes[i].checked){
+			checkboxes[0].checked = false;
+			checkboxes[0].disabled = true;
+			return;
+		};
+	};
+	checkboxes[0].disabled = false;
+});
+
+
+	
 {% endblock %}
 </script>
 
@@ -187,6 +203,7 @@
 
     </div>
 </div>
+<p> </p>
 
 
  

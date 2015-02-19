@@ -18,7 +18,6 @@
         padding: 0;
     }
     .sortable li {
-        padding: 5px;
 	    border: 1px solid gray;
         margin: 5px;
     }
@@ -30,6 +29,16 @@
 		background: none;
         height: 240px;
 	}
+
+    .no-pading {
+        margin: 0;
+        padding: 0;
+    }
+    .col-xs-height{
+        margin: 0;
+        padding: 5px;
+        border: 1px dashed #CCC;
+    }
 {% endblock %}
 </style>
 
@@ -65,8 +74,8 @@
             <ul class="sortable">
                 {% for plot_pice_form in plot_pice_forms %}
                 <li>
-                    <div class="row">
-                        <div class="col-xs-4 handle">
+                    <div class="container-fluid no-pading"><div class="row-same-height no-pading">
+                        <div class="col-xs-4 col-xs-height handle">
                             {{ plot_pice_form.id }}
                             {{ plot_pice_form.plot_thread }}
                             <p>
@@ -116,10 +125,10 @@
                                 <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}/delete"> Delete </a>            
                             </p>
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-xs-8 col-xs-height">
                             {{ plot_pice_form.plot_pice_text }}
                         </div>
-                    </div>
+                    </div></div>
                 </li>
                 {% endfor %}
             </ul>

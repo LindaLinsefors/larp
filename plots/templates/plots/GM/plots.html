@@ -12,6 +12,7 @@
 var checkboxes = $('input:checkbox')
 
 $('input:checkbox').change(function(){
+	
 	for (var i=1; i<checkboxes.length; i++){
 		if (!checkboxes[i].checked){
 			checkboxes[0].checked = false;
@@ -22,6 +23,23 @@ $('input:checkbox').change(function(){
 	checkboxes[0].disabled = false;
 });
 
+
+
+function display_plot(){
+	var plot_text = '';
+	var textareas = $('textarea');
+	for (var i=1; i<textareas.length; i++){
+		plot_text += '<p>' + textareas[i].innerHTML + '</p>';
+    };
+	$('#display')[0].innerHTML = plot_text;
+};
+
+display_plot();
+
+$('textarea').change(function(){
+	alert('hej');
+	display_plot(); 
+});
 
 	
 {% endblock %}
@@ -57,6 +75,11 @@ $('input:checkbox').change(function(){
         margin: 0;
         padding: 7px;
     }
+
+	.display {
+        padding: 10px;
+	    box-shadow: 0px 0px 5px 0px gray inset;
+	}
 
     /* columns of same height styles */
     /* from http://www.minimit.com/demos/bootstrap-3-responsive-columns-of-same-height */
@@ -108,9 +131,9 @@ $('input:checkbox').change(function(){
 
 			<p>
 		        <input type="submit" value="Save all" class="btn btn-default"/>
-		        <a href="delete" class="btn btn-default"> Delete all </a>
 		        <a href="plot_pice/new" class="btn btn-default"> Add new plot pice </a>
-				<a href="{% url 'GM:index' %}" class="btn btn-default">Back to GM index</a> 
+				<a href="{% url 'GM:index' %}" class="btn btn-default">Go to GM index</a>
+				{% block top-menu %} {% endblock %} 
 			</p>
 
             <h2> Plot Pices </h2>
@@ -188,17 +211,19 @@ $('input:checkbox').change(function(){
 
 			<p>
 		        <input type="submit" value="Save all" class="btn btn-default"/>
-		        <a href="delete" class="btn btn-default"> Delete all </a>
 		        <a href="plot_pice/new" class="btn btn-default"> Add new plot pice </a>
 				<a href="{% url 'GM:index' %}" class="btn btn-default">Back to GM index</a> 
+				{% block end-menu %} {% endblock %} 
 			</p>
           </form>
                 
         </div>
 
         <div class="col-md-6">
-            {% block display %}
-            {% endblock %}
+			<div class="display">
+				<h2> Full plot for {{ class_instance.name }} </h2>
+				<div id="display"></div>
+			</div>
         </div>
 
     </div>

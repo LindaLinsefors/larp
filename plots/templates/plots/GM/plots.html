@@ -29,7 +29,9 @@
 		background: none;
         height: 223px;
 	}
-
+	.border {
+		border: 1px dashed #CCC;
+	}
     .no-pading {
         margin: 0;
         padding: 0;
@@ -42,8 +44,17 @@
     /* columns of same height styles */
     /* from http://www.minimit.com/demos/bootstrap-3-responsive-columns-of-same-height */
     .col-top {
-      vertical-align: top;
+		display: -webkit-flex; /* Safari */
+		-webkit-flex-flow: row wrap; /* Safari 6.1+ */
+		-webkit-align-content: space-around; /* Safari 7.0+ */
+		display: flex;
+		flex-flow: row wrap;
+        align-content: space-between; 
+        vertical-align: top;
     }
+	.col-bottom {
+	  vertical-align: bottom;
+	}
     .row-same-height {
       display: table;
       width: 100%;
@@ -82,8 +93,8 @@
 
             <h2> Plot Pices </h2>
 
-            <input type="submit" value="Save all" />
-            <a href="plot_pice/new"> Add new </a>
+            <input type="submit" value="Save all" class="btn btn-success"/>
+            <a href="plot_pice/new" class="btn btn-primary"> Add new </a>
 
             {{ plot_pice_forms.management_form }}
 
@@ -137,9 +148,11 @@
                                 {% endif %}
                                 {% endfor %}
                             </p>
-                            <p>
-                                <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}"> Edit </a>
-                                <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}/delete"> Delete </a>            
+						  	<p class="col-bottom">
+                                <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}" 
+                                    class="btn btn-primary"> Edit </a>
+                                <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}/delete"
+                                    class="btn btn-warning"> Delete </a>            
                             </p>
                         </div>
                         <div class="col-xs-8 col-xs-height">
@@ -165,7 +178,7 @@
                 </a> </p>
             {% endblock %} 
                 
-            <p> <a href="{% url 'GM:index' %}">
+            <p> <a href="{% url 'GM:index' %}" class="btn btn-default">
             Back to GM index
             </a> </p>
 

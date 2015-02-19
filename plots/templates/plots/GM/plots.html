@@ -18,7 +18,7 @@
         padding: 0;
     }
     .sortable li {
-	    border: 1px solid gray;
+	    box-shadow: 0px 0px 5px 0px gray inset;
         margin: 5px;
     }
 	.handle {
@@ -27,7 +27,8 @@
 	li.sortable-placeholder {
 		border: 1px dashed #CCC;
 		background: none;
-        height: 223px;
+        height: 225px;
+		box-shadow: none
 	}
 	.border {
 		border: 1px dashed #CCC;
@@ -38,7 +39,7 @@
     }
     .col-xs-height{
         margin: 0;
-        padding: 5px;
+        padding: 7px;
     }
 
     /* columns of same height styles */
@@ -82,19 +83,23 @@
     <div class="row">
         <div class="col-md-6">
 
-
-            <form method="POST">
+          <form method="POST">
             {% csrf_token %}
 
             {% block top %}
             {{ class_form.as_p }}
             {% endblock %}
 
+			<p>
+		        <input type="submit" value="Save all" class="btn btn-default"/>
+		        <a href="delete" class="btn btn-default"> Delete all </a>
+		        <a href="plot_pice/new" class="btn btn-default"> Add new plot pice </a>
+				<a href="{% url 'GM:index' %}" class="btn btn-default">Back to GM index</a> 
+			</p>
 
             <h2> Plot Pices </h2>
 
-            <input type="submit" value="Save all" class="btn btn-success"/>
-            <a href="plot_pice/new" class="btn btn-primary"> Add new </a>
+
 
             {{ plot_pice_forms.management_form }}
 
@@ -148,11 +153,13 @@
                                 {% endif %}
                                 {% endfor %}
                             </p>
-						  	<p class="col-bottom">
+						  	<p>
                                 <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}" 
-                                    class="btn btn-primary"> Edit </a>
+                                    class="btn btn-default btn-sm"> Edit </a>
+                                <button type="button"
+                                    class="btn btn-default btn-sm"> Remove </button>
                                 <a href="plot_pice/{{ plot_pice_form.instance.plot_pice.id }}/delete"
-                                    class="btn btn-warning"> Delete </a>            
+                                    class="btn btn-default btn-sm"> Delete </a>            
                             </p>
                         </div>
                         <div class="col-xs-8 col-xs-height">
@@ -163,25 +170,14 @@
                 {% endfor %}
             </ul>
 
-
-            <p>
-            <input type="submit" value="Save all" />
-            <a href="plot_pice/new"> Add new </a>
-            </p>
-
-            </form>
-
-
-            {% block end %}     
-                <p> <a href="delete">
-                    Delete
-                </a> </p>
-            {% endblock %} 
+			<p>
+		        <input type="submit" value="Save all" class="btn btn-default"/>
+		        <a href="delete" class="btn btn-default"> Delete all </a>
+		        <a href="plot_pice/new" class="btn btn-default"> Add new plot pice </a>
+				<a href="{% url 'GM:index' %}" class="btn btn-default">Back to GM index</a> 
+			</p>
+          </form>
                 
-            <p> <a href="{% url 'GM:index' %}" class="btn btn-default">
-            Back to GM index
-            </a> </p>
-
         </div>
 
         <div class="col-md-6">

@@ -100,7 +100,7 @@ def PlotPiceForm(*args, **kw):
 
 
 
-def plot_pice(request, parent_type, parent_id, id):  
+def plot_pice(request, larp_id, parent_type, parent_id, id):  
     plot_pice = get_object_or_404(PlotPice, pk=id)
 
     if request.method == 'POST':
@@ -118,7 +118,7 @@ def plot_pice(request, parent_type, parent_id, id):
                 'parent_id': parent_id                  }   )
 
 
-def plot_pice_no_parent(request, id):  
+def plot_pice_no_parent(request, larp_id, id):  
     plot_pice = get_object_or_404(PlotPice, pk=id)
 
     if request.method == 'POST':
@@ -134,7 +134,7 @@ def plot_pice_no_parent(request, id):
                 'parent_url': 'GM:index'         }   )
 
 
-def new_plot_pice(request, parent_type, parent_id):  
+def new_plot_pice(request, larp_id, parent_type, parent_id):  
     
     if request.method == 'POST':
         plot_pice_form = PlotPiceForm(request.POST)
@@ -222,11 +222,11 @@ PlotPartForms = forms.inlineformset_factory(PlotThread, PlotPart,
                                             can_delete=False, #Look in to this
                                             extra=0             )
 
-def plot_thread(request, id): 
+def plot_thread(request, larp_id, id): 
     return plots(   request, PlotThread, id, PlotThreadForm, PlotPartForms, 
                     template='plots/GM/plot_thread.html'        )
 
-def new_plot_thread(request):
+def new_plot_thread(request, larp_id):
     pass 
 
 
@@ -248,7 +248,7 @@ GroupPlotPiceForms = forms.inlineformset_factory(   Group, GroupPlotPice,
                                                     can_delete=False,
                                                     extra=0                 )
 
-def group_plot(request, id): 
+def group_plot(request, larp_id, id): 
     return plots(   request, Group, id, GroupPlotForm, GroupPlotPiceForms, 
                     template='plots/GM/plots.html'        )
 
@@ -283,12 +283,12 @@ PersonalPlotPiceForms = forms.inlineformset_factory(Character, PersonalPlotPice,
                                                     can_delete=False,
                                                     extra=0                 )
 
-def personal_plot(request, id): 
+def personal_plot(request, larp_id, id): 
     return plots(   request, Character, id, PersonalPlotForm, PersonalPlotPiceForms, 
                     template='plots/GM/personal_plot.html'        )
 
 
-def new_personal_plot(request): 
+def new_personal_plot(request, larp_id): 
     pass
 
 
@@ -332,12 +332,12 @@ def MembersForm(*args, **kw):
     return MembersFormClass(*args, **kw)
         
 
-def save_group(request):
+def save_group(request, larp_id):
     # import pdb; pdb.set_trace()
     print request.POST
     return HttpResponse('saved')
 
-def group(request, id): 
+def group(request, larp_id, id): 
     group = get_object_or_404(Group, pk=id)
     half = ( Character.objects.count()+1 )/2
     return render(request, 'plots/GM/group.html',
@@ -347,14 +347,14 @@ def group(request, id):
                 'characters_second_half': Character.objects.all()[half:],
             }   )
 
-def new_group(request): 
+def new_group(request, larp_id): 
     return for_views.new(  request, Group, GroupForm, 
                            url='GM:group',       )
 
-def members_old(request, id, back): # This one works
+def members_old(request, larp_id, id, back): # This one works
     return for_views.edit( request, Group, id, MembersForm  )
 
-def members(request, id, back):
+def members(request, larp_id, id, back):
     group = get_object_or_404(Group, pk=id)
 
     if request.method == 'POST':
@@ -369,10 +369,10 @@ def members(request, id, back):
             {   'members_form': members_form,
                 'group': group,                 }   )
 
-def members_from_index(request, id):
+def members_from_index(request, larp_id, id):
     return members(request, id, reverse('GM:index') )
 
-def members_from_parent(request, id, parent_type ):
+def members_from_parent(request, larp_id, id, parent_type ):
     return members( request, id, 
                     reverse('GM:'+parent_type, args=(id,)) )
 
@@ -412,12 +412,12 @@ def CharacterForm(*args, **kw):
 
 
 
-def character(request, id): 
+def character(request, larp_id, id): 
     return for_views.edit( request, Character, id, CharacterForm, 
                                 template='plots/GM/character.html'   )
 
 
-def new_character(request): 
+def new_character(request, larp_id): 
     return for_views.new(  request, Character, CharacterForm, 
                                 url='GM:character',
                                 template='plots/GM/character.html'  )
@@ -429,7 +429,7 @@ class_dict = {  'group': Group,
                 'plot_thread': PlotThread,
                 'plot_pice': PlotPice   }
 
-def delete(request, class_name, id):
+def delete(request, larp_id, class_name, id):
     class_instance = get_object_or_404(class_dict[class_name], pk=id)
     if request.method == 'POST':
         class_instance.delete()
@@ -445,7 +445,7 @@ def delete(request, class_name, id):
                     'back': reverse('GM:'+class_name, args=(id,)) })
         
 
-def delete_plot_pice(request, parent_type, parent_id, id):
+def delete_plot_pice(request, larp_id, parent_type, parent_id, id):
     plot_pice = get_object_or_404(PlotPice, pk=id)
     if request.method == 'POST':
         plot_pice.delete()

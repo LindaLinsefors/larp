@@ -5,12 +5,14 @@
 <h1> Larps </h1>
 
 <ul>
-    {% for larp in laps %}
+    {% for larp in laprs %}
     <li>
-        <a href="{% url 'GM:larp_plot' larp.id %}"> {{ larp.name }} </a> 
+        <a href="{% url 'GM:larp' larp.id %}"> {{ larp.name }} </a> 
     </li>
-    {% end for %}
+    {% endfor %}
 </ul>
 
 <a href="{% url 'GM:new_larp' %}"> New larp </a>
+
+{% endblock %}
 

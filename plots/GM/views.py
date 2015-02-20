@@ -4,13 +4,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 
-from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership
-from plots.GM.forms import PlotPiceForm, PlotPartForms GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm
+from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp
+
+from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm
 
 
 #General
 
-def edit(request, id, ClassForm, template='plots/form_template.html'):
+def edit(request, Class, id, ClassForm, template='plots/form_template.html'):
     class_instance = get_object_or_404(Class, pk=id)
 
     if request.method == 'POST':
@@ -25,13 +26,16 @@ def edit(request, id, ClassForm, template='plots/form_template.html'):
                     'class_instance': class_instance}   )   
 
 
-def new(request, ClassForm, url='GM:stuff', template='plots/form_template.html'):
+def new(request, larp_id, ClassForm, url='GM:stuff', template='plots/form_template.html'):
     if request.method == 'POST':
         class_form = ClassForm(request.POST)
         if class_form.is_valid():
             class_form.save()
+            if Class == Larp:
+                return HttpResponseRedirect(            
+                    reverse(url, args=(class_form.instance.id,))  )
             return HttpResponseRedirect(            
-                reverse(url, args=(class_form.instance.id,))  )
+                reverse(url, args=(lapr_id, class_form.instance.id))  )
     else:
         class_form = ClassForm()
 
@@ -47,12 +51,17 @@ def index(request):
 #Larp
 
 def larp(request, larp_id):
-    return edit( request, larp_id, LarpForm )
+    return edit( request, Larp, larp_id, LarpForm )
 
 def new_larp(request):
-    return new( request, LarpForm, url='GM:larp' )
+    return new( request, 0, LarpForm, url='GM:larp' )
 
-def lapr_plots(request, larp_id): 
+def delete_larp(request, larp_id):
+    larp = get_object_or_404(Larp, pk=larp_id)
+    larp.delete()
+    return HttpResponseRedirect( reverse('GM:index') )
+
+def larp_plots(request, larp_id): 
 
     larp = get_object_or_404(Larp, larp_id)
     plot_threads = larp.plot_threads
@@ -60,7 +69,7 @@ def lapr_plots(request, larp_id):
     characters = larp.characters
 
     return render(request, 'plots/GM/larp_plots.html',
-              { 'larp': larp
+              { 'larp': larp,
                 'plot_threads': plot_threads,
                 'groups': groups,
                 'characters': characters,  
@@ -213,7 +222,7 @@ def new_group(request, larp_id):
     return new( request, GroupForm,  url='GM:group' )
 
 def members_old(request, larp_id, id, back): # This one works
-    return edit( request, id, MembersForm  )
+    return edit( request, Group, id, MembersForm  )
 
 def members(request, larp_id, id, back):
     group = get_object_or_404(Group, pk=id)
@@ -240,7 +249,7 @@ def members_from_parent(request, larp_id, id, parent_type ):
 # Character
 
 def character(request, larp_id, id): 
-    return edit( request, id, CharacterForm, 
+    return edit( request, Character, id, CharacterForm, 
                                 template='plots/GM/character.html'   )
 
 

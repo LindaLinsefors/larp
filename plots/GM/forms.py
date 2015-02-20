@@ -1,6 +1,6 @@
 from django import forms
 
-from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership
+from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp
 
 
 
@@ -30,7 +30,7 @@ def save_relations( instance,
 
 #Larp
 
-class LarpForm(forms.ModelForm)
+class LarpForm(forms.ModelForm):
     class Meta:
         model = Larp
 

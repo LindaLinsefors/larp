@@ -9,8 +9,6 @@ from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, Group
 from plots import for_views
 
 
-def character_has_no_group(character, larp)
-
 def lapr_plots(request, larp_id): 
 
     larp = get_object_or_404(Larp, larp_id)

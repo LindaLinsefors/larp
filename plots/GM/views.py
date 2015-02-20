@@ -9,6 +9,8 @@ from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, Group
 from plots import for_views
 
 
+def character_has_no_group(character, larp)
+
 def lapr_plots(request, larp_id): 
 
     larp = get_object_or_404(Larp, larp_id)
@@ -23,21 +25,16 @@ def lapr_plots(request, larp_id):
                 'characters': characters,  
                 # There is probably a better way to do this with filter
                 'characters_without_group': 
-                   [character for character 
-                    in Character.objects.all() 
-                    if list( character.membership_set.all() )==[] ],
+                   [character for character in characters
+                    if list( character.groups.filter(lapr=larp) )==[] ],
                 'plot_pices_without_character_or_group':
-                   [plot_pice for plot_pice
-                    in PlotPice.objects.all()
-                    if (list( plot_pice.characters.all() )==[]
-                        and list( plot_pice.groups.all() )==[] ) ],   
+                   [plot_pice for plot_pice in larp.plot_pices
+                    if (list( plot_pice.characters.filter(lapr=larp) )==[]
+                        and list( plot_pice.groups.filter(lapr=larp) )==[] ) ],   
                 'plot_pices_without_plot_thread':
-                   [plot_pice for plot_pice
-                    in PlotPice.objects.all()
-                    if list( plot_pice.plot_threads.all() )==[] ],       
+                   [plot_pice for plot_pice in larp.plot.pices
+                    if list( plot_pice.plot_threads.filter(lapr=larp) )==[] ],       
                 } )
-
-
 
 #Plot Pice
 

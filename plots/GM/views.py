@@ -31,7 +31,7 @@ def new(request, larp_id, ClassForm, url='GM:stuff', template='plots/form_templa
         class_form = ClassForm(request.POST)
         if class_form.is_valid():
             class_form.save()
-            if Class == Larp:
+            if ClassForm == LarpForm:
                 return HttpResponseRedirect(            
                     reverse(url, args=(class_form.instance.id,))  )
             return HttpResponseRedirect(            

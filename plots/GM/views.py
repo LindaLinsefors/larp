@@ -40,7 +40,7 @@ def new(request, ClassForm, url='GM:stuff', template='plots/form_template.html')
 
 
 #Index
-def index(request)
+def index(request):
     return render( request, 'plots/GM/index.html',
                 { 'laprs': Larp.objects.all() }     )
 

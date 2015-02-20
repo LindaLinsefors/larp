@@ -26,8 +26,7 @@ class BasicModel(models.Model):
 class BasicRelation(models.Model):
     rank = models.FloatField( default=0 )
     rank.help_text = 'Arrange in which order objects appear. Lowest to highest'
-
-    plot_pice = models.ForeignKey('Larp')
+    larp = models.ForeignKey('Larp')
 
     class Meta:
         abstract = True
@@ -103,7 +102,7 @@ class PlotPice(models.Model):
     plot_threads_string.verbose_name = 'Plot threds'
     plot_threads_string.short_description = 'Plot threds'
 
-    plot_pice = models.ForeignKey('Larp')
+    larp = models.ForeignKey('Larp')
 
 
 

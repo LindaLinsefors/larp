@@ -9,6 +9,7 @@ urlpatterns = [
 
     # Larp
     url(r'^$(?P<larp_id>[0-9]+)/$', views.index, name='larp'),
+    url(r'^$(?P<larp_id>[0-9]+)/plots/$', views.index, name='larp_plots'),
 
     # Plot categories
     url(r'^(?P<larp_id>[0-9]+)/plot_thread/(?P<id>[0-9]+)/$', 

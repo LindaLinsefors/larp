@@ -261,4 +261,9 @@ class PlotThread(BasicModel):
 
 
 class Larp(BasicModel):
-    pass
+    characters = models.ManyToManyField(
+                'Character', null=True, blank=True)
+    groups = models.ManyToManyField(
+                'Group', null=True, blank=True )
+    plot_threads = models.ManyToManyField( 
+                'PlotThread', null=True, blank=True,)

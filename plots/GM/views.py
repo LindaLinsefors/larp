@@ -9,11 +9,18 @@ from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, Group
 from plots import for_views
 
 
-def index(request): 
+def lapr_plots(request, larp_id): 
+
+    larp = get_object_or_404(Larp, larp_id)
+    plot_threads = larp.plot_threads
+    groups = larp.groups
+    characters = larp.characters
+
     return render(request, 'plots/GM/index.html',
-              { 'plot_threads': PlotThread.objects.all(),
-                'groups': Group.objects.all(),
-                'characters': Character.objects.all(),  
+              { 'larp': larp
+                'plot_threads': plot_threads,
+                'groups': groups,
+                'characters': characters,  
                 # There is probably a better way to do this with filter
                 'characters_without_group': 
                    [character for character 

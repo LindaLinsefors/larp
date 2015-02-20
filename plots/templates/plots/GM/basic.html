@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>{% block title %}GM{% endblock %}</title>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -29,11 +30,17 @@
 
         body {
             /*background-color: #F0AD41;*/
-            background-color: #f1eeee
+            background-color: #f1eeee;
         }
         
         {% block style %}
         {% endblock %}    
+
+        .larp-title {
+            width: 100%;
+            background-color: #BBF;
+        }
+        
     </style>
     
 
@@ -47,6 +54,14 @@
 
 </head>
 <body>
+
+{% if larp %}
+<div class="larp-title">
+    <h2>
+        {{ larp.name }}
+    </h2>
+</div>
+{% endif %}
 
 {% block body %}
 {% endblock %}

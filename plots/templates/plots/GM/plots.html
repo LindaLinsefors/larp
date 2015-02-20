@@ -1,9 +1,8 @@
 {% extends "plots/GM/basic.html" %}
 
+{% block title %}GM:{{% larp.name %}}{% endblock %}
+
 <script>
-
-    $(".sortable").sortable();
-
 {% block script %}
     $(".sortable").sortable({
 		handle: '.handle'

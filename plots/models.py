@@ -82,8 +82,8 @@ class PlotPice(models.Model):
     plot_pice = models.TextField(blank=True, default='')
     
     plot_is_finished = models.BooleanField(default=False)
-    plot_is_finished.verbose_name = 'plot pice is finiched'
-    plot_is_finished.short_description = 'plot is finiched'
+    plot_is_finished.verbose_name = 'plot pice is finished'
+    plot_is_finished.short_description = 'plot is finished'
 
     def groups_string(self):
         return ',\n '.join([group.name for group in self.groups.all()])
@@ -132,8 +132,8 @@ class Character(BasicModel):
     secret_comments.help_text = '<i>Player can nether read nor write.</i>'
 
     plot_is_finished = models.BooleanField(default=False)
-    plot_is_finished.verbose_name = "character's plot is finiched"
-    plot_is_finished.short_description = "plot is finiched"
+    plot_is_finished.verbose_name = "character's plot is finished"
+    plot_is_finished.short_description = "plot is finished"
 
     def groups_string(self):
         return ', '.join([group.name for group in self.groups.all()])
@@ -164,7 +164,7 @@ class Group(BasicModel):
     show_members.help_text = 'Members presentation is made public.'
 
     plot_is_finished = models.BooleanField(default=False)
-    plot_is_finished.verbose_name = "group's plot is finiched."
+    plot_is_finished.verbose_name = "group's plot is finished"
 
     show_group = models.BooleanField(default=False)
     show_group.help_text = 'Group description is made public.'
@@ -212,7 +212,7 @@ class PlotThread(BasicModel):
     no_of_plot_parts.verbose_name = 'number of plot parts'
 
     plot_is_finished = models.BooleanField(default=False)
-    plot_is_finished.verbose_name = "plot thread is finiched"
+    plot_is_finished.verbose_name = "plot thread is finished"
 
 
     def characters(self):
@@ -255,4 +255,5 @@ class PlotThread(BasicModel):
     groups_incl_char_string.verbose_name = groups_incl_char.verbose_name
 
 
-
+class Larp(BasicModel):
+    pass

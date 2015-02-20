@@ -4,6 +4,37 @@ from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, Group
 
 
 
+#Help functions
+
+def checkboxes(choice_list):
+    return forms.MultipleChoiceField(
+                    required = False,
+                    widget  = forms.CheckboxSelectMultiple , 
+                    choices = [ (choice, choice.name) 
+                                for choice
+                                in choice_list   ] )
+
+def save_relations( instance,
+                    choice_list, old_relations, new_relation_names,  
+                    RelationClass, instance_type, choice_type ):
+
+    for choice in choice_list:
+        if (        (choice not in old_relations) 
+                and (choice.name in new_relation_names) ):
+            print choice.name
+            RelationClass(**{choice_type:choice, instance_type:instance}).save()
+        elif (      (choice in old_relations) 
+                and (choice.name not in new_relation_names) ):
+            RelationClass.objects.get(**{choice_type:choice, instance_type:instance}).delete()     
+
+
+#Larp
+
+class LarpForm(forms.ModelForm)
+    class Meta:
+        model = Larp
+
+
 #Plot Head
 
 class PlotThreadForm(forms.ModelForm):
@@ -60,7 +91,7 @@ def MembersForm(*args, **kw):
             model = Group
             fields = []
 
-        characters = for_views.checkboxes( Character.objects.all() )
+        characters = checkboxes( Character.objects.all() )
 
         def __init__(self, *args, **kw):
             forms.ModelForm.__init__(self, *args, **kw)
@@ -71,11 +102,11 @@ def MembersForm(*args, **kw):
             self.is_valid()
             forms.ModelForm.save(self)
          
-            for_views.save_relations(   self.instance,
-                                        Character.objects.all(),
-                                        self.instance.character_set.all(), 
-                                        self.cleaned_data['characters'],
-                                        Membership, 'character', 'group' )
+            save_relations( self.instance,
+                            Character.objects.all(),
+                            self.instance.character_set.all(), 
+                            self.cleaned_data['characters'],
+                            Membership, 'character', 'group' )
 
     return MembersFormClass(*args, **kw)
 
@@ -96,7 +127,7 @@ class CharacterFormBasic(forms.ModelForm):
 def CharacterForm(*args, **kw):
     class CharacterFormClass(CharacterFormBasic):
 
-        groups = for_views.checkboxes( Group.objects.all() )
+        groups = checkboxes( Group.objects.all() )
 
         def __init__(self, *args, **kw):
             CharacterFormBasic.__init__(self, *args, **kw)
@@ -106,11 +137,11 @@ def CharacterForm(*args, **kw):
         def save(self):
             self.is_valid()
             CharacterFormBasic.save(self)
-            for_views.save_relations(   self.instance,
-                                        Group.objects.all(),
-                                        self.instance.groups.all(), 
-                                        self.cleaned_data['groups'],
-                                        Membership, 'character', 'group' )
+            save_relations( self.instance,
+                            Group.objects.all(),
+                            self.instance.groups.all(), 
+                            self.cleaned_data['groups'],
+                            Membership, 'character', 'group' )
 
     return CharacterFormClass(*args, **kw)
 
@@ -147,9 +178,9 @@ class PlotPiceFormBasic(forms.ModelForm):
 def PlotPiceForm(*args, **kw):
 
     class PlotPiceFromClass(PlotPiceFormBasic):
-        characters = for_views.checkboxes( Character.objects.all() )
-        groups = for_views.checkboxes( Group.objects.all() )
-        plot_threads = for_views.checkboxes( PlotThread.objects.all() )
+        characters = checkboxes( Character.objects.all() )
+        groups = checkboxes( Group.objects.all() )
+        plot_threads = checkboxes( PlotThread.objects.all() )
 
         def __init__(self, *args, **kw):
             PlotPiceFormBasic.__init__(self, *args, **kw)
@@ -161,24 +192,24 @@ def PlotPiceForm(*args, **kw):
         def save(self):
             self.is_valid()
             PlotPiceFormBasic.save(self)
-            for_views.save_relations(   self.instance,
-                                        Group.objects.all(),
-                                        self.instance.groups.all(), 
-                                        self.cleaned_data['groups'],
-                                        GroupPlotPice, 'plot_pice', 'group' )
+            save_relations( self.instance,
+                            Group.objects.all(),
+                            self.instance.groups.all(), 
+                            self.cleaned_data['groups'],
+                            GroupPlotPice, 'plot_pice', 'group' )
          
-            for_views.save_relations(   self.instance,
-                                        Character.objects.all(),
-                                        self.instance.characters.all(), 
-                                        self.cleaned_data['characters'],
-                                        PersonalPlotPice, 'plot_pice', 'character' )
+            save_relations( self.instance,
+                            Character.objects.all(),
+                            self.instance.characters.all(), 
+                            self.cleaned_data['characters'],
+                            PersonalPlotPice, 'plot_pice', 'character' )
 
-            for_views.save_relations(   self.instance,
-                                        PlotThread.objects.all(),
-                                        self.instance.plot_threads.all(), 
-                                        self.cleaned_data['plot_threads'],
-                                        PlotPart, 'plot_pice', 'plot_thread' )
-            
+            save_relations( self.instance,
+                            PlotThread.objects.all(),
+                            self.instance.plot_threads.all(), 
+                            self.cleaned_data['plot_threads'],
+                            PlotPart, 'plot_pice', 'plot_thread' )
+
     return PlotPiceFromClass(*args, **kw)
 
 

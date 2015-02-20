@@ -5,10 +5,52 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 
 from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership
-from plots import for_views
-from plots.GM.forms import PlotPiceForm, PlotPartForms GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm
+from plots.GM.forms import PlotPiceForm, PlotPartForms GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm
+
+
+#General
+
+def edit(request, id, ClassForm, template='plots/form_template.html'):
+    class_instance = get_object_or_404(Class, pk=id)
+
+    if request.method == 'POST':
+        class_form = ClassForm(request.POST, instance=class_instance)
+        if class_form.is_valid():
+            class_form.save()
+    else:
+        class_form = ClassForm(instance=class_instance)     
+
+    return render(  request, template,
+                   {'class_form': class_form, 'id':id,
+                    'class_instance': class_instance}   )   
+
+
+def new(request, ClassForm, url='GM:stuff', template='plots/form_template.html'):
+    if request.method == 'POST':
+        class_form = ClassForm(request.POST)
+        if class_form.is_valid():
+            class_form.save()
+            return HttpResponseRedirect(            
+                reverse(url, args=(class_form.instance.id,))  )
+    else:
+        class_form = ClassForm()
+
+    return render(  request, template,
+                   {'class_form': class_form}   )  
+
+
+#Index
+def index(request)
+    return render( request, 'plots/GM/index.html',
+                { 'laprs': Larp.objects.all() }     )
 
 #Larp
+
+def larp(request, larp_id):
+    return edit( request, larp_id, LarpForm )
+
+def new_larp(request):
+    return new( request, LarpForm, url='GM:larp' )
 
 def lapr_plots(request, larp_id): 
 
@@ -17,7 +59,7 @@ def lapr_plots(request, larp_id):
     groups = larp.groups
     characters = larp.characters
 
-    return render(request, 'plots/GM/index.html',
+    return render(request, 'plots/GM/larp_plots.html',
               { 'larp': larp
                 'plot_threads': plot_threads,
                 'groups': groups,
@@ -168,11 +210,10 @@ def group(request, larp_id, id):
             }   )
 
 def new_group(request, larp_id): 
-    return for_views.new(  request, Group, GroupForm, 
-                           url='GM:group',       )
+    return new( request, GroupForm,  url='GM:group' )
 
 def members_old(request, larp_id, id, back): # This one works
-    return for_views.edit( request, Group, id, MembersForm  )
+    return edit( request, id, MembersForm  )
 
 def members(request, larp_id, id, back):
     group = get_object_or_404(Group, pk=id)
@@ -198,17 +239,13 @@ def members_from_parent(request, larp_id, id, parent_type ):
 
 # Character
 
-
-
-
-
 def character(request, larp_id, id): 
-    return for_views.edit( request, Character, id, CharacterForm, 
+    return edit( request, id, CharacterForm, 
                                 template='plots/GM/character.html'   )
 
 
 def new_character(request, larp_id): 
-    return for_views.new(  request, Character, CharacterForm, 
+    return new(  request, CharacterForm, 
                                 url='GM:character',
                                 template='plots/GM/character.html'  )
 

@@ -63,10 +63,10 @@ def delete_larp(request, larp_id):
 
 def larp_plots(request, larp_id): 
 
-    larp = get_object_or_404(Larp, larp_id)
-    plot_threads = larp.plot_threads
-    groups = larp.groups
-    characters = larp.characters
+    larp = get_object_or_404(Larp, pk=larp_id)
+    plot_threads = larp.plot_threads.all()
+    groups = larp.groups.all()
+    characters = larp.characters.all()
 
     return render(request, 'plots/GM/larp_plots.html',
               { 'larp': larp,
@@ -78,11 +78,11 @@ def larp_plots(request, larp_id):
                    [character for character in characters
                     if list( character.groups.filter(lapr=larp) )==[] ],
                 'plot_pices_without_character_or_group':
-                   [plot_pice for plot_pice in larp.plot_pices
+                   [plot_pice for plot_pice in larp.plotpice_set.all()
                     if (list( plot_pice.characters.filter(lapr=larp) )==[]
                         and list( plot_pice.groups.filter(lapr=larp) )==[] ) ],   
                 'plot_pices_without_plot_thread':
-                   [plot_pice for plot_pice in larp.plot.pices
+                   [plot_pice for plot_pice in larp.plotpice_set.all()
                     if list( plot_pice.plot_threads.filter(lapr=larp) )==[] ],       
                 } )
 

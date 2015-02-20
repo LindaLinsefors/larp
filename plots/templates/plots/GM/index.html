@@ -8,6 +8,8 @@
     {% for larp in laprs %}
     <li>
         <a href="{% url 'GM:larp' larp.id %}"> {{ larp.name }} </a> 
+        -
+        <a href="{% url 'GM:larp_plots' larp.id %}"> Plots </a> 
     </li>
     {% endfor %}
 </ul>

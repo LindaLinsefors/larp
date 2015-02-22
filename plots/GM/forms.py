@@ -44,6 +44,12 @@ class PlotThreadForm(forms.ModelForm):
                     'summery', 
                     'plot_is_finished'     ]
 
+class NewPlotThreadForm(forms.ModelForm):
+    class Meta:
+        model = PlotThread
+        fields = [  'name', 
+                    'summery', ]
+
 
 class GroupPlotForm(forms.ModelForm):
     class Meta:

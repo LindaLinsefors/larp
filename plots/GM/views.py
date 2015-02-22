@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 
 from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp
 
-from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm
+from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm, PlotThreadForm, NewPlotThreadForm
 
 
 #General
@@ -34,6 +34,10 @@ def new(request, larp_id, ClassForm, url='GM:stuff', template='plots/form_templa
             if ClassForm == LarpForm:
                 return HttpResponseRedirect(            
                     reverse(url, args=(class_form.instance.id,))  )
+
+            larp = get_object_or_404(Larp, larp_id=id)
+            larp.ad(class_form.instance)
+            larp.save()
             return HttpResponseRedirect(            
                 reverse(url, args=(lapr_id, class_form.instance.id))  )
     else:
@@ -178,26 +182,29 @@ def plots(request, larp_id, Class, id, ClassForm, InlineFormset,
 #Plot Thread
 
 def plot_thread(request, larp_id, id): 
-    return plots(   request, larp_id, PlotThread, id, PlotThreadForm, PlotPartForms, 
+    return plots(   request, larp_id, 
+                    PlotThread, id, PlotThreadForm, PlotPartForms, 
                     template='plots/GM/plot_thread.html'        )
 
 
 def new_plot_thread(request, larp_id):
-    pass 
+    return new(request, larp_id, NewPlotThreadForm, url='GM:plot_thread.html')
 
 
 
 # Group Plot
 
 def group_plot(request, larp_id, id): 
-    return plots(   request, larp_id, Group, id, GroupPlotForm, GroupPlotPiceForms, 
+    return plots(   request, larp_id,   
+                    Group, id, GroupPlotForm, GroupPlotPiceForms, 
                     template='plots/GM/plots.html'        )
 
 
 # Personal Plot
 
 def personal_plot(request, larp_id, id): 
-    return plots(   request, larp_id, Character, id, PersonalPlotForm, PersonalPlotPiceForms, 
+    return plots(   request, larp_id, 
+                    Character, id, PersonalPlotForm, PersonalPlotPiceForms, 
                     template='plots/GM/personal_plot.html'        )
 
 

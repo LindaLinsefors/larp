@@ -301,14 +301,8 @@ def delete(request, larp_id, class_name, id):
         class_instance.delete()
         return HttpResponseRedirect( reverse('GM:index') )
     
-    if class_name == 'plot_pice': 
-        name = 'Plot Pice'
-    else: 
-        name = class_instance.name
-        
-    return render(  request, 'plots/GM/delete.html',
-                   {'name': name,
-                    'back': reverse('GM:'+class_name, args=(id,)) })
+    return Http404    #Fix when on internet
+
         
 
 def delete_plot_pice(request, larp_id, parent_type, parent_id, id):

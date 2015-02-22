@@ -150,8 +150,11 @@ def save_formset(formset): #Is this needed?
         form.save()           
 
 
-def plots(request, Class, id, ClassForm, InlineFormset, template='plots/GM/plots.html'):
+def plots(request, larp_id, Class, id, ClassForm, InlineFormset, 
+        template='plots/GM/plots.html'):
+
     class_instance = get_object_or_404(Class, pk=id)
+    larp = get_object_or_404(Larp, pk=larp_id)
 
     if request.method == 'POST':
         class_form = ClassForm(request.POST, instance=class_instance)
@@ -159,7 +162,6 @@ def plots(request, Class, id, ClassForm, InlineFormset, template='plots/GM/plots
             class_form.save()
 
         inline_formset = InlineFormset(request.POST, instance=class_instance)
-        #import pdb; pdb.set_trace()
         if inline_formset.is_valid():
             save_formset(inline_formset)
 
@@ -169,14 +171,16 @@ def plots(request, Class, id, ClassForm, InlineFormset, template='plots/GM/plots
     return render(request, template,
            {'class_form': class_form,
             'class_instance': class_instance ,
-            'plot_pice_forms': inline_formset}   )   
+            'plot_pice_forms': inline_formset,
+            'larp':larp                         }   ) 
 
 
 #Plot Thread
 
 def plot_thread(request, larp_id, id): 
-    return plots(   request, PlotThread, id, PlotThreadForm, PlotPartForms, 
+    return plots(   request, larp_id, PlotThread, id, PlotThreadForm, PlotPartForms, 
                     template='plots/GM/plot_thread.html'        )
+
 
 def new_plot_thread(request, larp_id):
     pass 
@@ -186,19 +190,16 @@ def new_plot_thread(request, larp_id):
 # Group Plot
 
 def group_plot(request, larp_id, id): 
-    return plots(   request, Group, id, GroupPlotForm, GroupPlotPiceForms, 
+    return plots(   request, larp_id, Group, id, GroupPlotForm, GroupPlotPiceForms, 
                     template='plots/GM/plots.html'        )
 
 
 # Personal Plot
 
 def personal_plot(request, larp_id, id): 
-    return plots(   request, Character, id, PersonalPlotForm, PersonalPlotPiceForms, 
+    return plots(   request, larp_id, Character, id, PersonalPlotForm, PersonalPlotPiceForms, 
                     template='plots/GM/personal_plot.html'        )
 
-
-def new_personal_plot(request, larp_id): 
-    pass
 
 
 # Group

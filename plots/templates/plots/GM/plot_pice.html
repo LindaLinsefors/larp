@@ -3,12 +3,8 @@
 {% block body %}
 
 
+<h1> {{ heading }} Plot Pice </h1>
 
-{% if plot_pice_form.instance %}
-    <h1> Edit Plot Pice </h1>
-{% else %}
-    <h1> New Plot Pice </h1>
-{% endif %}
 
 <form method="POST" >
     {% csrf_token %}
@@ -34,9 +30,9 @@
 <p> <a href="delete"> Delete </a> </p>
 
 {% if parent_id %}
-    <p> <a href="{% url larp.id parent_url parent_id %}"> </p>
+    <p> <a href="{% url parent_url larp.id parent_id %}"> </p>
 {% else %}
-    <p> <a href="{% url larp.id parent_url %}"> </p>
+    <p> <a href="{% url 'GM:larp' larp.id %}"> </p>
 {% endif %}
 Cancel </a>
 

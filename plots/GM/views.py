@@ -105,6 +105,7 @@ def larp_plots(request, larp_id):
 
 def plot_pice(request, larp_id, parent_type, parent_id, id):  
     plot_pice = get_object_or_404(PlotPice, pk=id)
+    larp = get_object_or_404(Larp, pk=larp_id)
 
     if request.method == 'POST':
         plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
@@ -118,11 +119,14 @@ def plot_pice(request, larp_id, parent_type, parent_id, id):
     return render(request, 'plots/GM/plot_pice.html',
             {   'plot_pice_form': plot_pice_form,
                 'parent_url': 'GM:'+parent_type,
-                'parent_id': parent_id                  }   )
+                'parent_id': parent_id,                 
+                'larp': larp,
+                'heading': 'Edit',                        }   )
 
 
 def plot_pice_no_parent(request, larp_id, id):  
     plot_pice = get_object_or_404(PlotPice, pk=id)
+    larp = get_object_or_404(Larp, pk=larp_id)
 
     if request.method == 'POST':
         plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
@@ -134,10 +138,13 @@ def plot_pice_no_parent(request, larp_id, id):
     
     return render(request, 'plots/GM/plot_pice.html',
             {   'plot_pice_form': plot_pice_form,
-                'parent_url': 'GM:index'         }   )
+                'parent_url': 'GM:index',
+                'larp': larp,
+                'heading': 'Edit',                       }   )
 
 
 def new_plot_pice(request, larp_id, parent_type, parent_id):  
+    larp = get_object_or_404(Larp, pk=larp_id)
     
     if request.method == 'POST':
         plot_pice_form = PlotPiceForm(request.POST)
@@ -151,7 +158,9 @@ def new_plot_pice(request, larp_id, parent_type, parent_id):
     return render(request, 'plots/GM/plot_pice.html',
             {   'plot_pice_form': plot_pice_form,
                 'parent_url': 'GM:'+parent_type,
-                'parent_id': parent_id                  }   )
+                'parent_id': parent_id,
+                'larp': larp,
+                'heading': 'New',                       }   )
 
 
 

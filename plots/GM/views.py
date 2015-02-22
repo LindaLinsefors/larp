@@ -298,6 +298,7 @@ class_dict = {  'group': Group,
 def delete(request, larp_id, class_name, id):
     class_instance = get_object_or_404(class_dict[class_name], pk=id)
     class_instance.delete()
+    class_instance.save()
     return HttpResponseRedirect( reverse('GM:larp_plots', args=(larp_id) ) )
         
 

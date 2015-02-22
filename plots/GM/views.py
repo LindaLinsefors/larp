@@ -297,12 +297,8 @@ class_dict = {  'group': Group,
 
 def delete(request, larp_id, class_name, id):
     class_instance = get_object_or_404(class_dict[class_name], pk=id)
-    if request.method == 'POST':
-        class_instance.delete()
-        return HttpResponseRedirect( reverse('GM:index') )
-    
-    return Http404    #Fix when on internet
-
+    class_instance.delete()
+    return HttpResponseRedirect( reverse('GM:larp_plots', args=(larp_id) ) )
         
 
 def delete_plot_pice(request, larp_id, parent_type, parent_id, id):

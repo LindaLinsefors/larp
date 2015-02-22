@@ -34,9 +34,9 @@
 <p> <a href="delete"> Delete </a> </p>
 
 {% if parent_id %}
-    <p> <a href="{% url parent_url parent_id %}"> </p>
+    <p> <a href="{% url larp.id parent_url parent_id %}"> </p>
 {% else %}
-    <p> <a href="{% url parent_url %}"> </p>
+    <p> <a href="{% url larp.id parent_url %}"> </p>
 {% endif %}
 Cancel </a>
 

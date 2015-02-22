@@ -1,6 +1,6 @@
 {% extends "plots/GM/basic.html" %}
 
-{% block title %}GM:{{% larp.name %}}{% endblock %}
+{% block title %}GM:{{ larp.name }}{% endblock %}
 
 <script>
 {% block script %}
@@ -113,9 +113,7 @@ $('textarea').change(function(){
 <div class="container-fluid">
 
     <h1>
-        {% block title %}
         {{ class_instance.name }}
-        {% endblock %}
     </h1>
 
     <div class="row">

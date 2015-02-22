@@ -152,6 +152,7 @@ def new_plot_pice(request, larp_id, parent_type, parent_id):
             plot_pice_form.save()
             return HttpResponseRedirect(            
                 reverse('GM:'+parent_type, args=( parent_id,))  )
+        print 'Form is not vaild'
     else:
         plot_pice_form = PlotPiceForm()
     

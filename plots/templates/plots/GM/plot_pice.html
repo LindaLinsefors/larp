@@ -8,20 +8,21 @@
 
 <form method="POST" >
     {% csrf_token %}
+    {{ plot_pice_form.larp }}
     <p>{{ plot_pice_form.plot_pice }}</p>
-    <p>Plot Pice is finnished {{ plot_pice_form.plot_is_finished }}</p>
+    <p><b> Plot Pice is finnished: </b> {{ plot_pice_form.plot_is_finished }}</p>
 
     <h3> Plot Threads </h3>
     {{ plot_pice_form.plot_threads }}
-    New: {{ plot_pice_form.new_plot_thread_name}}
+    <b>New:</b> {{ plot_pice_form.new_plot_thread_name}}
 
     <h3> Groups </h3>
     {{ plot_pice_form.groups }}
-    New: {{ plot_pice_form.new_group_name }}
+    <b>New:</b> {{ plot_pice_form.new_group_name }}
 
     <h3> Characters </h3>
     {{ plot_pice_form.characters }}
-    New: {{ plot_pice_form.new_character_name }}
+    <b>New:</b> {{ plot_pice_form.new_character_name }}
 
     <p> <input type="submit" value="Save" /> </p>
 </form> 

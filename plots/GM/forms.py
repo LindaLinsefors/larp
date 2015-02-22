@@ -170,16 +170,17 @@ class PlotPiceFormBasic(forms.ModelForm):
         if self.cleaned_data['new_'+class_name+'_name']:
             new = Class( name=self.cleaned_data['new_'+class_name+'_name'] )
             new.save()
-            RelationClass( plot_pice=self.instance, 
-                           plot_thread=new, 
-                           larp=self.larp,             ).save()
+            if Class == PlotThread:
+                RelationClass( plot_pice=self.instance, 
+                               plot_thread=new, 
+                               larp=self.instance.larp, ).save()
 
     def save(self):
         self.is_valid()
         forms.ModelForm.save(self)
-        self.save_new_relation(Character, character, CharacterPlotPice)
-        self.save_new_relation(Group, group, GroupPlotPice)
-        self.save_new_relation(PlotThread, PlotThread, PlotPart)
+        self.save_new_relation(Character, 'character', PersonalPlotPice)
+        self.save_new_relation(Group, 'group', GroupPlotPice)
+        self.save_new_relation(PlotThread, 'plot_thread', PlotPart)
 
 
 

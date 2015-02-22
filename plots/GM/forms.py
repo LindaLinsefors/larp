@@ -172,7 +172,7 @@ class PlotPiceFormBasic(forms.ModelForm):
             new.save()
             RelationClass( plot_pice=self.instance, 
                            plot_thread=new, 
-                           larp=self.larp              ).save()
+                           larp=self.larp,             ).save()
 
     def save(self):
         self.is_valid()

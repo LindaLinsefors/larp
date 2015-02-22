@@ -65,7 +65,7 @@ def index(request):
 #Larp
 
 def larp(request, larp_id):
-    return edit( request, Larp, larp_id, LarpForm )
+    return edit( request, larp_id, Larp, larp_id, LarpForm )
 
 def new_larp(request):
     return new( request, 0, Larp, LarpForm, url='GM:larp' )
@@ -251,8 +251,8 @@ def group(request, larp_id, id):
 def new_group(request, larp_id): 
     return new( request, larp_id, Group, GroupForm,  url='GM:group' )
 
-def members_old(request, larp_id, id, back): # This one works
-    return edit( request, Group, id, MembersForm  )
+def members_old(request, larp_id, id, back): 
+    return edit( request, larp_id, Group, id, MembersForm, template='plots/GM/members.html'  )
 
 def members(request, larp_id, id, back):
     group = get_object_or_404(Group, pk=id)
@@ -279,7 +279,7 @@ def members_from_parent(request, larp_id, id, parent_type ):
 # Character
 
 def character(request, larp_id, id): 
-    return edit( request, Character, id, CharacterForm, 
+    return edit( request, larp_id, Character, id, CharacterForm, 
                                 template='plots/GM/character.html'   )
 
 

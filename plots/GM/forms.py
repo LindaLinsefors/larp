@@ -160,7 +160,7 @@ def CharacterForm(*args, **kw):
 class PlotPiceFormBasic(forms.ModelForm):
     class Meta:
         model=PlotPice
-        fields = [ 'plot_pice', 'plot_is_finished' ]
+        fields = [ 'plot_pice', 'plot_is_finished', 'larp' ]
     
     new_character_name = forms.CharField(required=False, max_length=50)
     new_group_name = forms.CharField(required=False, max_length=50)    
@@ -170,14 +170,16 @@ class PlotPiceFormBasic(forms.ModelForm):
         if self.cleaned_data['new_'+class_name+'_name']:
             new = Class( name=self.cleaned_data['new_'+class_name+'_name'] )
             new.save()
-            RelationClass( plot_pice=self.instance, plot_thread=new ).save()
+            RelationClass( plot_pice=self.instance, 
+                           plot_thread=new, 
+                           larp=self.larp              ).save()
 
-        def save(self):
-            self.is_valid()
-            forms.ModelForm.save(self)
-            self.save_new_relation(Character, character, CharacterPlotPice)
-            self.save_new_relation(Group, group, GroupPlotPice)
-            self.save_new_relation(PlotThread, PlotThread, PlotPart)
+    def save(self):
+        self.is_valid()
+        forms.ModelForm.save(self)
+        self.save_new_relation(Character, character, CharacterPlotPice)
+        self.save_new_relation(Group, group, GroupPlotPice)
+        self.save_new_relation(PlotThread, PlotThread, PlotPart)
 
 
 

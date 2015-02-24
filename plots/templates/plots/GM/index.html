@@ -5,7 +5,6 @@
 {% block body %}
 
 <h1> Larps </h1>
-
 <ul>
     {% for larp in larps %}
     <li>
@@ -15,8 +14,27 @@
     </li>
     {% endfor %}
 </ul>
+<a href="{% url 'GM:new_larp' %}" class="btn btn-default"> New larp </a>
 
-<a href="{% url 'GM:new_larp' %}"> New larp </a>
+<h1> Groups </h1>
+<ul>
+    {% for group in grups %}
+    <li>
+        <a href="{% url 'GM:group' group.id %}"> {{ group.name }} </a> 
+    </li>
+    {% endfor %}
+</ul>
+
+<h1> Characters </h1>
+<ul>
+    {% for character in grups %}
+    <li>
+        <a href="{% url 'GM:character' character.id %}"> {{ group.name }} </a> 
+    </li>
+    {% endfor %}
+</ul>
+
+
 
 {% endblock %}
 

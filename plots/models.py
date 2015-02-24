@@ -236,8 +236,13 @@ class Group(BasicModel):
     show_group = models.BooleanField(default=False)
     show_group.help_text = 'Group description is made public.'
 
+    is_open = models.BooleanField(default=False)
+
     group_description = models.TextField(blank=True, default='')
     members_presentations = models.TextField(blank=True, default='')
+
+    characters = models.ManyToManyField(
+                'Character', null=True, blank=True, through='Membership')
 
 
     def make_members_presentations(self):

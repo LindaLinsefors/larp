@@ -70,7 +70,7 @@ def index(request):
     return render( request, 'plots/GM/index.html',
                 {   'larps': Larp.objects.all(),
                     'groups': Group.objects.all(),
-                    'characters': Character.objects.all() }     )
+                    'characters': Character.objects.all(), }     )
 
 #Larp
 

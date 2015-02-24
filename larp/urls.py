@@ -6,8 +6,8 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'larp.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+    #url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^groups/', include('plots.groups.urls', namespace="groups")),
 
     url(r'^personal/your_characters/', 

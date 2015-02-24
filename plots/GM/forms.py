@@ -1,6 +1,6 @@
 from django import forms
 
-from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp
+from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp, LarpPlotThread, PersonalPlot, GroupPlot
 
 
 
@@ -54,24 +54,26 @@ class PlotThreadForm(forms.ModelForm):
     class Meta:
         model = PlotThread
         fields = [  'name', 
-                    'summery', 
-                    'plot_is_finished'     ]
+                    'summery',  ]
+
+class LarpPlotThreadForm(forms.ModelForm):
+    class Meta:
+        model = LarpPlotThread
+        fields = [  'plot_is_finished',     ]
 
 
 class GroupPlotForm(forms.ModelForm):
     class Meta:
-        model = Group
+        model = GroupPlot
         fields = [  'secret_comments',   
-                    'plot_is_finished'     ]
+                    'plot_is_finished',    ]
 
 
 class PersonalPlotForm(forms.ModelForm):
     class Meta:
-        model = Character
+        model = PersonalPlot
         fields = [  'secret_comments',   
-                    'plot_is_finished',
-                    'character_description',
-                    'other_info'             ]
+                    'plot_is_finished',     ]
 
     character_description = forms.CharField(
             widget=forms.Textarea(attrs={'readonly':'readonly'}), 
@@ -94,7 +96,7 @@ class GroupForm(forms.ModelForm):
                     'show_group',
                     'show_members',
                     'group_description',
-                    'secret_comments',       ]
+                    'characters',       ]
 
 
 def MembersForm(*args, **kw):
@@ -132,8 +134,7 @@ class CharacterFormBasic(forms.ModelForm):
                     'character_concept', 
                     'presentation', 
                     'character_description',
-                    'other_info',
-                    'secret_comments'       ]
+                    'other_info',               ]
    
     
 def CharacterForm(*args, **kw):
@@ -256,7 +257,7 @@ class PlotPartForm(PlotPiceInlineForm):
     class Meta(PlotPiceInlineForm.Meta):
         model=PlotPart
 
-PlotPartForms = forms.inlineformset_factory(PlotThread, PlotPart, 
+PlotPartForms = forms.inlineformset_factory(LarpPlotThread, PlotPart, 
                                             form=PlotPartForm, 
                                             can_delete=False, #Look in to this
                                             extra=0                             )  
@@ -265,9 +266,9 @@ PlotPartForms = forms.inlineformset_factory(PlotThread, PlotPart,
 
 class GroupPlotPiceForm(PlotPiceInlineForm):
     class Meta(PlotPiceInlineForm.Meta):
-        model=PlotPart
+        model=GroupPlotPice
 
-GroupPlotPiceForms = forms.inlineformset_factory(   Group, GroupPlotPice, 
+GroupPlotPiceForms = forms.inlineformset_factory(   GroupPlot, GroupPlotPice, 
                                                     form=GroupPlotPiceForm, 
                                                     can_delete=False,
                                                     extra=0                 )
@@ -278,7 +279,7 @@ class PersonalPlotPiceForm(PlotPiceInlineForm):
     class Meta(PlotPiceInlineForm.Meta):
         model=PersonalPlotPice
 
-PersonalPlotPiceForms = forms.inlineformset_factory(Character, PersonalPlotPice, 
+PersonalPlotPiceForms = forms.inlineformset_factory(PersonalPlot, PersonalPlotPice, 
                                                     form=GroupPlotPiceForm, 
                                                     can_delete=False,
                                                     extra=0                 )

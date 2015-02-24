@@ -5,7 +5,7 @@
 {% block body %}
 
 <h1> Plot threads <small>(<a href="{% url 'GM:new_larp_plot_thread' larp.id %}">New</a>)</small></h1>
-{% if plot_threads %}
+{% if larp_plot_threads %}
     <ul>
     {% for larp_plot_thread in larp_plot_threads %} 
         <li>

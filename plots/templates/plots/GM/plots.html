@@ -129,11 +129,18 @@ $('textarea').change(function(){
             {% endblock %}
 
 			<p>
+                <!--
 		        <input type="submit" value="Save all" class="btn btn-default"/>
 		        <a href="" class="btn btn-default"> Reset </a>
 		        <a href="plot_pice/new" class="btn btn-default"> Add new plot pice (save) </a>
 				<a href="{% url 'GM:larp_plots' larp.id %}" class="btn btn-default"> Larp overview (save) </a>
 				<a href="{% url 'GM:larp_plots' larp.id %}" class="btn btn-default"> Larp overview (dont save) </a>
+                -->
+
+		        <input type="submit" value="Save all" class="btn btn-default"/>
+		        <a href="plot_pice/new" class="btn btn-default"> Add new plot pice </a>
+				<a href="{% url 'GM:larp_plots' larp.id %}" class="btn btn-default">Larp overview</a> 
+                {% block menue %}{% endblock %}
 			</p>
 
             <h2> Plot Pieces </h2>
@@ -212,7 +219,7 @@ $('textarea').change(function(){
 			<p>
 		        <input type="submit" value="Save all" class="btn btn-default"/>
 		        <a href="plot_pice/new" class="btn btn-default"> Add new plot pice </a>
-				<a href="{% url 'GM:index' %}" class="btn btn-default">Larp overview</a> 
+				<a href="{% url 'GM:larp_plots' larp.id %}" class="btn btn-default">Larp overview</a> 
 			</p>
           </form>
                 

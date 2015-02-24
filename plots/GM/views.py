@@ -336,7 +336,20 @@ def new_larp_plot_thread(request, larp_id):
         larp_plot_thread.save()
         return HttpResponseRedirect( 
                     reverse(    'GM:larp_plot_thread',
-                                args=(larp_plot_thread.id, )     ))
+                                args=(larp_plot_thread.id, )     ) )
+
+def delete_larp_plot_thread(request, id):
+    larp_plot_thread = get_object_or_404(LarpPlotThread, pk=id)
+    larp_id = larp_plot_thread.larp.id
+
+    if larp_plot_thread.plot_thread.larpplotthread_set.count() == 1:
+        larp_plot_thread.plot_thread.delete()
+        print 'delete'
+    else:
+        larp_plot_thread.delete()
+    return HttpResponseRedirect( 
+                reverse(    'GM:larp_plots', args=(larp_id, )    ) )
+                    
 
 
 

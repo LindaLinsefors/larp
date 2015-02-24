@@ -18,6 +18,8 @@ urlpatterns = [
             views.new_larp_plot_thread, name='new_larp_plot_thread'),
     url(r'^larp/plot_thread/(?P<id>\d+)/$', 
             views.larp_plot_thread, name='larp_plot_thread'),
+    url(r'^larp/plot_thread/(?P<id>\d+)/delete/$', 
+            views.delete_larp_plot_thread, name='delete_larp_plot_thread'),
 
     # Plot categories
 

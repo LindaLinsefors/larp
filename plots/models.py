@@ -60,6 +60,8 @@ class PersonalPlotPice(BasicPlotRelation):
 class GroupPlot(models.Model):
     larp = models.ForeignKey('Larp')
     group = models.ForeignKey('Group')
+    class Meta():
+        unique_together = (('larp','group'),)
 
     secret_comments = models.TextField(blank=True, default='')
 
@@ -78,6 +80,8 @@ class GroupPlot(models.Model):
 class PersonalPlot(models.Model):
     larp = models.ForeignKey('Larp')
     character = models.ForeignKey('Character')
+    class Meta():
+        unique_together = (('larp','character'),)
 
     secret_comments = models.TextField(blank=True, default='')
 
@@ -96,6 +100,8 @@ class PersonalPlot(models.Model):
 class LarpPlotThread(models.Model):
     larp = models.ForeignKey('Larp')
     plot_thread = models.ForeignKey('PlotThread')
+    class Meta():
+        unique_together = (('larp','plot_thread'),)
 
     plot_is_finished = models.BooleanField(default=False)
     plot_is_finished.verbose_name = "plot thread is finished"

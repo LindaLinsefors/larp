@@ -85,8 +85,9 @@ class LarpPlotThreadForm(forms.ModelForm):
     def save(self):
         self.is_valid()
         forms.ModelForm.save(self)
-        self.instance.name = self.cleaned_data['name']
-        self.instance.summery = self.cleaned_data['summery']
+        self.instance.plot_thread.name = self.cleaned_data['name']
+        self.instance.plot_thread.summery = self.cleaned_data['summery']
+        self.instance.plot_thread.save()
 
 
 

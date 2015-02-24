@@ -54,7 +54,12 @@ def new(    request, larp_id, Class, ClassForm,
                 reverse(url, args=(larp_id, class_form.instance.id))  )
     else:
         class_form = ClassForm()
+        if Class == Larp:
+            return render (  request, template,
+                            {'class_form': class_form,}   ) 
 
+        larp = get_object_or_404(Larp, pk=larp_id) 
+        
     return render(  request, template,
                    {'class_form': class_form,
                     'larp': larp,               }   )  

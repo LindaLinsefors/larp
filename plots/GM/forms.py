@@ -22,10 +22,15 @@ def save_relations( instance,
         if (        (choice not in old_relations) 
                 and (choice.name in new_relation_names) ):
             print choice.name
-            RelationClass(**{choice_type:choice, instance_type:instance}).save()
+            RelationClass( **{  choice_type:choice, 
+                                instance_type:instance, 
+                                'larp':instance.larp,       }).save()
+
         elif (      (choice in old_relations) 
                 and (choice.name not in new_relation_names) ):
-            RelationClass.objects.get(**{choice_type:choice, instance_type:instance}).delete()     
+            RelationClass.objects.get( **{  choice_type:choice, 
+                                            instance_type:instance, 
+                                            'larp':instance.larp,   }).delete()     
 
 
 #Larp
@@ -33,6 +38,14 @@ def save_relations( instance,
 class LarpForm(forms.ModelForm):
     class Meta:
         model = Larp
+        fields = [ 'groups',
+                   'plot_threads',
+                   'characters',    ]
+        widgets = {
+            'groups': forms.CheckboxSelectMultiple,
+            'plot_threads': forms.CheckboxSelectMultiple,
+            'characters': forms.CheckboxSelectMultiple,
+        }
 
 
 #Plot Head
@@ -161,19 +174,13 @@ class PlotPiceFormBasic(forms.ModelForm):
 
     def save_new_relation(self, Class, class_name, RelationClass):
         if self.cleaned_data['new_'+class_name+'_name']:
-            new = Class( name=self.cleaned_data['new_'+class_name+'_name'] )
-            new.save()
-            if Class == PlotThread:
-                RelationClass( plot_pice=self.instance, 
-                               plot_thread=new, 
-                               larp=self.instance.larp, ).save()
+            new_class_instance = Class( name=self.cleaned_data['new_'+class_name+'_name'] )
+            new_class_instance.save()
 
-    def save(self):
-        self.is_valid()
-        forms.ModelForm.save(self)
-        self.save_new_relation(Character, 'character', PersonalPlotPice)
-        self.save_new_relation(Group, 'group', GroupPlotPice)
-        self.save_new_relation(PlotThread, 'plot_thread', PlotPart)
+            kw = {  'plot_pice': slef.instance,
+                    class_name: new_class_instance,
+                    'larp': self.instance.larp,     }
+            RelationClass( **kw ).save()
 
 
 
@@ -193,7 +200,7 @@ def PlotPiceForm(*args, **kw):
 
         def save(self):
             self.is_valid()
-            PlotPiceFormBasic.save(self)
+            forms.ModelForm.save(self)
             save_relations( self.instance,
                             Group.objects.all(),
                             self.instance.groups.all(), 
@@ -211,6 +218,10 @@ def PlotPiceForm(*args, **kw):
                             self.instance.plot_threads.all(), 
                             self.cleaned_data['plot_threads'],
                             PlotPart, 'plot_pice', 'plot_thread' )
+
+            self.save_new_relation(Character, 'character', PersonalPlotPice)
+            self.save_new_relation(Group, 'group', GroupPlotPice)
+            self.save_new_relation(PlotThread, 'plot_thread', PlotPart)
 
     return PlotPiceFromClass(*args, **kw)
 

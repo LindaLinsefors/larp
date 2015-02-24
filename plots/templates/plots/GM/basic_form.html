@@ -7,23 +7,25 @@
     {% if class_instance %}
         <h1> {{ class_instance.name }} </h1>
     {% else %}
-        <h1> New </h1>
+        <h1> New {{ class_name }} </h1>
     {% endif %}
 
     <form method="POST" >
         {% csrf_token %}
         {{ class_form.as_p }}
-        <input type="submit" value="Save" />
+        <p>
+            <input type="submit" value="Save" />
+            {% if class_instance %}
+                <a href="delete" class="btn btn-default"> Delete </a>
+            {% endif %}
+            {% if larp %}
+                <a href="{% url 'GM:larp_plots' larp.id %}" 
+                    class="btn btn-default"> Larp overview </a>
+            {% else %}
+                <a href="{% url 'GM:index' %}" 
+                    class="btn btn-default"> GM index </a>
+            {% endif %}
+        </p>
     </form>
-
-    {% if class_instance %}
-    <p> <BIG> <a href="delete">
-    Delete
-    </a> </BIG> </p>
-    {% endif %}
-
-    <p> <BIG> <a href="{% url 'GM:larp_plots' larp.id %}">
-    Larp overview
-    </a> </BIG> </p>
 
 {% endblock %}

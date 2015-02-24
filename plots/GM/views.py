@@ -4,39 +4,88 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 
-from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp
+from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlot, PersonalPlot, LarpPlotThread, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp
 
-from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm, PlotThreadForm
+from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm, PlotThreadForm, LarpPlotThreadForm
+
+#Dicts
+
+class_dict = {  'larp':Larp,
+                'group':Group,
+                'character':Character,
+                'plot_pice':PlotPice,
+                'plot_thread': PlotThread,
+                'group_plot':GroupPlot,
+                'personal_plot':PersonalPlot,
+                'larp_plot_thred':LarpPlotThread,   }
+
+form_dict = {   'larp':LarpForm,
+                'group':GroupForm,
+                'character':CharacterForm,
+                'plot_pice':PlotPiceForm,
+                'plot_thread': PlotThreadForm,
+                'group_plot':GroupPlotForm,
+                'personal_plot':PersonalPlotForm,
+                'larp_plot_thred':LarpPlotThreadForm,   }
 
 
 #Edit/New
 
-def edit_save_if_POST(request, Class, id, ClassForm):
+def edit_form(request, id, Class, ClassForm):
     class_instance = get_object_or_404(Class, pk=id)
 
-    if request.method == 'POST':
-        class_form = ClassForm(request.POST, instance=class_instance)
-        if class_form.is_valid():
-            class_form.save()
-            return class_form
-    else:
+    if request.method != 'POST':
         return ClassForm(instance=class_instance)
 
-    
+    class_form = ClassForm(request.POST, instance=class_instance)
+    if class_form.is_valid():
+        class_form.save()
+        return class_form
+
+def new_form(request, Class, ClassForm):
+    if request.method != 'POST':
+        return ClassForm()
+
+    class_form = ClassForm(request.POST)
+    if class_form.is_valid():
+        class_form.save()
+        return class_form
+
+#Topp
+
+def edit_topp(request, class_name, id):
+    class_form = edit_form( request, id,
+                            class_dict[class_name],  
+                            form_dict[class_name]   )
+
+    return render(  request, 'plots/GM/basic_form.html',
+                   {'class_form': class_form,
+                    'class_instance': class_instance,    }   ) 
+
+def new_topp(request, class_name):
+    if request.method != 'POST':
+        if class_name == 'plot_thread':
+            class_name = 'plot thread'
+        return render(  request, 'plots/GM/basic_form.html',
+                       {'class_form': form_dict[class_name](),  
+                        'class_name': class_name                }   ) 
+
+    class_form = form_dict[class_name](request.POST)
+    if class_form.is_valid():
+        class_form.save()
+        return HttpResponseRedirect(            
+                reverse('GM:edit_topp', 
+                        args=(  'class_name',
+                                class_form.instance.id,)  ))  
+
+def delete_topp(request, class_name, id):
+    class_instance = get_object_or_404(class_dict[class_name], pk=id)
+    class_instance.delete()
 
 
-def edit(   request, Class, id, ClassForm, 
-            template='plots/GM/basic_form.html'     ):
 
-    class_form = edit_save_if_POST(request, Class, id, ClassForm)
-
-    return render(  request, template,
-                   {'class_form': class_form, 
-                    'class_instance': class_instance    }   ) 
-
-
-def edit_under_larp(  request, larp_id, Class, id, ClassForm, 
-                   template='plots/GM/basic_form.html'     ):
+def edit_under_larp(    request, larp_id, Class, id, ClassForm, 
+                        template='plots/GM/basic_form.html'     ):
 
     class_form = edit_save_if_POST(request, Class, id, ClassForm)
     larp = get_object_or_404(Larp, pk=larp_id)   
@@ -126,10 +175,10 @@ def index(request):
 #Larp
 
 def larp(request, larp_id):
-    return edit( request, larp_id, Larp, larp_id, LarpForm )
+    return edit( request, Larp, larp_id, LarpForm )
 
 def new_larp(request):
-    return new( request, 0, Larp, LarpForm, url='GM:larp' )
+    return new( request, Larp, LarpForm, url='GM:larp' )
 
 def delete_larp(request, larp_id):
     larp = get_object_or_404(Larp, pk=larp_id)
@@ -355,10 +404,6 @@ def new_character(request, larp_id):
 
 #Delete
 
-class_dict = {  'group': Group,
-                'character': Character,
-                'plot_thread': PlotThread,
-                'plot_pice': PlotPice   }
 
 def delete(request, larp_id, class_name, id):
     class_instance = get_object_or_404(class_dict[class_name], pk=id)

@@ -8,31 +8,33 @@
 <ul>
     {% for larp in larps %}
     <li>
-        <a href="{% url 'GM:larp' larp.id %}"> {{ larp.name }} </a> 
+        <a href="{% url 'GM:edit_topp' 'larp' larp.id %}"> {{ larp.name }} </a> 
         -
         <a href="{% url 'GM:larp_plots' larp.id %}"> Plots </a> 
     </li>
     {% endfor %}
 </ul>
-<a href="{% url 'GM:new_larp' %}" class="btn btn-default"> New larp </a>
+<a href="{% url 'GM:new_topp' 'larp' %}" class="btn btn-default"> New larp </a>
 
 <h1> Groups </h1>
 <ul>
     {% for group in grups %}
     <li>
-        <a href="{% url 'GM:group' group.id %}"> {{ group.name }} </a> 
+        <a href="{% url 'GM:edit_topp' 'character' group.id %}"> {{ group.name }} </a> 
     </li>
     {% endfor %}
 </ul>
+<a href="{% url 'GM:new_topp' 'group' %}" class="btn btn-default"> New larp </a>
 
 <h1> Characters </h1>
 <ul>
     {% for character in grups %}
     <li>
-        <a href="{% url 'GM:character' character.id %}"> {{ group.name }} </a> 
+        <a href="{% url 'GM:edit_topp' character.id %}"> {{ group.name }} </a> 
     </li>
     {% endfor %}
 </ul>
+<a href="{% url 'GM:new_topp' 'character' %}" class="btn btn-default"> New larp </a>
 
 
 

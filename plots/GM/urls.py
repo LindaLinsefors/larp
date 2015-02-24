@@ -7,11 +7,11 @@ urlpatterns = [
     # Index
     url(r'^$', views.index, name='index'),
 
-    # Larp
-    url(r'^(?P<larp_id>[0-9]+)/$', views.larp, name='larp'),
-    url(r'^(?P<larp_id>[0-9]+)/delete/$', views.delete_larp, name='delete_larp'),
-    url(r'^new/$', views.new_larp, name='new_larp'),
-    url(r'^(?P<larp_id>[0-9]+)/plots/$', views.larp_plots, name='larp_plots'),
+    # Larp/Group/Character
+    url(r'^(?P<class_name>\w+)/(?P<id>\d+)/$', views.edit_topp, name='edit_topp'),
+    url(r'^(?P<class_name>\w+)/(?P<id>\d+)/delete/$', views.delete_topp, name='delete_topp'),
+    url(r'^(?P<class_name>\w+)/new/$', views.new_topp, name='new_topp'),
+    url(r'^larp/(?P<id>\d+)/plots/$', views.larp_plots, name='larp_plots'),
 
     # Plot categories
     url(r'^(?P<larp_id>[0-9]+)/plot_thread/(?P<id>[0-9]+)/$', 

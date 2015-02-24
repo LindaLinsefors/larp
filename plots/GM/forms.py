@@ -38,9 +38,10 @@ def save_relations( instance,
 class LarpForm(forms.ModelForm):
     class Meta:
         model = Larp
-        fields = [ 'groups',
-                   'plot_threads',
-                   'characters',    ]
+        fields = [  'name',
+                    'groups',
+                    'plot_threads',
+                    'characters',    ]
         widgets = {
             'groups': forms.CheckboxSelectMultiple,
             'plot_threads': forms.CheckboxSelectMultiple,

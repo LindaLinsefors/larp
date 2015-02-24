@@ -87,7 +87,6 @@ class GroupForm(forms.ModelForm):
                     'show_group',
                     'show_members',
                     'group_description',
-                    'members_presentations',
                     'secret_comments',       ]
 
 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+{% extends "plots/GM/basic.html" %}
+
+{% block body %}
+
+    {% if class_instance %}
+        <h1> {{ class_instance.name }} </h1>
+    {% else %}
+        <h1> New </h1>
+    {% endif %}
+
+    <form method="POST" >
+        {% csrf_token %}
+        {{ class_form.as_p }}
+        <input type="submit" value="Save" />
+    </form>
+
+    {% if class_instance %}
+    <p> <BIG> <a href="delete">
+    Delete
+    </a> </BIG> </p>
+    {% endif %}
+
+    <p> <BIG> <a href="{% url 'GM:larp_plots' larp.id %}">
+    Larp overview
+    </a> </BIG> </p>
+
+{% endblock %}

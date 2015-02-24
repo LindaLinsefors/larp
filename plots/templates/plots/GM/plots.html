@@ -147,10 +147,10 @@ $('textarea').change(function(){
                             {{ plot_pice_form.id }}
                             {{ plot_pice_form.plot_thread }}
                             <p>
-                                <b>Finished:</b> {{ plot_pice_form.plot_is_finished }}
+                                <label>Finished:</label> {{ plot_pice_form.plot_is_finished }}
                             </p>
                             <p>
-                                <b>Characters:</b>
+                                <label>Characters:</label>
                                 {% for character in plot_pice_form.instance.plot_pice.characters.all %}
                                 {% if character != class_instance %}  
                                 <a href="{% url 'GM:personal_plot' character.id %}">
@@ -163,7 +163,7 @@ $('textarea').change(function(){
                                 {% endfor %}
                             </p>
                             <p>
-                                <b>Groups:</b>
+                                <label>Groups:</label>
                                 {% for group in plot_pice_form.instance.plot_pice.groups.all %}
                                 {% if group != class_instance %}  
                                 <a href="{% url 'GM:group_plot' group.id %}">
@@ -176,7 +176,7 @@ $('textarea').change(function(){
                                 {% endfor %}
                             </p>
                             <p>
-                                <b>Plot Threads:</b>
+                                <label>Plot Threads:</label>
                                 {% for plot_thread in plot_pice_form.instance.plot_pice.plot_threads.all %}
                                 {% if plot_thread != class_instance %}  
                                 <a href="{% url 'GM:plot_thread' plot_thread.id %}">

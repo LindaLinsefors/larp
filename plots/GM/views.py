@@ -12,7 +12,7 @@ from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlot
 #Edit/New
 
 def edit(   request, larp_id, Class, id, ClassForm, 
-            template='plots/form_template.html'     ):
+            template='plots/GM/basic_form.html'     ):
 
     class_instance = get_object_or_404(Class, pk=id)
     larp = get_object_or_404(Larp, pk=larp_id)
@@ -31,7 +31,7 @@ def edit(   request, larp_id, Class, id, ClassForm,
 
 
 def new(    request, larp_id, Class, ClassForm, 
-            url='GM:stuff', template='plots/form_template.html'):
+            url='GM:stuff', template='plots/GM/basic_form.html'):
 
     if request.method == 'POST':
         class_form = ClassForm(request.POST)

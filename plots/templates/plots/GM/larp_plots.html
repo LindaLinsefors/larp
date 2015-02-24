@@ -4,13 +4,13 @@
 
 {% block body %}
 
-<h1> Plot threads <small>(<a href="{% url 'GM:new_plot_thread' larp.id %}">New</a>)</small></h1>
+<h1> Plot threads <small>(<a href="{% url 'GM:new_larp_plot_thread' larp.id %}">New</a>)</small></h1>
 {% if plot_threads %}
     <ul>
-    {% for plot_thread in plot_threads %} 
+    {% for larp_plot_thread in larp_plot_threads %} 
         <li>
-        <h2> <a href="{% url 'GM:plot_thread' larp.id plot_thread.id %}"> 
-        {{ plot_thread.name }} </a> </h2> 
+        <h2> <a href="{% url 'GM:larp_plot_thread' larp_plot_thread.id %}"> 
+        {{ larp_plot_thread.name }} </a> </h2> 
         </li>
     {% endfor %}
     </ul>
@@ -79,7 +79,7 @@
     <p>There are no plot groups yet.</p>
 {% endif %}
 
-<h1> Characters without group </h1>
+<h1> Characters without Group on this Larp </h1>
 {% if characters_without_group %}
     <ul>
     {% for character in characters_without_group %}

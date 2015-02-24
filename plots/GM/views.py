@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 
 from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlot, PersonalPlot, LarpPlotThread, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp
 
-from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm, PlotThreadForm, LarpPlotThreadForm
+from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm, PlotThreadForm, PlotThreadForm_noLarps, LarpPlotThreadForm
 
 #Dicts
 
@@ -60,7 +60,7 @@ def edit_topp(request, class_name, id):
 
     return render(  request, 'plots/GM/basic_form.html',
                    {'class_form': class_form,
-                    'class_instance': class_instance,    }   ) 
+                    'class_instance': class_form.instance,    }   ) 
 
 def new_topp(request, class_name):
     if request.method != 'POST':
@@ -81,6 +81,7 @@ def new_topp(request, class_name):
 def delete_topp(request, class_name, id):
     class_instance = get_object_or_404(class_dict[class_name], pk=id)
     class_instance.delete()
+    return HttpResponseRedirect( reverse('GM:index') )
 
 
 
@@ -96,7 +97,7 @@ def edit_under_larp(    request, larp_id, Class, id, ClassForm,
                     'larp': larp,                      }   )   
 
 
-def new(    request, Class, ClassForm, 
+def new(    request, larp_id, Class, ClassForm, 
             url='GM:stuff', template='plots/GM/basic_form.html'):
 
     if request.method == 'POST':
@@ -185,16 +186,16 @@ def delete_larp(request, larp_id):
     larp.delete()
     return HttpResponseRedirect( reverse('GM:index') )
 
-def larp_plots(request, larp_id): 
+def larp_plots(request, id): 
 
-    larp = get_object_or_404(Larp, pk=larp_id)
-    plot_threads = larp.plot_threads.all()
+    larp = get_object_or_404(Larp, pk=id)
+    larp_plot_threads = larp.larpplotthread_set.all()
     groups = larp.groups.all()
     characters = larp.characters.all()
 
     return render(request, 'plots/GM/larp_plots.html',
               { 'larp': larp,
-                'plot_threads': plot_threads,
+                'larp_plot_threads': larp_plot_threads,
                 'groups': groups,
                 'characters': characters,  
                 # There is probably a better way to do this with filter
@@ -284,11 +285,11 @@ def save_formset(formset): #Is this needed?
         form.save()           
 
 
-def plots(request, larp_id, Class, id, ClassForm, InlineFormset, 
+def plots(request, Class, id, ClassForm, InlineFormset, 
         template='plots/GM/plots.html'):
 
     class_instance = get_object_or_404(Class, pk=id)
-    larp = get_object_or_404(Larp, pk=larp_id)
+    larp = class_instance.larp
 
     if request.method == 'POST':
         class_form = ClassForm(request.POST, instance=class_instance)
@@ -311,17 +312,31 @@ def plots(request, larp_id, Class, id, ClassForm, InlineFormset,
 
 #Plot Thread
 
-def plot_thread(request, larp_id, id): 
-    return plots(   request, larp_id, 
-                    PlotThread, id, PlotThreadForm, PlotPartForms, 
+def larp_plot_thread(request, id): 
+    return plots(   request, 
+                    LarpPlotThread, id, LarpPlotThreadForm, PlotPartForms, 
                     template='plots/GM/plot_thread.html'        )
 
 
-def new_plot_thread(request, larp_id):
-    return new( request, larp_id, 
-                PlotThread, PlotThreadForm, 
-                url='GM:plot_thread',
-                template='plots/GM/plot_thread.html'        )   
+def new_larp_plot_thread(request, larp_id):
+    larp = get_object_or_404(Larp, pk=larp_id)
+    
+    if request.method != 'POST':
+        return render(  request, 'plots/GM/basic_form.html',
+                       {'class_form': PlotThreadForm_noLarps(),
+                        'class_name': 'plot thread',    
+                        'larp':larp,                     }  )
+
+    form = PlotThreadForm_noLarps(request.POST)
+    if form.is_valid():
+        form.save()
+
+        larp_plot_thread = LarpPlotThread(  larp=larp, 
+                                            plot_thread=form.instance   )
+        larp_plot_thread.save()
+        return HttpResponseRedirect( 
+                    reverse(    'GM:larp_plot_thread',
+                                args=(larp_plot_thread.id, )     ))
 
 
 

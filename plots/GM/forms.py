@@ -58,11 +58,37 @@ class PlotThreadForm(forms.ModelForm):
                     'larps',     ]
         widgets = {'larps': forms.CheckboxSelectMultiple, }
 
+class PlotThreadForm_noLarps(forms.ModelForm):
+    class Meta:
+        model = PlotThread
+        fields = [  'name', 
+                    'summery',   ]
+
+
+
 
 class LarpPlotThreadForm(forms.ModelForm):
+    name = PlotThreadForm.base_fields['name']
+    summery = PlotThreadForm.base_fields['summery']
     class Meta:
         model = LarpPlotThread
-        fields = [  'plot_is_finished',     ]
+        fields = [  'name',
+                    'summery',
+                    'plot_is_finished',  ]
+
+    def __init__(self, *args, **kw):
+        forms.ModelForm.__init__(self, *args, **kw)
+        if kw.has_key('instance'):
+            self.fields['name'].initial = self.instance.plot_thread.name
+            self.fields['summery'].initial = self.instance.plot_thread.summery
+
+    def save(self):
+        self.is_valid()
+        forms.ModelForm.save(self)
+        self.instance.name = self.cleaned_data['name']
+        self.instance.summery = self.cleaned_data['summery']
+
+
 
 
 class GroupPlotForm(forms.ModelForm):

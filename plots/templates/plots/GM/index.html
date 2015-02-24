@@ -18,23 +18,23 @@
 
 <h1> Groups </h1>
 <ul>
-    {% for group in grups %}
+    {% for group in groups %}
     <li>
-        <a href="{% url 'GM:edit_topp' 'character' group.id %}"> {{ group.name }} </a> 
+        <a href="{% url 'GM:edit_topp' 'group' group.id %}"> {{ group.name }} </a> 
     </li>
     {% endfor %}
 </ul>
-<a href="{% url 'GM:new_topp' 'group' %}" class="btn btn-default"> New larp </a>
+<a href="{% url 'GM:new_topp' 'group' %}" class="btn btn-default"> New group </a>
 
 <h1> Characters </h1>
 <ul>
-    {% for character in grups %}
+    {% for character in characters %}
     <li>
-        <a href="{% url 'GM:edit_topp' character.id %}"> {{ group.name }} </a> 
+        <a href="{% url 'GM:edit_topp' character.id %}"> {{ character.name }} </a> 
     </li>
     {% endfor %}
 </ul>
-<a href="{% url 'GM:new_topp' 'character' %}" class="btn btn-default"> New larp </a>
+<a href="{% url 'GM:new_topp' 'character' %}" class="btn btn-default"> New character </a>
 
 
 

@@ -189,7 +189,9 @@ class PlotPice(models.Model):
 
 class Character(BasicModel):
     
-    user = models.ForeignKey(auth.models.User, null=True, blank=True, default=None )  
+    user = models.ForeignKey(auth.models.User, null=True, blank=True, default=None ) 
+    larps = models.ManyToManyField(
+                'Larp', null=True, blank=True, through='PersonalPlot') 
     
     def heading(self):
         if self.character_concept == '':
@@ -243,6 +245,8 @@ class Group(BasicModel):
 
     characters = models.ManyToManyField(
                 'Character', null=True, blank=True, through='Membership')
+    larps = models.ManyToManyField(
+                'Larp', null=True, blank=True, through='GroupPlot' )
 
 
     def make_members_presentations(self):
@@ -258,6 +262,9 @@ class Group(BasicModel):
 
 class PlotThread(BasicModel):
     summery = models.TextField(blank=True, default='')
+
+    larps = models.ManyToManyField( 
+                'Larp', null=True, blank=True, through='LarpPlotThread')
 
 
 

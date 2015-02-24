@@ -44,8 +44,7 @@ class LarpForm(forms.ModelForm):
         widgets = {
             'groups': forms.CheckboxSelectMultiple,
             'plot_threads': forms.CheckboxSelectMultiple,
-            'characters': forms.CheckboxSelectMultiple,
-        }
+            'characters': forms.CheckboxSelectMultiple,     }
 
 
 #Plot Head
@@ -54,7 +53,10 @@ class PlotThreadForm(forms.ModelForm):
     class Meta:
         model = PlotThread
         fields = [  'name', 
-                    'summery',  ]
+                    'summery',  
+                    'larps',     ]
+        widgets = {'larps': forms.CheckboxSelectMultiple, }
+
 
 class LarpPlotThreadForm(forms.ModelForm):
     class Meta:
@@ -66,22 +68,15 @@ class GroupPlotForm(forms.ModelForm):
     class Meta:
         model = GroupPlot
         fields = [  'secret_comments',   
-                    'plot_is_finished',    ]
+                    'plot_is_finished',  ]
 
 
 class PersonalPlotForm(forms.ModelForm):
     class Meta:
         model = PersonalPlot
         fields = [  'secret_comments',   
-                    'plot_is_finished',     ]
-
-    character_description = forms.CharField(
-            widget=forms.Textarea(attrs={'readonly':'readonly'}), 
-            required=False,      )
-
-    other_info = forms.CharField(
-            widget=forms.Textarea(attrs={'readonly':'readonly'}), 
-            required=False,      )
+                    'plot_is_finished', 
+                    'larp',             ]
 
 
 
@@ -92,11 +87,14 @@ class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = [  'name',
+                    'group_description',
                     'is_open',
                     'show_group',
                     'show_members',
-                    'group_description',
+                    'larps',
                     'characters',       ]
+        widgets = { 'larps': forms.CheckboxSelectMultiple,
+                    'characters': forms.CheckboxSelectMultiple,  }
 
 
 def MembersForm(*args, **kw):

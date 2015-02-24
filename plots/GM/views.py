@@ -11,18 +11,35 @@ from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlot
 
 #Edit/New
 
-def edit(   request, larp_id, Class, id, ClassForm, 
-            template='plots/GM/basic_form.html'     ):
-
+def edit_save_if_POST(request, Class, id, ClassForm):
     class_instance = get_object_or_404(Class, pk=id)
-    larp = get_object_or_404(Larp, pk=larp_id)
 
     if request.method == 'POST':
         class_form = ClassForm(request.POST, instance=class_instance)
         if class_form.is_valid():
             class_form.save()
+            return class_form
     else:
-        class_form = ClassForm(instance=class_instance)     
+        return ClassForm(instance=class_instance)
+
+    
+
+
+def edit(   request, Class, id, ClassForm, 
+            template='plots/GM/basic_form.html'     ):
+
+    class_form = edit_save_if_POST(request, Class, id, ClassForm)
+
+    return render(  request, template,
+                   {'class_form': class_form, 
+                    'class_instance': class_instance    }   ) 
+
+
+def edit_under_larp(  request, larp_id, Class, id, ClassForm, 
+                   template='plots/GM/basic_form.html'     ):
+
+    class_form = edit_save_if_POST(request, Class, id, ClassForm)
+    larp = get_object_or_404(Larp, pk=larp_id)   
 
     return render(  request, template,
                    {'class_form': class_form, 
@@ -30,7 +47,7 @@ def edit(   request, larp_id, Class, id, ClassForm,
                     'larp': larp,                      }   )   
 
 
-def new(    request, larp_id, Class, ClassForm, 
+def new(    request, Class, ClassForm, 
             url='GM:stuff', template='plots/GM/basic_form.html'):
 
     if request.method == 'POST':
@@ -64,6 +81,40 @@ def new(    request, larp_id, Class, ClassForm,
                    {'class_form': class_form,
                     'larp': larp,               }   )  
 
+
+def new_under_larp(    request, Class, ClassForm, 
+            url='GM:stuff', template='plots/GM/basic_form.html'):
+
+    if request.method == 'POST':
+        class_form = ClassForm(request.POST)
+        if class_form.is_valid():
+            class_form.save()
+            if Class == Larp:
+                return HttpResponseRedirect(            
+                    reverse(url, args=(class_form.instance.id,))  )
+
+            larp = get_object_or_404(Larp, pk=larp_id)
+            if Class == PlotThread:
+                larp.plot_threads.add(class_form.instance)
+            elif Class == Group:
+                larp.groups.add(class_form.instance)
+            elif Class == Character.add(class_form.instance):
+                larp.characers.add(class_form.instance)
+
+            larp.save()
+            return HttpResponseRedirect(            
+                reverse(url, args=(larp_id, class_form.instance.id))  )
+    else:
+        class_form = ClassForm()
+        if Class == Larp:
+            return render (  request, template,
+                            {'class_form': class_form,}   ) 
+
+        larp = get_object_or_404(Larp, pk=larp_id) 
+        
+    return render(  request, template,
+                   {'class_form': class_form,
+                    'larp': larp,               }   )  
 
 #Index
 def index(request):

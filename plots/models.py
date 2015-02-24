@@ -29,7 +29,7 @@ class BasicRelation(models.Model):
 class Membership(BasicRelation):
     character = models.ForeignKey('Character')
     group = models.ForeignKey('Group')
-    class Meta(BasicPlotRelation.Meta):
+    class Meta(BasicRelation.Meta):
         unique_together = (("group", "character"),)
     former_member = models.BooleanField(default=False)
 
@@ -57,7 +57,7 @@ class PersonalPlotPice(BasicPlotRelation):
         unique_together = (("personal_plot", "plot_pice"),)
 
 
-class GroupPlot(modes.Model):
+class GroupPlot(models.Model):
     larp = models.ForeignKey('Larp')
     group = models.ForeignKey('Group')
 
@@ -109,7 +109,7 @@ class LarpPlotThread(models.Model):
         return unicode( self.plot_thread.name + ', ' + self.larp.name )
 
     def characters(self):
-        return [PersonalPlot.objects.filter(plotpice__in=self.plot_parts() )
+        return PersonalPlot.objects.filter(plotpice__in=self.plot_parts() )
     characters.help_text = (
          'Characters that have part in the plot line, not including group plots')
     characters.short_description = 'Characters involved'
@@ -155,12 +155,12 @@ class PlotPice(models.Model):
         return unicode(self.plot_pice[0:50])+'...' 
     __str__.short_description = 'str'
 
-    characters = models.ManyToManyField(
-                'Character', null=True, blank=True, through='PersonalPlotPice')
-    groups = models.ManyToManyField(
-                'Group', null=True, blank=True, through='GroupPlotPice')
-    plot_threads = models.ManyToManyField( 
-                'PlotThread', null=True, blank=True, through='PlotPart')
+    personal_plots = models.ManyToManyField(
+                'PersonalPlot', null=True, blank=True, through='PersonalPlotPice')
+    group_plotss = models.ManyToManyField(
+                'GroupPlot', null=True, blank=True, through='GroupPlotPice')
+    larp_plot_threads = models.ManyToManyField( 
+                'LarpPlotThread', null=True, blank=True, through='PlotPart')
 
     plot_pice = models.TextField(blank=True, default='')
     

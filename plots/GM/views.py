@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 
 from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp
 
-from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm, PlotThreadForm, NewPlotThreadForm
+from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm, PlotThreadForm
 
 
 #Edit/New
@@ -68,7 +68,7 @@ def new(    request, larp_id, Class, ClassForm,
 #Index
 def index(request):
     return render( request, 'plots/GM/index.html',
-                { 'laprs': Larp.objects.all() }     )
+                { 'larps': Larp.objects.all() }     )
 
 #Larp
 
@@ -98,14 +98,14 @@ def larp_plots(request, larp_id):
                 # There is probably a better way to do this with filter
                 'characters_without_group': 
                    [character for character in characters
-                    if list( character.groups.filter(lapr=larp) )==[] ],
+                    if list( character.groups.filter(larp=larp) )==[] ],
                 'plot_pices_without_character_or_group':
                    [plot_pice for plot_pice in larp.plotpice_set.all()
-                    if (list( plot_pice.characters.filter(lapr=larp) )==[]
-                        and list( plot_pice.groups.filter(lapr=larp) )==[] ) ],   
+                    if (list( plot_pice.characters.filter(larp=larp) )==[]
+                        and list( plot_pice.groups.filter(larp=larp) )==[] ) ],   
                 'plot_pices_without_plot_thread':
                    [plot_pice for plot_pice in larp.plotpice_set.all()
-                    if list( plot_pice.plot_threads.filter(lapr=larp) )==[] ],       
+                    if list( plot_pice.plot_threads.filter(larp=larp) )==[] ],       
                 } )
 
 #Plot Pice
@@ -217,7 +217,7 @@ def plot_thread(request, larp_id, id):
 
 def new_plot_thread(request, larp_id):
     return new( request, larp_id, 
-                PlotThread, NewPlotThreadForm, 
+                PlotThread, PlotThreadForm, 
                 url='GM:plot_thread',
                 template='plots/GM/plot_thread.html'        )   
 

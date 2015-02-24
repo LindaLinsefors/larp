@@ -1,15 +1,12 @@
 {% extends "plots/GM/plots.html" %}
 
 
-{% block title %}
-    Plot thread: {{ class_instance.name }}
-{% endblock %}
-
-{% block top %}
-    <p> <b>Name:</b> {{ class_form.name }} </p>
-    <p> <b>Summery:</b> <br> {{ class_form.summery }} </p>
-    <p> <b>Plot thread is finished:</b> {{ class_form.plot_is_finished }}</p>
-    <p> <a href="delete" class="btn btn-default"> Delete Plot Thread </a> </p>
+{% block heading %} 
+    {% if clas_instance %} 
+        Plot thread: {{ class_instance.name }}
+    {% else %} 
+        New plot thread
+    {% endif %}
 {% endblock %}
 
 

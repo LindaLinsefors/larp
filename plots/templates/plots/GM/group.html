@@ -18,7 +18,7 @@
 
     $(".save").click(function(){
         alert('hej');
-        $.post("{% url 'GM:save_group' %}",
+        $.post("{% url 'GM:save_group' larp.id %}",
             {
                 csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),
                 data: 'data'
@@ -114,7 +114,7 @@
                 </div>              
             </form>
 
-            <p><a href="{% url 'GM:index' %}">Back to GM index</a></p>
+            <p><a href="{% url 'GM:larp_plots larp.id' %}">Back to GM index</a></p>
         </div>
 
         <div class="col-sm-6">

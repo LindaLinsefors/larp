@@ -15,6 +15,7 @@ def edit(   request, larp_id, Class, id, ClassForm,
             template='plots/form_template.html'     ):
 
     class_instance = get_object_or_404(Class, pk=id)
+    larp = get_object_or_404(Larp, pk=larp_id)
 
     if request.method == 'POST':
         class_form = ClassForm(request.POST, instance=class_instance)
@@ -25,7 +26,8 @@ def edit(   request, larp_id, Class, id, ClassForm,
 
     return render(  request, template,
                    {'class_form': class_form, 
-                    'class_instance': class_instance}   )   
+                    'class_instance': class_instance,
+                    'larp': larp,                      }   )   
 
 
 def new(    request, larp_id, Class, ClassForm, 
@@ -54,7 +56,8 @@ def new(    request, larp_id, Class, ClassForm,
         class_form = ClassForm()
 
     return render(  request, template,
-                   {'class_form': class_form}   )  
+                   {'class_form': class_form,
+                    'larp': larp,               }   )  
 
 
 #Index
@@ -239,7 +242,7 @@ def save_group(request, larp_id):
     print request.POST
     return HttpResponse('saved')
 
-def group(request, larp_id, id): 
+def group_old(request, larp_id, id): 
     group = get_object_or_404(Group, pk=id)
     half = ( Character.objects.count()+1 )/2
     return render(request, 'plots/GM/group.html',
@@ -251,6 +254,9 @@ def group(request, larp_id, id):
 
 def new_group(request, larp_id): 
     return new( request, larp_id, Group, GroupForm,  url='GM:group' )
+
+def group(request, larp_id, id):
+    return edit( request, larp_id, Group, id, GroupForm )
 
 def members_old(request, larp_id, id, back): 
     return edit( request, larp_id, Group, id, MembersForm, template='plots/GM/members.html'  )

@@ -38,9 +38,10 @@ def edit_form(request, id, Class, ClassForm):
         return ClassForm(instance=class_instance)
 
     class_form = ClassForm(request.POST, instance=class_instance)
+    print request.POST
     if class_form.is_valid():
         class_form.save()
-        return class_form
+        return ClassForm(instance=Class.objects.get(pk=id) )
 
 def new_form(request, Class, ClassForm):
     if request.method != 'POST':
@@ -75,7 +76,7 @@ def new_topp(request, class_name):
         class_form.save()
         return HttpResponseRedirect(            
                 reverse('GM:edit_topp', 
-                        args=(  'class_name',
+                        args=(  class_name,
                                 class_form.instance.id,)  ))  
 
 def delete_topp(request, class_name, id):

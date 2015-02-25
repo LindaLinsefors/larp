@@ -15,22 +15,20 @@ def checkboxes(choice_list):
                                 in choice_list   ] )
 
 def save_relations( instance,
-                    choice_list, old_relations, new_relation_names,  
+                    choice_list, old_relations, new_relations,  
                     RelationClass, instance_type, choice_type ):
 
     for choice in choice_list:
         if (        (choice not in old_relations) 
-                and (choice.name in new_relation_names) ):
-            print choice.name
+                and (choice in new_relations) ):
+
             RelationClass( **{  choice_type:choice, 
-                                instance_type:instance, 
-                                'larp':instance.larp,       }).save()
+                                instance_type:instance, }).save()
 
         elif (      (choice in old_relations) 
-                and (choice.name not in new_relation_names) ):
+                and (choice not in new_relations) ):
             RelationClass.objects.get( **{  choice_type:choice, 
-                                            instance_type:instance, 
-                                            'larp':instance.larp,   }).delete()     
+                                            instance_type:instance, }).delete()     
 
 
 #Larp
@@ -47,6 +45,27 @@ class LarpForm(forms.ModelForm):
             'plot_threads': forms.CheckboxSelectMultiple,
             'characters': forms.CheckboxSelectMultiple,     }
 
+    def save(self):
+        larp = self.instance
+        larp.name = self.cleaned_data['name']
+        larp.save()
+        save_relations( larp,
+                        Group.objects.all(), 
+                        larp.groups.all(), self.cleaned_data['groups'],
+                        GroupPlot, 'larp', 'group')
+
+        save_relations( larp,
+                        PlotThread.objects.all(), 
+                        larp.plot_threads.all(), self.cleaned_data['plot_threads'],
+                        LarpPlotThread, 'larp', 'plot_thread')
+
+        save_relations( larp,
+                        Character.objects.all(), 
+                        larp.characters.all(), self.cleaned_data['characters'],
+                        PersonalPlot, 'larp', 'character')
+
+
+
 
 #Plot Head
 
@@ -57,6 +76,18 @@ class PlotThreadForm(forms.ModelForm):
                     'summery',  
                     'larps',     ]
         widgets = {'larps': forms.CheckboxSelectMultiple, }
+
+    def save(self):
+        plot_thread = self.instance
+        plot_thread.name = self.cleaned_data['name']
+        plot_thread.summery = self.cleaned_data['summery']
+        plot_thread.save()
+        save_relations( plot_thread,
+                        Larp.objects.all(), 
+                        plot_thread.larps.all(), self.cleaned_data['larps'],
+                        LarpPlotTread, 'plot_thread', 'larp')
+
+
 
 class PlotThreadForm_noLarps(forms.ModelForm):
     class Meta:
@@ -123,6 +154,25 @@ class GroupForm(forms.ModelForm):
                     'characters',       ]
         widgets = { 'larps': forms.CheckboxSelectMultiple,
                     'characters': forms.CheckboxSelectMultiple,  }
+
+    def save(self):
+        group = self.instance
+        group.name = self.cleaned_data['name']
+        group.group_description = self.cleaned_data['group_description']
+        group.is_open = self.cleaned_data['is_open']
+        group.show_group = self.cleaned_data['show_group']
+        group.show_members = self.cleaned_data['show_members']
+        group.save()
+        save_relations( group,
+                        Larp.objects.all(), 
+                        group.larps.all(), self.cleaned_data['larps'],
+                        GroupPlot, 'group', 'larp')
+
+        save_relations( group,
+                        Character.objects.all(), 
+                        group.characters.all(), self.cleaned_data['characters'],
+                        Membership, 'group', 'character')
+
 
 
 def MembersForm(*args, **kw):

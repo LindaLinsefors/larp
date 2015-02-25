@@ -251,6 +251,8 @@ class Group(BasicModel):
 
     characters = models.ManyToManyField(
                 'Character', null=True, blank=True, through='Membership')
+    characters.verbose_name = "members"
+
     larps = models.ManyToManyField(
                 'Larp', null=True, blank=True, through='GroupPlot' )
 

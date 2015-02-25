@@ -203,16 +203,39 @@ def MembersForm(*args, **kw):
 
 # Character
 
-class CharacterFormBasic(forms.ModelForm):
+class CharacterForm(forms.ModelForm):
     class Meta:
         model = Character
         fields = [  'name', 
                     'character_concept', 
                     'presentation', 
                     'character_description',
-                    'other_info',               ]
+                    'other_info',               
+                    'groups',
+                    'larps',               ]
+
+    def save(self):
+        character = self.instance
+        character.name = self.cleaned_data['name']
+        character.character_concept = self.cleaned_data['character_concept']
+        character.presentation = self.cleaned_data['presentation']
+        character.character_description = self.cleaned_data['character_description']
+        character.other_info = self.cleaned_data['other_info']
+
+        character.show_members = self.cleaned_data['show_members']
+        group.save()
+        save_relations( group,
+                        Larp.objects.all(), 
+                        group.larps.all(), self.cleaned_data['larps'],
+                        GroupPlot, 'group', 'larp')
+
+        save_relations( group,
+                        Character.objects.all(), 
+                        group.characters.all(), self.cleaned_data['characters'],
+                        Membership, 'group', 'character')
+
    
-    
+'''
 def CharacterForm(*args, **kw):
     class CharacterFormClass(CharacterFormBasic):
 
@@ -233,7 +256,7 @@ def CharacterForm(*args, **kw):
                             Membership, 'character', 'group' )
 
     return CharacterFormClass(*args, **kw)
-
+'''
 
 
 

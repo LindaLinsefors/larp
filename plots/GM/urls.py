@@ -13,12 +13,13 @@ urlpatterns = [
     url(r'^(?P<class_name>\w+)/new/$', views.new_topp, name='new_topp'),
     url(r'^larp/(?P<id>\d+)/plots/$', views.larp_plots, name='larp_plots'),
 
+    # Plots
+    url(r'^plots/(?P<class_name>\w+)/(?P<id>\d+)/$', views.edit_plots, name='plots' ),
+
     # LarpPlotThread
-    url(r'^larp/(?P<larp_id>\d+)/plot_thread/new/$', 
+    url(r'^larp/(?P<larp_id>\d+)/new_plot_thread/new/$', 
             views.new_larp_plot_thread, name='new_larp_plot_thread'),
-    url(r'^larp/plot_thread/(?P<id>\d+)/$', 
-            views.larp_plot_thread, name='larp_plot_thread'),
-    url(r'^larp/plot_thread/(?P<id>\d+)/delete/$', 
+    url(r'^plots/larp_plot_thread/(?P<id>\d+)/delete/$', 
             views.delete_larp_plot_thread, name='delete_larp_plot_thread'),
 
     # Plot categories

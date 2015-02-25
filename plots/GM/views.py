@@ -17,7 +17,7 @@ class_dict = {  'larp':Larp,
                 'plot_thread': PlotThread,
                 'group_plot':GroupPlot,
                 'personal_plot':PersonalPlot,
-                'larp_plot_thred':LarpPlotThread,   }
+                'larp_plot_thread':LarpPlotThread,   }
 
 form_dict = {   'larp':LarpForm,
                 'group':GroupForm,
@@ -26,7 +26,7 @@ form_dict = {   'larp':LarpForm,
                 'plot_thread': PlotThreadForm,
                 'group_plot':GroupPlotForm,
                 'personal_plot':PersonalPlotForm,
-                'larp_plot_thred':LarpPlotThreadForm,   }
+                'larp_plot_thread':LarpPlotThreadForm,   }
 
 
 #Edit/New
@@ -85,8 +85,8 @@ def delete_topp(request, class_name, id):
 
 
 
-def edit_under_larp(    request, larp_id, Class, id, ClassForm, 
-                        template='plots/GM/basic_form.html'     ):
+def edit(   request, larp_id, Class, id, ClassForm, 
+            template='plots/GM/basic_form.html'     ):
 
     class_form = edit_save_if_POST(request, Class, id, ClassForm)
     larp = get_object_or_404(Larp, pk=larp_id)   
@@ -132,7 +132,7 @@ def new(    request, larp_id, Class, ClassForm,
                     'larp': larp,               }   )  
 
 
-def new_under_larp(    request, Class, ClassForm, 
+def new(    request, Class, ClassForm, 
             url='GM:stuff', template='plots/GM/basic_form.html'):
 
     if request.method == 'POST':
@@ -214,9 +214,9 @@ def larp_plots(request, id):
 #Plot Pice
 
 
-def plot_pice(request, larp_id, parent_type, parent_id, id):  
+def plot_pice(request, parent_type, parent_id, id):  
     plot_pice = get_object_or_404(PlotPice, pk=id)
-    larp = get_object_or_404(Larp, pk=larp_id)
+    larp = plot_pice.larp
 
     if request.method == 'POST':
         plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
@@ -254,25 +254,26 @@ def plot_pice_no_parent(request, larp_id, id):
                 'heading': 'Edit',                       }   )
 
 
-def new_plot_pice(request, larp_id, parent_type, parent_id):  
-    larp = get_object_or_404(Larp, pk=larp_id)
-    
-    if request.method == 'POST':
-        plot_pice_form = PlotPiceForm(request.POST)
-        if plot_pice_form.is_valid():
-            plot_pice_form.save()
-            return HttpResponseRedirect(            
-                reverse('GM:'+parent_type, args=( parent_id,))  )
-        print 'Form is not vaild'
-    else:
-        PlotPiceForm(initial={'larp':larp})
-    
-    return render(request, 'plots/GM/plot_pice.html',
-            {   'plot_pice_form': plot_pice_form,
-                'parent_url': 'GM:'+parent_type,
-                'parent_id': parent_id,
-                'larp': larp,
-                'heading': 'New',                       }   )
+def new_plot_pice(request, parent_type, parent_id):  
+    parent = get_object_or_404(class_dict[parrent_type], pk=parent_id)
+
+    if request.method != 'POST':
+        PlotPiceForm(initial={'larp': parent.larp})
+        return render(request, 'plots/GM/plot_pice.html',
+                {   'plot_pice_form': plot_pice_form,
+                    'parent_url': 'GM:'+parent_type,
+                    'parent_id': parent_id,
+                    'larp': larp,
+                    'heading': 'New',                   } )
+
+    plot_pice_form = PlotPiceForm(request.POST)
+    if plot_pice_form.is_valid():
+        plot_pice_form.save()
+        return HttpResponseRedirect(            
+            reverse('GM:'+parent_type, args=( parent_id,))  )
+
+
+   
 
 
 
@@ -282,7 +283,24 @@ def new_plot_pice(request, larp_id, parent_type, parent_id):
 
 def save_formset(formset): #Is this needed?
     for form in formset:
-        form.save()           
+        form.save()    
+
+inlineform_dict = { 'group_plot': GroupPlotPiceForms,
+                    'personal_plot': PersonalPlotPiceForms,
+                    'larp_plot_thread': PlotPartForms,            }
+
+template_dict = { 'group_plot': 'plots/GM/plots.html',
+                  'personal_plot': 'plots/GM/plots.html',
+                  'larp_plot_thread': 'plots/GM/plot_thread.html',            }
+
+      
+
+def edit_plots(request, class_name, id):
+    Class = class_dict[class_name]
+    ClassForm = form_dict[class_name]
+    InlineFormset = inlineform_dict[class_name]
+    return plots(   request, Class, id, ClassForm, InlineFormset, 
+                    template=template_dict[class_name]              )
 
 
 def plots(request, Class, id, ClassForm, InlineFormset, 
@@ -335,8 +353,8 @@ def new_larp_plot_thread(request, larp_id):
                                             plot_thread=form.instance   )
         larp_plot_thread.save()
         return HttpResponseRedirect( 
-                    reverse(    'GM:larp_plot_thread',
-                                args=(larp_plot_thread.id, )     ) )
+                reverse(    'GM:plots',
+                            args=('larp_plot_thread', larp_plot_thread.id ) ))
 
 def delete_larp_plot_thread(request, id):
     larp_plot_thread = get_object_or_404(LarpPlotThread, pk=id)

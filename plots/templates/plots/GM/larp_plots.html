@@ -9,7 +9,7 @@
     <ul>
     {% for larp_plot_thread in larp_plot_threads %} 
         <li>
-        <h2> <a href="{% url 'GM:larp_plot_thread' larp_plot_thread.id %}"> 
+        <h2> <a href="{% url 'GM:plots' 'larp_plot_thread' larp_plot_thread.id %}"> 
         {{ larp_plot_thread.name }} </a> </h2> 
         </li>
     {% endfor %}

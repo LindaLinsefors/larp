@@ -1,4 +1,6 @@
+from django import forms as djangoforms
 from django import forms
+#import floppyforms as forms
 
 from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp, LarpPlotThread, PersonalPlot, GroupPlot
 
@@ -214,6 +216,14 @@ class CharacterForm(forms.ModelForm):
                     'groups',
                     'larps',               ]
 
+        widgets = { 'larps': forms.CheckboxSelectMultiple,
+                    'groups': forms.CheckboxSelectMultiple,  }
+
+    def __init__(self, *args, **kw):
+        super(CharacterForm, self).__init__(*args, **kw)
+        self.fields['name'].widget.attrs['required'] = True
+
+
     def save(self):
         character = self.instance
         character.name = self.cleaned_data['name']
@@ -221,18 +231,16 @@ class CharacterForm(forms.ModelForm):
         character.presentation = self.cleaned_data['presentation']
         character.character_description = self.cleaned_data['character_description']
         character.other_info = self.cleaned_data['other_info']
-
-        character.show_members = self.cleaned_data['show_members']
-        group.save()
-        save_relations( group,
+        character.save()
+        save_relations( character,
                         Larp.objects.all(), 
-                        group.larps.all(), self.cleaned_data['larps'],
-                        GroupPlot, 'group', 'larp')
+                        character.larps.all(), self.cleaned_data['larps'],
+                        PersonalPlot, 'character', 'larp')
 
-        save_relations( group,
-                        Character.objects.all(), 
-                        group.characters.all(), self.cleaned_data['characters'],
-                        Membership, 'group', 'character')
+        save_relations( character,
+                        Group.objects.all(), 
+                        character.groups.all(), self.cleaned_data['groups'],
+                        Membership, 'character', 'group')
 
    
 '''
@@ -356,10 +364,11 @@ class PlotPartForm(PlotPiceInlineForm):
     class Meta(PlotPiceInlineForm.Meta):
         model=PlotPart
 
-PlotPartForms = forms.inlineformset_factory(LarpPlotThread, PlotPart, 
-                                            form=PlotPartForm, 
-                                            can_delete=False, #Look in to this
-                                            extra=0                             )  
+PlotPartForms = djangoforms.inlineformset_factory(
+                                LarpPlotThread, PlotPart, 
+                                form=PlotPartForm, 
+                                can_delete=False, #Look in to this
+                                extra=0                             )  
 
 
 
@@ -367,10 +376,11 @@ class GroupPlotPiceForm(PlotPiceInlineForm):
     class Meta(PlotPiceInlineForm.Meta):
         model=GroupPlotPice
 
-GroupPlotPiceForms = forms.inlineformset_factory(   GroupPlot, GroupPlotPice, 
-                                                    form=GroupPlotPiceForm, 
-                                                    can_delete=False,
-                                                    extra=0                 )
+GroupPlotPiceForms = djangoforms.inlineformset_factory(   
+                                    GroupPlot, GroupPlotPice, 
+                                    form=GroupPlotPiceForm, 
+                                    can_delete=False,
+                                    extra=0                 )
 
 
 
@@ -378,7 +388,8 @@ class PersonalPlotPiceForm(PlotPiceInlineForm):
     class Meta(PlotPiceInlineForm.Meta):
         model=PersonalPlotPice
 
-PersonalPlotPiceForms = forms.inlineformset_factory(PersonalPlot, PersonalPlotPice, 
-                                                    form=GroupPlotPiceForm, 
-                                                    can_delete=False,
-                                                    extra=0                 )
+PersonalPlotPiceForms = djangoforms.inlineformset_factory(
+                                PersonalPlot, PersonalPlotPice, 
+                                form=GroupPlotPiceForm, 
+                                can_delete=False,
+                                extra=0                 )

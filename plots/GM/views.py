@@ -41,7 +41,8 @@ def edit_form(request, id, Class, ClassForm):
     print request.POST
     if class_form.is_valid():
         class_form.save()
-        return ClassForm(instance=Class.objects.get(pk=id) )
+    else: print 'Form is not valid'
+    return ClassForm(instance=Class.objects.get(pk=id) )
 
 def new_form(request, Class, ClassForm):
     if request.method != 'POST':

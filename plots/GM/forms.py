@@ -1,6 +1,5 @@
 from django import forms as djangoforms
-from django import forms
-#import floppyforms as forms
+import floppyforms.__future__  as forms
 
 from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp, LarpPlotThread, PersonalPlot, GroupPlot
 
@@ -218,11 +217,6 @@ class CharacterForm(forms.ModelForm):
 
         widgets = { 'larps': forms.CheckboxSelectMultiple,
                     'groups': forms.CheckboxSelectMultiple,  }
-
-    def __init__(self, *args, **kw):
-        super(CharacterForm, self).__init__(*args, **kw)
-        self.fields['name'].widget.attrs['required'] = True
-
 
     def save(self):
         character = self.instance

@@ -5,26 +5,24 @@
 {% block body %}
 
 <h1> Plot threads <small>(<a href="{% url 'GM:new_larp_plot_thread' larp.id %}">New</a>)</small></h1>
-{% if larp_plot_threads %}
-    <ul>
-    {% for larp_plot_thread in larp_plot_threads %} 
-        <li>
-        <h2> <a href="{% url 'GM:plots' 'larp_plot_thread' larp_plot_thread.id %}"> 
-        {{ larp_plot_thread.name }} </a> </h2> 
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>There are no plot threads yet.</p>
-{% endif %}
 
-<h2> Plot Pices without Character or Group </h2>
+<ul>
+{% for larp_plot_thread in larp.larpplotthread_set.all %} 
+    <li>
+        <a href="{% url 'GM:plots' 'larp_plot_thread' larp_plot_thread.id %}"> 
+        {{ larp_plot_thread.name }} </a> 
+    </li>
+{% endfor %}
+</ul>
+
+
+<h3> Plot Pices without Character or Group </h3>
 {% if plot_pices_without_character_or_group %}
     <ul>
     {% for plot_pice in plot_pices_without_character_or_group %} 
         <li>
-        <h3> <a href="{% url 'GM:plot_pice' larp.id plot_pice.id %}"> 
-        {{ plot_pice }} </a> </h3> 
+        <a href="{% url 'GM:plot_pice' larp.id plot_pice.id %}"> 
+        {{ plot_pice }} </a> 
         </li>
     {% endfor %}
     </ul>
@@ -32,13 +30,13 @@
     <p>There are no such plot pices.</p>
 {% endif %}
 
-<h2> Plot Pices without Plot Thread </h2>
+<h3> Plot Pices without Plot Thread </h3>
 {% if plot_pices_without_plot_thread %}
     <ul>
     {% for plot_pice in plot_pices_without_plot_thread %} 
         <li>
-        <h3> <a href="{% url 'GM:plot_pice' larp.id plot_pice.id %}"> 
-        {{ plot_pice }} </a> </h3> 
+        <a href="{% url 'GM:plot_pice' larp.id plot_pice.id %}"> 
+        {{ plot_pice }} </a> 
         </li>
     {% endfor %}
     </ul>
@@ -48,56 +46,40 @@
 
 
 
-<h1> Groups <small>(<a href="{% url 'GM:new_group' larp.id %}">New</a>)</small> </h1>
-{% if groups %}
-    <ul>
-    {% for group in groups %} 
-        <li>
-        <h2> 
-        {{ group.name }}  
-        (<a href="{% url 'GM:group_plot' larp.id group.id %}">Plot</a>,
-         <a href="{% url 'GM:group' larp.id group.id %}">Edit</a>,
-         <a href="{% url 'GM:members' larp.id group.id %}">Members</a>)
-        </h2> 
-        
-        <ul>
-        {% for character in group.character_set.all %}
-            <li>
-            <h3> 
-            {{ character.heading|safe }}
-            (<a href="{% url 'GM:personal_plot' larp.id character.id %}">Plot</a>,
-             <a href="{% url 'GM:character' larp.id character.id %}">Edit</a>)           
-            </h3>
-            </li>
-        {% endfor %}
-        </ul>
-
-        </li>
+<h1> 
+    Groups 
+    <small>
+        (<a href="{% url 'GM:new_plot_resiver' larp.id 'group' %}">New</a>)
+    </small> 
+</h1>
+<ul>
+    {% for group_plot in larp.groupplot_set.all %} 
+    <li>
+        <a href="{% url 'GM:plot_resiver' larp.id 
+            'group' group_plot.group.id %}"> {{ group_plot.group.name }} </a>
+        -
+        <a href="{% url 'GM:plots' 'group_plot' group_plot.id %}">Plot</a>
+    </li>
     {% endfor %}
-    </ul>
-{% else %}
-    <p>There are no plot groups yet.</p>
-{% endif %}
+</ul> 
 
-<h1> Characters without Group on this Larp </h1>
-{% if characters_without_group %}
-    <ul>
-    {% for character in characters_without_group %}
-        <li>
-        <h3> 
-        {{ character.heading|safe }}
-        (<a href="{% url 'GM:personal_plot' larp.id character.id %}">Plot</a>,
-         <a href="{% url 'GM:character' larp.id character.id %}">Edit</a>)           
-        </h3>
-        </li>
+
+<h1> Characters 
+    <small>
+        (<a href="{% url 'GM:new_plot_resiver' larp.id 'character' %}">New</a>)
+    </small> 
+</h1>
+<ul>
+    {% for personal_plot in larp.personalplot_set.all %}
+    <li>
+        <a href="{% url 'GM:plot_resiver' larp.id 
+                'character' personal_plot.character.id %}"> 
+            {{ personal_plot.character.name }} 
+        </a>
+        -
+        <a href="{% url 'GM:plots' 'personal_plot' personal_plot.id %}">Plot</a>
+    </li>
     {% endfor %}
-    </ul>
-{% else %}
-    <p> There are no such characters </p>
-{% endif %}
-
-<h3> 
-<a href="{% url 'GM:new_character' larp.id %}">Create new character</a>        
-</h3>
+</ul> 
 
 {% endblock %}

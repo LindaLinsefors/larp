@@ -193,21 +193,10 @@ def delete_larp(request, larp_id):
     return HttpResponseRedirect( reverse('GM:index') )
 
 def larp_plots(request, id): 
-
     larp = get_object_or_404(Larp, pk=id)
-    larp_plot_threads = larp.larpplotthread_set.all()
-    groups = larp.groups.all()
-    characters = larp.characters.all()
-
     return render(request, 'plots/GM/larp_plots.html',
               { 'larp': larp,
-                'larp_plot_threads': larp_plot_threads,
-                'groups': groups,
-                'characters': characters,  
                 # There is probably a better way to do this with filter
-                'characters_without_group': 
-                   [character for character in characters
-                    if list( character.groups.filter(larp=larp) )==[] ],
                 'plot_pices_without_character_or_group':
                    [plot_pice for plot_pice in larp.plotpice_set.all()
                     if (list( plot_pice.characters.filter(larp=larp) )==[]
@@ -305,7 +294,7 @@ def edit_plots(request, class_name, id):
     class_instance = get_object_or_404(class_dict[class_name], pk=id)
     larp = class_instance.larp
     ClassForm = form_dict[class_name]
-    InlineFromset = formset_dict[class_name]
+    InlineFormset = formset_dict[class_name]
 
     if request.method == 'POST':
         class_form = ClassForm(request.POST, instance=class_instance)
@@ -319,7 +308,7 @@ def edit_plots(request, class_name, id):
     class_form = ClassForm(instance=class_instance)
     inline_formset = InlineFormset(instance=class_instance)
 
-    return render(request, template_dict['class_name'],
+    return render(request, template_dict[class_name],
            {'class_form': class_form,
             'class_instance': class_instance ,
             'plot_pice_forms': inline_formset,
@@ -339,7 +328,7 @@ def delete_larp_plot_thread(request, id):
                 reverse(    'GM:larp_plots', args=(larp_id, )    ) )
 
 def delete_plots(request, class_name, id):
-    if 'class_name' == 'larp_plot_thread':
+    if class_name == 'larp_plot_thread':
         return delete_larp_plot_thread(request, id)
 
 
@@ -352,7 +341,7 @@ def new_larp_plot_thread(request, larp_id):
                         'class_name': 'plot thread',    
                         'larp':larp,                     }  )
 
-    form = PlotThreadForm_noLarps(request.POST)
+    form = PlotThreadFormLarp(request.POST)
     if form.is_valid():
         form.save()
 

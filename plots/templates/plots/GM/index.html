@@ -30,7 +30,7 @@
 <ul>
     {% for character in characters %}
     <li>
-        <a href="{% url 'GM:edit_topp' character.id %}"> {{ character.name }} </a> 
+        <a href="{% url 'GM:edit_topp' 'character' character.id %}"> {{ character.name }} </a> 
     </li>
     {% endfor %}
 </ul>

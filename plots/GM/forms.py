@@ -90,7 +90,7 @@ class PlotThreadForm(forms.ModelForm):
 
 
 
-class PlotThreadForm_noLarps(forms.ModelForm):
+class PlotThreadFormLarp(forms.ModelForm):
     class Meta:
         model = PlotThread
         fields = [  'name', 
@@ -175,6 +175,33 @@ class GroupForm(forms.ModelForm):
                         Membership, 'group', 'character')
 
 
+class GroupFormLarp(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = [  'name',
+                    'group_description',
+                    'is_open',
+                    'show_group',
+                    'show_members',
+                    'characters',       ]
+
+        widgets = { 'characters': forms.CheckboxSelectMultiple,  }
+
+    def save(self):
+        group = self.instance
+        group.name = self.cleaned_data['name']
+        group.group_description = self.cleaned_data['group_description']
+        group.is_open = self.cleaned_data['is_open']
+        group.show_group = self.cleaned_data['show_group']
+        group.show_members = self.cleaned_data['show_members']
+        group.save()
+
+        save_relations( group,
+                        Character.objects.all(), 
+                        group.characters.all(), self.cleaned_data['characters'],
+                        Membership, 'group', 'character')
+
+
 
 def MembersForm(*args, **kw):
     class MembersFormClass(forms.ModelForm):
@@ -236,30 +263,34 @@ class CharacterForm(forms.ModelForm):
                         character.groups.all(), self.cleaned_data['groups'],
                         Membership, 'character', 'group')
 
+
+class CharacterFormLarp(forms.ModelForm):
+    class Meta:
+        model = Character
+        fields = [  'name', 
+                    'character_concept', 
+                    'presentation', 
+                    'character_description',
+                    'other_info',               
+                    'groups',              ]
+
+        widgets = { 'groups': forms.CheckboxSelectMultiple,  }
+
+    def save(self):
+        character = self.instance
+        character.name = self.cleaned_data['name']
+        character.character_concept = self.cleaned_data['character_concept']
+        character.presentation = self.cleaned_data['presentation']
+        character.character_description = self.cleaned_data['character_description']
+        character.other_info = self.cleaned_data['other_info']
+        character.save()
+
+        save_relations( character,
+                        Group.objects.all(), 
+                        character.groups.all(), self.cleaned_data['groups'],
+                        Membership, 'character', 'group')
+
    
-'''
-def CharacterForm(*args, **kw):
-    class CharacterFormClass(CharacterFormBasic):
-
-        groups = checkboxes( Group.objects.all() )
-
-        def __init__(self, *args, **kw):
-            CharacterFormBasic.__init__(self, *args, **kw)
-            if kw.has_key('instance'):
-                self.fields['groups'].initial = self.instance.groups.all()
-            
-        def save(self):
-            self.is_valid()
-            CharacterFormBasic.save(self)
-            save_relations( self.instance,
-                            Group.objects.all(),
-                            self.instance.groups.all(), 
-                            self.cleaned_data['groups'],
-                            Membership, 'character', 'group' )
-
-    return CharacterFormClass(*args, **kw)
-'''
-
 
 
 

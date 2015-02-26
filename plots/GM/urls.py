@@ -11,16 +11,30 @@ urlpatterns = [
     url(r'^(?P<class_name>\w+)/(?P<id>\d+)/$', views.edit_topp, name='edit_topp'),
     url(r'^(?P<class_name>\w+)/(?P<id>\d+)/delete/$', views.delete_topp, name='delete_topp'),
     url(r'^(?P<class_name>\w+)/new/$', views.new_topp, name='new_topp'),
-    url(r'^larp/(?P<id>\d+)/plots/$', views.larp_plots, name='larp_plots'),
+    url(r'^larp_plots/(?P<id>\d+)/$', views.larp_plots, name='larp_plots'),
+
+    #LarpPlotThread
+
+    url(r'^larp_plots/larp_plot_thread/(?P<id>\d+)/delete/$', views.delete_larp_plot_thread, name='delete_larp_plot_thread'),
+
+
 
     # Plots
-    url(r'^plots/(?P<class_name>\w+)/(?P<id>\d+)/$', views.edit_plots, name='plots' ),
+    url(r'^larp_plots/(?P<class_name>\w+)/(?P<id>\d+)/$', views.edit_plots, name='edit_plots' ),
+    url(r'^larp_plots/(?P<class_name>\w+)/(?P<id>\d+)/delete/$', views.delete_plots, name='delete_plots' ),
+
+    url(r'^larp_plots/(?P<larp_id>\d+)/plot_thread/new/$', views.new_larp_plot_thread, name='new_larp_plot_thread' ),
+
+    url(r'^larp_plots/(?P<larp_id>\d+)/(?P<class_name>\w+)/new/$', views.new_plot_resiver, name='new_plot_resiver' ),
+    url(r'^larp_plots/(?P<larp_id>\d+)/(?P<class_name>\w+)/(?P<id>\d+)/$', views.edit_plot_resiver, name='edit_plot_resiver' ),
+    url(r'^larp_plots/(?P<larp_id>\d+)/(?P<class_name>\w+)/(?P<id>\d+)/$', views.delete_plot_resiver, name='delete_plot_resiver' ),
+
+
 
     # LarpPlotThread
     url(r'^larp/(?P<larp_id>\d+)/new_plot_thread/new/$', 
             views.new_larp_plot_thread, name='new_larp_plot_thread'),
-    url(r'^plots/larp_plot_thread/(?P<id>\d+)/delete/$', 
-            views.delete_larp_plot_thread, name='delete_larp_plot_thread'),
+
 
     # Plot categories
 

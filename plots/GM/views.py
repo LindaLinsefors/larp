@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 
 from plots.models import PlotThread, PlotPart, PlotPice, Group, Character, GroupPlot, PersonalPlot, LarpPlotThread, GroupPlotPice, PersonalPlotPice, PlotPart, Membership, Larp
 
-from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm, PlotThreadForm, PlotThreadForm_noLarps, LarpPlotThreadForm
+from plots.GM.forms import PlotPiceForm, PlotPartForms, GroupPlotForm, GroupPlotPiceForms, PersonalPlotForm, PersonalPlotPiceForms, GroupForm, MembersForm, CharacterForm, LarpForm, PlotThreadForm, PlotThreadFormLarp, LarpPlotThreadForm
 
 #Dicts
 
@@ -27,6 +27,10 @@ form_dict = {   'larp':LarpForm,
                 'group_plot':GroupPlotForm,
                 'personal_plot':PersonalPlotForm,
                 'larp_plot_thread':LarpPlotThreadForm,   }
+
+plots_form_dict = { 'group_plot':GroupPlotPiceForms,
+                    'personal_plot': PersonalPlotPiceForms,
+                    'larp_plot_thread': PlotPartForms,      }
 
 
 #Edit/New
@@ -281,35 +285,27 @@ def new_plot_pice(request, parent_type, parent_id):
 
 
 
-#Plot Pice Inline
+#Plots
 
 def save_formset(formset): #Is this needed?
     for form in formset:
         form.save()    
 
-inlineform_dict = { 'group_plot': GroupPlotPiceForms,
+formset_dict = { 'group_plot': GroupPlotPiceForms,
                     'personal_plot': PersonalPlotPiceForms,
                     'larp_plot_thread': PlotPartForms,            }
 
 template_dict = { 'group_plot': 'plots/GM/plots.html',
                   'personal_plot': 'plots/GM/plots.html',
-                  'larp_plot_thread': 'plots/GM/plot_thread.html',            }
+                  'larp_plot_thread': 'plots/GM/plot_thread.html',  }
 
-      
 
 def edit_plots(request, class_name, id):
-    Class = class_dict[class_name]
-    ClassForm = form_dict[class_name]
-    InlineFormset = inlineform_dict[class_name]
-    return plots(   request, Class, id, ClassForm, InlineFormset, 
-                    template=template_dict[class_name]              )
 
-
-def plots(request, Class, id, ClassForm, InlineFormset, 
-        template='plots/GM/plots.html'):
-
-    class_instance = get_object_or_404(Class, pk=id)
+    class_instance = get_object_or_404(class_dict[class_name], pk=id)
     larp = class_instance.larp
+    ClassForm = form_dict[class_name]
+    InlineFromset = formset_dict[class_name]
 
     if request.method == 'POST':
         class_form = ClassForm(request.POST, instance=class_instance)
@@ -323,19 +319,28 @@ def plots(request, Class, id, ClassForm, InlineFormset,
     class_form = ClassForm(instance=class_instance)
     inline_formset = InlineFormset(instance=class_instance)
 
-    return render(request, template,
+    return render(request, template_dict['class_name'],
            {'class_form': class_form,
             'class_instance': class_instance ,
             'plot_pice_forms': inline_formset,
             'larp':larp                         }   ) 
 
 
-#Plot Thread
+def delete_larp_plot_thread(request, id):
+    larp_plot_thread = get_object_or_404(LarpPlotThread, pk=id)
+    larp_id = larp_plot_thread.larp.id
 
-def larp_plot_thread(request, id): 
-    return plots(   request, 
-                    LarpPlotThread, id, LarpPlotThreadForm, PlotPartForms, 
-                    template='plots/GM/plot_thread.html'        )
+    if larp_plot_thread.plot_thread.larpplotthread_set.count() == 1:
+        larp_plot_thread.plot_thread.delete()
+        print 'delete'
+    else:
+        larp_plot_thread.delete()
+    return HttpResponseRedirect( 
+                reverse(    'GM:larp_plots', args=(larp_id, )    ) )
+
+def delete_plots(request, class_name, id):
+    if 'class_name' == 'larp_plot_thread':
+        return delete_larp_plot_thread(request, id)
 
 
 def new_larp_plot_thread(request, larp_id):
@@ -343,7 +348,7 @@ def new_larp_plot_thread(request, larp_id):
     
     if request.method != 'POST':
         return render(  request, 'plots/GM/basic_form.html',
-                       {'class_form': PlotThreadForm_noLarps(),
+                       {'class_form': PlotThreadFormLarp(),
                         'class_name': 'plot thread',    
                         'larp':larp,                     }  )
 
@@ -358,17 +363,14 @@ def new_larp_plot_thread(request, larp_id):
                 reverse(    'GM:plots',
                             args=('larp_plot_thread', larp_plot_thread.id ) ))
 
-def delete_larp_plot_thread(request, id):
-    larp_plot_thread = get_object_or_404(LarpPlotThread, pk=id)
-    larp_id = larp_plot_thread.larp.id
+def new_plot_resiver(request, larp_id, class_name):
+    pass
 
-    if larp_plot_thread.plot_thread.larpplotthread_set.count() == 1:
-        larp_plot_thread.plot_thread.delete()
-        print 'delete'
-    else:
-        larp_plot_thread.delete()
-    return HttpResponseRedirect( 
-                reverse(    'GM:larp_plots', args=(larp_id, )    ) )
+def edit_plot_resiver(request, larp_id, class_name, id):
+    pass
+
+def delete_plot_resiver(request, larp_id, class_name, id):
+    pass
                     
 
 

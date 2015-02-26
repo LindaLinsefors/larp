@@ -48,14 +48,6 @@ def edit_form(request, id, Class, ClassForm):
     else: print 'Form is not valid'
     return ClassForm(instance=Class.objects.get(pk=id) )
 
-def new_form(request, Class, ClassForm):
-    if request.method != 'POST':
-        return ClassForm()
-
-    class_form = ClassForm(request.POST)
-    if class_form.is_valid():
-        class_form.save()
-        return class_form
 
 #Topp
 
@@ -181,16 +173,7 @@ def index(request):
 
 #Larp
 
-def larp(request, larp_id):
-    return edit( request, Larp, larp_id, LarpForm )
 
-def new_larp(request):
-    return new( request, Larp, LarpForm, url='GM:larp' )
-
-def delete_larp(request, larp_id):
-    larp = get_object_or_404(Larp, pk=larp_id)
-    larp.delete()
-    return HttpResponseRedirect( reverse('GM:index') )
 
 def larp_plots(request, id): 
     larp = get_object_or_404(Larp, pk=id)
@@ -315,21 +298,24 @@ def edit_plots(request, class_name, id):
             'larp':larp                         }   ) 
 
 
-def delete_larp_plot_thread(request, id):
-    larp_plot_thread = get_object_or_404(LarpPlotThread, pk=id)
+def delete_plots(request, class_name id):
+    class_instance = get_object_or_404(class_dict[class_name, pk=id)
     larp_id = larp_plot_thread.larp.id
 
-    if larp_plot_thread.plot_thread.larpplotthread_set.count() == 1:
-        larp_plot_thread.plot_thread.delete()
-        print 'delete'
-    else:
-        larp_plot_thread.delete()
+    if (class_name == 'lapr_plot_thread' and
+            class_instance.plot_thread.larpplotthread_set.count() == 1):
+        class_instance.plot_thread.delete()
+    elif (class_name == 'personal_plot' and
+            class_instance.character.personalplot_set.count() == 1):
+        class_instance.character.delete()
+    elif (class_name == 'group_plot' and
+            class_instance.group.groupplot_set.count() == 1):
+        class_instance.group.delete()
+    else
+        class_instance.delete()
     return HttpResponseRedirect( 
                 reverse(    'GM:larp_plots', args=(larp_id, )    ) )
 
-def delete_plots(request, class_name, id):
-    if class_name == 'larp_plot_thread':
-        return delete_larp_plot_thread(request, id)
 
 
 def new_larp_plot_thread(request, larp_id):
@@ -352,8 +338,31 @@ def new_larp_plot_thread(request, larp_id):
                 reverse(    'GM:plots',
                             args=('larp_plot_thread', larp_plot_thread.id ) ))
 
+
+
 def new_plot_resiver(request, larp_id, class_name):
-    pass
+    larp = get_object_or_404(Larp, pk=larp_id)
+    class_form = {  'group': GroupFromLarp, 
+                    'character': CharacterFormLarp}[class_name]
+    
+    if request.method != 'POST':
+        return render(  request, 'plots/GM/basic_form.html',
+               {'class_form': class_form,
+                'class_name': class_name,    
+                'larp':larp,                     }  )
+
+    form = class_form(request.POST)
+    if form.is_valid():
+        form.save()
+        
+        #under construction
+        plot_relation = LarpPlotThread(  larp=larp, 
+                                            plot_thread=form.instance   )
+
+        return HttpResponseRedirect( 
+                reverse(    'GM:plots',
+                            args=('larp_plot_thread', larp_plot_thread.id ) ))
+
 
 def edit_plot_resiver(request, larp_id, class_name, id):
     pass
@@ -372,37 +381,11 @@ def group_plot(request, larp_id, id):
                     template='plots/GM/plots.html'        )
 
 
-# Personal Plot
-
-def personal_plot(request, larp_id, id): 
-    return plots(   request, larp_id, 
-                    Character, id, PersonalPlotForm, PersonalPlotPiceForms, 
-                    template='plots/GM/personal_plot.html'        )
 
 
 
-# Group
 
-def save_group(request, larp_id):
-    # import pdb; pdb.set_trace()
-    print request.POST
-    return HttpResponse('saved')
-
-def group_old(request, larp_id, id): 
-    group = get_object_or_404(Group, pk=id)
-    half = ( Character.objects.count()+1 )/2
-    return render(request, 'plots/GM/group.html',
-            {   'group': group, 
-                'members': group.character_set.all(),
-                'characters_fist_half': Character.objects.all()[:half],
-                'characters_second_half': Character.objects.all()[half:],
-            }   )
-
-def new_group(request, larp_id): 
-    return new( request, larp_id, Group, GroupForm,  url='GM:group' )
-
-def group(request, larp_id, id):
-    return edit( request, larp_id, Group, id, GroupForm )
+# Memberst (verry old)
 
 def members_old(request, larp_id, id, back): 
     return edit( request, larp_id, Group, id, MembersForm, template='plots/GM/members.html'  )
@@ -429,17 +412,6 @@ def members_from_parent(request, larp_id, id, parent_type ):
     return members( request, id, 
                     reverse('GM:'+parent_type, args=(id,)) )
 
-# Character
-
-def character(request, larp_id, id): 
-    return edit( request, larp_id, Character, id, CharacterForm, 
-                                template='plots/GM/character.html'   )
-
-
-def new_character(request, larp_id): 
-    return new(  request, larp_id, Character, CharacterForm, 
-                                url='GM:character',
-                                template='plots/GM/character.html'  )
 
 #Delete
 

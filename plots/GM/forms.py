@@ -135,8 +135,7 @@ class PersonalPlotForm(forms.ModelForm):
     class Meta:
         model = PersonalPlot
         fields = [  'secret_comments',   
-                    'plot_is_finished', 
-                    'larp',             ]
+                    'plot_is_finished', ]
 
 
 

@@ -165,7 +165,8 @@ def index(request):
     return render( request, 'plots/GM/index.html',
                 {   'larps': Larp.objects.all(),
                     'groups': Group.objects.all(),
-                    'characters': Character.objects.all(), }     )
+                    'characters': Character.objects.all(),
+                    'plot_threads': PlotThread.objects.all(), }     )
 
 #Larp
 
@@ -298,7 +299,7 @@ def delete_plots(request, class_name, id):
     class_instance = get_object_or_404(class_dict[class_name], pk=id)
     larp_id = class_instance.larp.id
 
-    if (class_name == 'lapr_plot_thread' and
+    if (class_name == 'larp_plot_thread' and
             class_instance.plot_thread.larpplotthread_set.count() == 1):
         class_instance.plot_thread.delete()
     elif (class_name == 'personal_plot' and
@@ -372,10 +373,36 @@ def new_plot(request, larp_id, class_name):
 
 
 def edit_plot_resiver(request, larp_id, class_name, id):
-    pass
+    class_form = edit_form( request, id,
+                            class_dict[class_name],  
+                            form_dict[class_name]   )
+
+    return render(  request, 'plots/GM/basic_form.html',
+                   {'class_form': class_form,
+                    'class_instance': class_form.instance,    }   ) 
 
 def delete_plot_resiver(request, larp_id, class_name, id):
-    pass
+    class_instance = get_object_or_404(class_dict[class_name], pk=id)
+    larp = get_object_or_404(Larp, pk=larp_id)
+
+    if class_name == 'character':
+        if class_instance.personalplot_set.count() == 1:
+            class_instance.delete()
+        else:
+            get_object_or_404(  GroupPlot, 
+                                larp=larp, 
+                                group=class_instance ).delete()
+
+    elif class_name == 'group':
+        if class_instance.groupplot_set.count() == 1:
+            class_instance.delete()
+        else:
+            get_object_or_404(  PersonalPlot, 
+                                larp=larp, 
+                                character=class_instance ).delete()
+
+    return HttpResponseRedirect( 
+                reverse(    'GM:larp_plots', args=(larp_id, )    ) )
                     
 
 

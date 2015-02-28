@@ -36,6 +36,15 @@
 </ul>
 <a href="{% url 'GM:new_topp' 'character' %}" class="btn btn-default"> New character </a>
 
+<h1> Plot Threads </h1>
+<ul>
+    {% for plot_thread in plot_threads %}
+    <li>
+        <a href="{% url 'GM:edit_topp' 'plot_thread' plot_thread.id %}"> {{ plot_thread.name }} </a> 
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'GM:new_topp' 'plot_thread' %}" class="btn btn-default"> New plot thread </a>
 
 
 {% endblock %}

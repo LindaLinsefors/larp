@@ -30,11 +30,8 @@
 
 <p> <a href="delete"> Delete </a> </p>
 
-{% if parent_id %}
-    <p> <a href="{% url parent_url larp.id parent_id %}"> </p>
-{% else %}
-    <p> <a href="{% url 'GM:larp' larp.id %}"> </p>
-{% endif %}
-Cancel </a>
+<p> <a href="{{ back }}"> Cancel </a> </p>
+
+
 
 {% endblock %}

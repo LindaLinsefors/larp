@@ -304,59 +304,69 @@ class PlotPiceFormBasic(forms.ModelForm):
     new_group_name = forms.CharField(required=False, max_length=50)    
     new_plot_thread_name = forms.CharField(required=False, max_length=50)
 
-    def save_new_relation(self, Class, class_name, RelationClass):
-        if self.cleaned_data['new_'+class_name+'_name']:
-            new_class_instance = Class( name=self.cleaned_data['new_'+class_name+'_name'] )
-            new_class_instance.save()
-
-            kw = {  'plot_pice': slef.instance,
-                    class_name: new_class_instance,
-                    'larp': self.instance.larp,     }
-            RelationClass( **kw ).save()
 
 
 
-def PlotPiceForm(*args, **kw):
+
+def PlotPiceForm(larp, *args, **kw):
 
     class PlotPiceFromClass(PlotPiceFormBasic):
-        characters = checkboxes( Character.objects.all() )
-        groups = checkboxes( Group.objects.all() )
-        plot_threads = checkboxes( PlotThread.objects.all() )
+        characters = checkboxes( larp.personalplot_set.all() )
+        groups = checkboxes( larp.groupplot_set.all() )
+        plot_threads = checkboxes( LarpPlotThread.objects.all() )
 
         def __init__(self, *args, **kw):
             PlotPiceFormBasic.__init__(self, *args, **kw)
             if kw.has_key('instance'):
-                self.fields['groups'].initial = self.instance.groups.all()
-                self.fields['characters'].initial = self.instance.characters.all()
-                self.fields['plot_threads'].initial = self.instance.plot_threads.all()
+                self.fields['groups'].initial = self.instance.group_plots.all()
+                self.fields['characters'].initial = self.instance.personal_plots.all()
+                self.fields['plot_threads'].initial = self.instance.larp_plot_threads.all()
+
+    def save_new_relation(self, Class, class_name, PlotClass, plot_name, RelationClass):
+        if self.cleaned_data['new_'+class_name+'_name']:
+            new_class_instance = Class( name=self.cleaned_data['new_'+class_name+'_name'] )
+            new_class_instance.save()
+            new_plot_instance = PlotClass( **{'plot':plot, class_name: new_class_instance} )
+            new_plot_instance.save() 
+            RelationClass( **{  'plot_pice': self.instance,
+                                plot_name: new_plot_instance,
+                                'rank': -1,                     } ).save()
 
         def save(self):
             self.is_valid()
             forms.ModelForm.save(self)
             save_relations( self.instance,
-                            Group.objects.all(),
-                            self.instance.groups.all(), 
+                            larp.groupplot_set.all(),
+                            self.instance.group_plots.all(), 
                             self.cleaned_data['groups'],
-                            GroupPlotPice, 'plot_pice', 'group' )
+                            GroupPlotPice, 'plot_pice', 'group_plot' )
+):
          
             save_relations( self.instance,
-                            Character.objects.all(),
-                            self.instance.characters.all(), 
+                            larp.personalplot_set.all(),
+                            self.instance.personal_plots.all(), 
                             self.cleaned_data['characters'],
-                            PersonalPlotPice, 'plot_pice', 'character' )
+                            PersonalPlotPice, 'plot_pice', 'personal_plot' )
 
             save_relations( self.instance,
-                            PlotThread.objects.all(),
-                            self.instance.plot_threads.all(), 
+                            larp.larpplotthread_set.all(),
+                            self.instance.larp_plot_threads.all(), 
                             self.cleaned_data['plot_threads'],
-                            PlotPart, 'plot_pice', 'plot_thread' )
+                            PlotPart, 'plot_pice', 'larp_plot_thread' )
 
-            self.save_new_relation(Character, 'character', PersonalPlotPice)
-            self.save_new_relation(Group, 'group', GroupPlotPice)
-            self.save_new_relation(PlotThread, 'plot_thread', PlotPart)
+            self.save_new_relation( Character, 'character', 
+                                    PersonalPlot, 'personal_plot', 
+                                    PersonalPlotPice,                )
+
+            self.save_new_relation( Group, 'group', 
+                                    GroupPlot, 'group_plot',
+                                    GroupPlotPice,               )
+
+            self.save_new_relation( PlotThread, 'plot_thread', 
+                                    LarpPlotThread, 'larp_plot_thread', 
+                                    PlotPart,                           )
 
     return PlotPiceFromClass(*args, **kw)
-
 
 
 #Plot Pice Inline

@@ -78,87 +78,9 @@ def delete_topp(request, class_name, id):
     return HttpResponseRedirect( reverse('GM:index') )
 
 
-
-def edit(   request, larp_id, Class, id, ClassForm, 
-            template='plots/GM/basic_form.html'     ):
-
-    class_form = edit_save_if_POST(request, Class, id, ClassForm)
-    larp = get_object_or_404(Larp, pk=larp_id)   
-
-    return render(  request, template,
-                   {'class_form': class_form, 
-                    'class_instance': class_instance,
-                    'larp': larp,                      }   )   
+   
 
 
-def new(    request, larp_id, Class, ClassForm, 
-            url='GM:stuff', template='plots/GM/basic_form.html'):
-
-    if request.method == 'POST':
-        class_form = ClassForm(request.POST)
-        if class_form.is_valid():
-            class_form.save()
-            if Class == Larp:
-                return HttpResponseRedirect(            
-                    reverse(url, args=(class_form.instance.id,))  )
-
-            larp = get_object_or_404(Larp, pk=larp_id)
-            if Class == PlotThread:
-                larp.plot_threads.add(class_form.instance)
-            elif Class == Group:
-                larp.groups.add(class_form.instance)
-            elif Class == Character.add(class_form.instance):
-                larp.characers.add(class_form.instance)
-
-            larp.save()
-            return HttpResponseRedirect(            
-                reverse(url, args=(larp_id, class_form.instance.id))  )
-    else:
-        class_form = ClassForm()
-        if Class == Larp:
-            return render (  request, template,
-                            {'class_form': class_form,}   ) 
-
-        larp = get_object_or_404(Larp, pk=larp_id) 
-        
-    return render(  request, template,
-                   {'class_form': class_form,
-                    'larp': larp,               }   )  
-
-
-def new(    request, Class, ClassForm, 
-            url='GM:stuff', template='plots/GM/basic_form.html'):
-
-    if request.method == 'POST':
-        class_form = ClassForm(request.POST)
-        if class_form.is_valid():
-            class_form.save()
-            if Class == Larp:
-                return HttpResponseRedirect(            
-                    reverse(url, args=(class_form.instance.id,))  )
-
-            larp = get_object_or_404(Larp, pk=larp_id)
-            if Class == PlotThread:
-                larp.plot_threads.add(class_form.instance)
-            elif Class == Group:
-                larp.groups.add(class_form.instance)
-            elif Class == Character.add(class_form.instance):
-                larp.characers.add(class_form.instance)
-
-            larp.save()
-            return HttpResponseRedirect(            
-                reverse(url, args=(larp_id, class_form.instance.id))  )
-    else:
-        class_form = ClassForm()
-        if Class == Larp:
-            return render (  request, template,
-                            {'class_form': class_form,}   ) 
-
-        larp = get_object_or_404(Larp, pk=larp_id) 
-        
-    return render(  request, template,
-                   {'class_form': class_form,
-                    'larp': larp,               }   )  
 
 #Index
 def index(request):
@@ -188,64 +110,59 @@ def larp_plots(request, id):
 
 #Plot Pice
 
-
-def plot_pice(request, parent_type, parent_id, id):  
-    plot_pice = get_object_or_404(PlotPice, pk=id)
-    larp = plot_pice.larp
-
+def edit_plot_pice(request, plot_pice, back):
     if request.method == 'POST':
-        plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
+        plot_pice_form = PlotPiceForm(  plot_pice.larp, 
+                                        request.POST, 
+                                        instance=plot_pice, )
         if plot_pice_form.is_valid():
             plot_pice_form.save()
-            return HttpResponseRedirect(            
-                reverse('GM:'+parent_type, args=( parent_id,))  )
+            return HttpResponseRedirect( back )
 
-    plot_pice_form = PlotPiceForm(instance=plot_pice)
+    plot_pice_form = PlotPiceForm(  plot_pice.larp,
+                                    instance=plot_pice)
     
     return render(request, 'plots/GM/plot_pice.html',
             {   'plot_pice_form': plot_pice_form,
-                'parent_url': 'GM:'+parent_type,
-                'parent_id': parent_id,                 
-                'larp': larp,
-                'heading': 'Edit',                        }   )
-
-
-def plot_pice_no_parent(request, larp_id, id):  
-    plot_pice = get_object_or_404(PlotPice, pk=id)
-    larp = get_object_or_404(Larp, pk=larp_id)
-
-    if request.method == 'POST':
-        plot_pice_form = PlotPiceForm(request.POST, instance=plot_pice)
-        if plot_pice_form.is_valid():
-            plot_pice_form.save()
-            return HttpResponseRedirect( reverse('GM:index') )
-
-    plot_pice_form = PlotPiceForm(instance=plot_pice)
-    
-    return render(request, 'plots/GM/plot_pice.html',
-            {   'plot_pice_form': plot_pice_form,
-                'parent_url': 'GM:index',
-                'larp': larp,
+                'back': back,
+                'larp': plot_pice.larp,
                 'heading': 'Edit',                       }   )
 
 
+def plot_pice(request, parent_type, parent_id, id):  
+    plot_pice = get_object_or_404(PlotPice, pk=id)
+    back = reverse('GM:plots', args=(parent_type, parent_id,)   )
+    return edit_plot_pice(request, plot_pice, back)
+
+def delete_plot_pice(request, parent_type, parent_id, id):  
+    get_object_or_404(PlotPice, pk=id).delete()
+    back = reverse('GM:plots', args=(parent_type, parent_id,)   )
+    return HttpResponseRedirect( back )
+
+
+def plot_pice_no_parent(request,  id):  
+    plot_pice = get_object_or_404(PlotPice, pk=id)
+    back = reverse('GM:larp_plots', args=(plot_pice.larp.id,)    )
+    return edit_plot_pice(request, plot_pice, back)
+
+
 def new_plot_pice(request, parent_type, parent_id):  
-    parent = get_object_or_404(class_dict[parrent_type], pk=parent_id)
+    parent = get_object_or_404(class_dict[parent_type], pk=parent_id)
+    back = reverse('GM:larp_plots', args=(parent.larp.id,)    )
 
-    if request.method != 'POST':
-        PlotPiceForm(initial={'larp': parent.larp})
-        return render(request, 'plots/GM/plot_pice.html',
-                {   'plot_pice_form': plot_pice_form,
-                    'parent_url': 'GM:'+parent_type,
-                    'parent_id': parent_id,
-                    'larp': larp,
-                    'heading': 'New',                   } )
+    if request.method == 'POST':
 
-    plot_pice_form = PlotPiceForm(request.POST)
-    if plot_pice_form.is_valid():
-        plot_pice_form.save()
-        return HttpResponseRedirect(            
-            reverse('GM:'+parent_type, args=( parent_id,))  )
+        plot_pice_form = PlotPiceForm(parent.larp, request.POST)
+        if plot_pice_form.is_valid():
+            plot_pice_form.save()
+            return HttpResponseRedirect( back )
+
+    plot_pice_form = PlotPiceForm(parent.larp, initial={'larp': parent.larp})
+    return render(request, 'plots/GM/plot_pice.html',
+            {   'plot_pice_form': plot_pice_form,
+                'back': back,
+                'larp': parent.larp,
+                'heading': 'New',                   } )
 
 
    
@@ -407,19 +324,26 @@ def delete_plot_resiver(request, larp_id, class_name, id):
 
 
 
-# Group Plot
-
-def group_plot(request, larp_id, id): 
-    return plots(   request, larp_id,   
-                    Group, id, GroupPlotForm, GroupPlotPiceForms, 
-                    template='plots/GM/plots.html'        )
-
 
 
 
 
 
 # Memberst (verry old)
+
+
+
+
+def edit(   request, larp_id, Class, id, ClassForm, 
+            template='plots/GM/basic_form.html'     ):
+
+    class_form = edit_save_if_POST(request, Class, id, ClassForm)
+    larp = get_object_or_404(Larp, pk=larp_id)   
+
+    return render(  request, template,
+                   {'class_form': class_form, 
+                    'class_instance': class_instance,
+                    'larp': larp,                      }   )
 
 def members_old(request, larp_id, id, back): 
     return edit( request, larp_id, Group, id, MembersForm, template='plots/GM/members.html'  )
@@ -447,26 +371,5 @@ def members_from_parent(request, larp_id, id, parent_type ):
                     reverse('GM:'+parent_type, args=(id,)) )
 
 
-#Delete
-
-
-def delete(request, larp_id, class_name, id):
-    class_instance = get_object_or_404(class_dict[class_name], pk=id)
-    class_instance.delete()
-    return HttpResponseRedirect( reverse('GM:larp_plots', args=(larp_id) ) )
-        
-
-def delete_plot_pice(request, larp_id, parent_type, parent_id, id):
-    plot_pice = get_object_or_404(PlotPice, pk=id)
-    if request.method == 'POST':
-        plot_pice.delete()
-        return HttpResponseRedirect( 
-                reverse('GM:'+parent_type, args=(parent_id,) ))
-
-    return render( request, 'plots/GM/delete.html',
-                   {'name': 'Plot Pice',
-                    'back': reverse('GM:'+class_name, 
-                                    args=(parent_type, parent_id, id)) 
-                    })
 
 

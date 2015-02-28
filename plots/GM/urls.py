@@ -15,6 +15,20 @@ urlpatterns = [
     url(r'^(?P<class_name>\w+)/new/$', views.new_topp, name='new_topp'),
 
 
+    # Plot pice    
+    url(r'^larp_plots/(?P<parent_type>\w+)/(?P<parent_id>[0-9]+)/plot_pice/new/$', 
+            views.new_plot_pice, name='new_plot_pice'),
+
+    url(r'^larp_plots/(?P<parent_type>\w+)/(?P<parent_id>[0-9]+)/plot_pice/(?P<id>[0-9]+)/$', 
+            views.plot_pice, name='plot_pice'),
+
+    url(r'^larp_plots/(?P<parent_type>\w+)/(?P<parent_id>[0-9]+)/plot_pice/(?P<id>[0-9]+)/delete/$', 
+            views.delete_plot_pice, name='plot_pice'),
+
+    url(r'^larp_plots/plot_pice/(?P<id>[0-9]+)/$', 
+            views.plot_pice_no_parent, name='plot_pice'),
+
+
     # Plots
     url(r'^larp_plots/(?P<class_name>\w+)/(?P<id>\d+)/$', views.edit_plots, name='plots' ),
     url(r'^larp_plots/(?P<class_name>\w+)/(?P<id>\d+)/delete/$', views.delete_plots, name='delete_plots' ),
@@ -24,14 +38,6 @@ urlpatterns = [
 
 
     
-    # Plot pice    
-    url(r'^(?P<larp_id>[0-9]+)/(?P<parent_type>\w+)/(?P<parent_id>[0-9]+)/plot_pice/(?P<id>[0-9]+)/$', 
-            views.plot_pice, name='plot_pice'),
 
-    url(r'^(?P<larp_id>[0-9]+)/(?P<parent_type>\w+)/(?P<parent_id>[0-9]+)/plot_pice/new/$', 
-            views.new_plot_pice, name='new_plot_pice'),
-
-    url(r'^(?P<larp_id>[0-9]+)/plot_pice/(?P<id>[0-9]+)/$', 
-            views.plot_pice_no_parent, name='plot_pice'),
 
     ]

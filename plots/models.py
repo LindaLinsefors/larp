@@ -72,9 +72,9 @@ class GroupPlot(models.Model):
         return self.group.name
 
     def __str__(self):
-        return self.group.name + ', ' + self.larp.name
+        return self.group.name 
     def __unicode__(self):          # for Python 2 
-        return unicode( self.group.name + ', ' + self.larp.name )
+        return unicode( self.group.name )
 
 
 class PersonalPlot(models.Model):
@@ -92,9 +92,9 @@ class PersonalPlot(models.Model):
         return self.character.name
 
     def __str__(self):
-        return self.character.name + ', ' + self.larp.name
+        return self.character.name 
     def __unicode__(self):          # for Python 2 
-        return unicode( self.character.name + ', ' + self.larp.name )
+        return unicode( self.character.name )
 
 
 class LarpPlotThread(models.Model):
@@ -110,9 +110,9 @@ class LarpPlotThread(models.Model):
         return self.plot_thread.name
 
     def __str__(self):
-        return self.plot_thread.name + ', ' + self.larp.name
+        return self.plot_thread.name
     def __unicode__(self):          # for Python 2 
-        return unicode( self.plot_thread.name + ', ' + self.larp.name )
+        return unicode( self.plot_thread.name )
 
     def characters(self):
         return PersonalPlot.objects.filter(plotpice__in=self.plot_parts() )

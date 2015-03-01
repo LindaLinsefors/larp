@@ -32,7 +32,7 @@ urlpatterns = [
     # Plots
     url(r'^larp_plots/(?P<class_name>\w+)/(?P<id>\d+)/$', views.edit_plots, name='plots' ),
     url(r'^larp_plots/(?P<class_name>\w+)/(?P<id>\d+)/delete/$', views.delete_plots, name='delete_plots' ),
-    url(r'^larp_plots/(?P<larp_id>\d+)/(?P<class_name>\w+)/new/$', views.new_plot, name='new_plot' ),
+    url(r'^larp_plots/(?P<larp_id>\d+)/(?P<class_name>\w+)/new/$', views.new_plots, name='new_plots' ),
     url(r'^larp_plots/(?P<larp_id>\d+)/(?P<class_name>\w+)/(?P<id>\d+)/$', views.edit_plot_resiver, name='plot_resiver' ),
     url(r'^larp_plots/(?P<larp_id>\d+)/(?P<class_name>\w+)/(?P<id>\d+)/delete$', views.delete_plot_resiver, name='delete_plot_resiver' ),
 

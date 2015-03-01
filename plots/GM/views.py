@@ -112,15 +112,13 @@ def larp_plots(request, id):
 
 def edit_plot_pice(request, plot_pice, back):
     if request.method == 'POST':
-        plot_pice_form = PlotPiceForm(  plot_pice.larp, 
-                                        request.POST, 
-                                        instance=plot_pice, )
+        plot_pice_form = PlotPiceForm(larp)(request.POST, 
+                                            instance=plot_pice, )
         if plot_pice_form.is_valid():
             plot_pice_form.save()
             return HttpResponseRedirect( back )
 
-    plot_pice_form = PlotPiceForm(  plot_pice.larp,
-                                    instance=plot_pice)
+    plot_pice_form = PlotPiceForm(larp)(instance=plot_pice)
     
     return render(request, 'plots/GM/plot_pice.html',
             {   'plot_pice_form': plot_pice_form,
@@ -152,12 +150,12 @@ def new_plot_pice(request, parent_type, parent_id):
 
     if request.method == 'POST':
 
-        plot_pice_form = PlotPiceForm(parent.larp, request.POST)
+        plot_pice_form = PlotPiceForm(parent.larp)(request.POST)
         if plot_pice_form.is_valid():
             plot_pice_form.save()
             return HttpResponseRedirect( back )
 
-    plot_pice_form = PlotPiceForm(parent.larp, initial={'larp': parent.larp})
+    plot_pice_form = PlotPiceForm(parent.larp)()
     return render(request, 'plots/GM/plot_pice.html',
             {   'plot_pice_form': plot_pice_form,
                 'back': back,
@@ -232,38 +230,18 @@ def delete_plots(request, class_name, id):
 
 
 
-def new_larp_plot_thread(request, larp_id):
-    larp = get_object_or_404(Larp, pk=larp_id)
-    
-    if request.method != 'POST':
-        return render(  request, 'plots/GM/basic_form.html',
-                       {'class_form': PlotThreadFormLarp(),
-                        'class_name': 'plot thread',    
-                        'larp':larp,                     }  )
-
-    form = PlotThreadFormLarp(request.POST)
-    if form.is_valid():
-        form.save()
-
-        larp_plot_thread = LarpPlotThread(  larp=larp, 
-                                            plot_thread=form.instance   )
-        larp_plot_thread.save()
-        return HttpResponseRedirect( 
-                reverse(    'GM:plots',
-                            args=('larp_plot_thread', larp_plot_thread.id ) ))
-
 larpform_dict =  {  'group': GroupFormLarp, 
                     'character': CharacterFormLarp,
                     'plot_thread': PlotThreadFormLarp, }
 
 plotname_dict = {   'group': 'group_plot',
-                'character': 'personal_plot', 
-                'plot_thread': 'larp_plot_thread' }
+                    'character': 'personal_plot', 
+                    'plot_thread': 'larp_plot_thread' }
 
 
-def new_plot(request, larp_id, class_name):
+def new_plots(request, larp_id, class_name):
     larp = get_object_or_404(Larp, pk=larp_id)
-    class_form = larpform_dict[class_name]
+    class_form = larpform_dict[class_name](larp)
     
     if request.method != 'POST':
         if class_name == 'plot_thread':
@@ -290,9 +268,10 @@ def new_plot(request, larp_id, class_name):
 
 
 def edit_plot_resiver(request, larp_id, class_name, id):
+    larp = get_object_or_404(Larp, pk=larp_id)
     class_form = edit_form( request, id,
                             class_dict[class_name],  
-                            form_dict[class_name]   )
+                            larpform_dict[class_name](larp)   )
 
     return render(  request, 'plots/GM/basic_form.html',
                    {'class_form': class_form,

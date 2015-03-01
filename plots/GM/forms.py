@@ -90,11 +90,15 @@ class PlotThreadForm(forms.ModelForm):
 
 
 
-class PlotThreadFormLarp(forms.ModelForm):
+class PlotThreadFormLarpClass(forms.ModelForm):
     class Meta:
         model = PlotThread
         fields = [  'name', 
                     'summery',   ]
+
+def PlotThreadFormLarp(larp):
+    return PlotThreadFormLarpClass
+
 
 
 
@@ -173,32 +177,36 @@ class GroupForm(forms.ModelForm):
                         group.characters.all(), self.cleaned_data['characters'],
                         Membership, 'group', 'character')
 
+def GroupFormLarp(larp)
 
-class GroupFormLarp(forms.ModelForm):
-    class Meta:
-        model = Group
-        fields = [  'name',
-                    'group_description',
-                    'is_open',
-                    'show_group',
-                    'show_members',
-                    'characters',       ]
+    class GroupFormLarp(forms.ModelForm):
+        class Meta:
+            model = Group
+            fields = [  'name',
+                        'group_description',
+                        'is_open',
+                        'show_group',
+                        'show_members',
+                        'characters',       ]
 
-        widgets = { 'characters': forms.CheckboxSelectMultiple,  }
+            widgets = { 'characters': forms.CheckboxSelectMultiple(
+                                        choices = larp.characters.all() ),  }
 
-    def save(self):
-        group = self.instance
-        group.name = self.cleaned_data['name']
-        group.group_description = self.cleaned_data['group_description']
-        group.is_open = self.cleaned_data['is_open']
-        group.show_group = self.cleaned_data['show_group']
-        group.show_members = self.cleaned_data['show_members']
-        group.save()
+        def save(self):
+            group = self.instance
+            group.name = self.cleaned_data['name']
+            group.group_description = self.cleaned_data['group_description']
+            group.is_open = self.cleaned_data['is_open']
+            group.show_group = self.cleaned_data['show_group']
+            group.show_members = self.cleaned_data['show_members']
+            group.save()
 
-        save_relations( group,
-                        Character.objects.all(), 
-                        group.characters.all(), self.cleaned_data['characters'],
-                        Membership, 'group', 'character')
+            save_relations( group,
+                            larp.characters.all(), 
+                            group.characters.all(), self.cleaned_data['characters'],
+                            Membership, 'group', 'character')
+
+    return GroupFormLarpClass
 
 
 
@@ -263,31 +271,36 @@ class CharacterForm(forms.ModelForm):
                         Membership, 'character', 'group')
 
 
-class CharacterFormLarp(forms.ModelForm):
-    class Meta:
-        model = Character
-        fields = [  'name', 
-                    'character_concept', 
-                    'presentation', 
-                    'character_description',
-                    'other_info',               
-                    'groups',              ]
+def CharacterFromLarp(larp)
 
-        widgets = { 'groups': forms.CheckboxSelectMultiple,  }
+    class CharacterFormLarpClass(forms.ModelForm):
+        class Meta:
+            model = Character
+            fields = [  'name', 
+                        'character_concept', 
+                        'presentation', 
+                        'character_description',
+                        'other_info',               
+                        'groups',              ]
 
-    def save(self):
-        character = self.instance
-        character.name = self.cleaned_data['name']
-        character.character_concept = self.cleaned_data['character_concept']
-        character.presentation = self.cleaned_data['presentation']
-        character.character_description = self.cleaned_data['character_description']
-        character.other_info = self.cleaned_data['other_info']
-        character.save()
+            widgets = { 'groups': forms.CheckboxSelectMultiple(
+                                    choices = larp.groups.all() ),  }
 
-        save_relations( character,
-                        Group.objects.all(), 
-                        character.groups.all(), self.cleaned_data['groups'],
-                        Membership, 'character', 'group')
+        def save(self):
+            character = self.instance
+            character.name = self.cleaned_data['name']
+            character.character_concept = self.cleaned_data['character_concept']
+            character.presentation = self.cleaned_data['presentation']
+            character.character_description = self.cleaned_data['character_description']
+            character.other_info = self.cleaned_data['other_info']
+            character.save()
+
+            save_relations( character,
+                            larp.groups.all(), 
+                            character.groups.all(), self.cleaned_data['groups'],
+                            Membership, 'character', 'group')
+
+    return CharacterFormLarpClass
 
    
 
@@ -295,7 +308,7 @@ class CharacterFormLarp(forms.ModelForm):
 
 #Plot Pice
 
-def PlotPiceForm(larp, *args, **kw):
+def PlotPiceForm(larp):
 
     class PlotPiceFromClass(forms.ModelForm):
         class Meta:
@@ -307,13 +320,13 @@ def PlotPiceForm(larp, *args, **kw):
                         'personal_plots',]
 
             widgets = { 'group_plots': forms.CheckboxSelectMultiple(
-                                choices = GroupPlot.objects.filter(larp=larp)   ),
+                                    choices = larp.groupplot_set.all()   ),
 
                         'personal_plots': forms.CheckboxSelectMultiple(
-                                choices = PersonalPlot.objects.filter(larp=larp)    ),
+                                    choices = larp.personalplot_set.all()    ),
 
                         'larp_plot_threads': forms.CheckboxSelectMultiple(
-                                choices = LarpPlotThread.objects.filter(larp=larp)  ),  }
+                                    choices = larp.larpplotthread_set.all()  ),  }
         
         new_character_name = forms.CharField(required=False, max_length=50)
         new_group_name = forms.CharField(required=False, max_length=50)    
@@ -367,7 +380,7 @@ def PlotPiceForm(larp, *args, **kw):
                                     LarpPlotThread, 'larp_plot_thread', 
                                     PlotPart,                           )
 
-    return PlotPiceFromClass(*args, **kw)
+    return PlotPiceFromClass
 
 
 #Plot Pice Inline

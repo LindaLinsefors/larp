@@ -162,40 +162,40 @@ $('textarea').change(function(){
                             </p>
                             <p>
                                 <label>Characters:</label>
-                                {% for character in plot_pice_form.instance.plot_pice.characters.all %}
-                                {% if character != class_instance %}  
-                                <a href="{% url 'GM:personal_plot' character.id %}">
+                                {% for personal_plot in plot_pice_form.instance.plot_pice.personal_plots.all %}
+                                {% if personal_plot != class_instance %}  
+                                <a href="{% url 'GM:plots' 'personal_plot' personal_plot.id %}">
                                 {% endif %}
-                                {% if forloop.counter = plot_pice_form.instance.plot_pice.characters.count %}
-                                    {{ character.name }}</a>
+                                {% if forloop.counter = plot_pice_form.instance.plot_pice.personal_plots.count %}
+                                    {{ personal_plot.name }}</a>
                                 {% else %}
-                                    {{ character.name }}</a>,
+                                    {{ personal_plot.name }}</a>,
                                 {% endif %}
                                 {% endfor %}
                             </p>
                             <p>
                                 <label>Groups:</label>
-                                {% for group in plot_pice_form.instance.plot_pice.groups.all %}
-                                {% if group != class_instance %}  
-                                <a href="{% url 'GM:group_plot' group.id %}">
+                                {% for group_plot in plot_pice_form.instance.plot_pice.group_plots.all %}
+                                {% if group_plot != class_instance %}  
+                                <a href="{% url 'GM:plots' 'group_plot' group_plot.id %}">
                                 {% endif %}
-                                {% if forloop.counter = plot_pice_form.instance.plot_pice.groups.count %}
-                                    {{ group.name }}</a>
+                                {% if forloop.counter = plot_pice_form.instance.plot_pice.group_plots.count %}
+                                    {{ group_plot.name }}</a>
                                 {% else %}
-                                    {{ group.name }}</a>,
+                                    {{ group_plot.name }}</a>,
                                 {% endif %}
                                 {% endfor %}
                             </p>
                             <p>
                                 <label>Plot Threads:</label>
-                                {% for plot_thread in plot_pice_form.instance.plot_pice.plot_threads.all %}
-                                {% if plot_thread != class_instance %}  
-                                <a href="{% url 'GM:plot_thread' plot_thread.id %}">
+                                {% for larp_plot_thread in plot_pice_form.instance.plot_pice.larp_plot_threads.all %}
+                                {% if larp_plot_thread != class_instance %}  
+                                <a href="{% url 'GM:plots' 'larp_plot_thread' larp_plot_thread.id %}">
                                 {% endif %}
-                                {% if forloop.counter = plot_pice_form.instance.plot_pice.plot_threads.count %}
-                                    {{ plot_thread.name }}</a>
+                                {% if forloop.counter = plot_pice_form.instance.plot_pice.larp_plot_threads.count %}
+                                    {{ larp_plot_thread.name }}</a>
                                 {% else %}
-                                    {{ plot_thread.name }}</a>,
+                                    {{ larp_plot_thread.name }}</a>,
                                 {% endif %}
                                 {% endfor %}
                             </p>

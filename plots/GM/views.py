@@ -119,7 +119,7 @@ def edit_plot_pice(request, plot_pice, back):
             plot_pice_form.save()
             return HttpResponseRedirect( back )
 
-    plot_pice_form = PlotPiceForm(larp)(instance=plot_pice)
+    plot_pice_form = PlotPiceForm(plot_pice.larp)(instance=plot_pice)
     
     return render(request, 'plots/GM/plot_pice.html',
             {   'plot_pice_form': plot_pice_form,

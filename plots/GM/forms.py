@@ -284,7 +284,7 @@ def CharacterFormLarp(larp):
                         'groups',              ]
 
             widgets = { 'groups': forms.CheckboxSelectMultiple(
-                                    choices = larp.groups.all() ),  }
+                                    choices = larp.groups.all()   ),  }
 
         def save(self):
             character = self.instance
@@ -303,9 +303,6 @@ def CharacterFormLarp(larp):
     return CharacterFormLarpClass
 
    
-
-
-
 #Plot Pice
 
 def PlotPiceForm(larp):
@@ -336,7 +333,7 @@ def PlotPiceForm(larp):
             if self.cleaned_data['new_'+class_name+'_name']:
                 new_class_instance = Class( name=self.cleaned_data['new_'+class_name+'_name'] )
                 new_class_instance.save()
-                new_plot_instance = PlotClass( **{'plot':plot, class_name: new_class_instance} )
+                new_plot_instance = PlotClass( **{'larp':larp, class_name: new_class_instance} )
                 new_plot_instance.save() 
                 RelationClass( **{  'plot_pice': self.instance,
                                     plot_name: new_plot_instance,

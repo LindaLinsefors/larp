@@ -349,6 +349,7 @@ def PlotPiceForm(larp):
             plot_pice.larp = larp
             plot_pice.plot_pice = self.cleaned_data['plot_pice']
             plot_pice.plot_is_finished = self.cleaned_data['plot_is_finished']
+            plot_pice.save()
 
             save_relations( self.instance,
                             larp.groupplot_set.all(),

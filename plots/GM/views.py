@@ -112,8 +112,9 @@ def larp_plots(request, id):
 
 def edit_plot_pice(request, plot_pice, back):
     if request.method == 'POST':
-        plot_pice_form = PlotPiceForm(larp)(request.POST, 
-                                            instance=plot_pice, )
+        plot_pice_form = PlotPiceForm(plot_pice.larp)(
+                                request.POST, instance=plot_pice, )
+
         if plot_pice_form.is_valid():
             plot_pice_form.save()
             return HttpResponseRedirect( back )

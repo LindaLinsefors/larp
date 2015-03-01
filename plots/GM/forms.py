@@ -177,9 +177,9 @@ class GroupForm(forms.ModelForm):
                         group.characters.all(), self.cleaned_data['characters'],
                         Membership, 'group', 'character')
 
-def GroupFormLarp(larp)
+def GroupFormLarp(larp):
 
-    class GroupFormLarp(forms.ModelForm):
+    class GroupFormLarpClass(forms.ModelForm):
         class Meta:
             model = Group
             fields = [  'name',
@@ -271,7 +271,7 @@ class CharacterForm(forms.ModelForm):
                         Membership, 'character', 'group')
 
 
-def CharacterFromLarp(larp)
+def CharacterFormLarp(larp):
 
     class CharacterFormLarpClass(forms.ModelForm):
         class Meta:

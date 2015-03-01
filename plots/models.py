@@ -163,7 +163,7 @@ class PlotPice(models.Model):
 
     personal_plots = models.ManyToManyField(
                 'PersonalPlot', null=True, blank=True, through='PersonalPlotPice')
-    group_plotss = models.ManyToManyField(
+    group_plots = models.ManyToManyField(
                 'GroupPlot', null=True, blank=True, through='GroupPlotPice')
     larp_plot_threads = models.ManyToManyField( 
                 'LarpPlotThread', null=True, blank=True, through='PlotPart')

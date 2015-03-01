@@ -322,15 +322,15 @@ def PlotPiceForm(larp, *args, **kw):
                 self.fields['characters'].initial = self.instance.personal_plots.all()
                 self.fields['plot_threads'].initial = self.instance.larp_plot_threads.all()
 
-    def save_new_relation(self, Class, class_name, PlotClass, plot_name, RelationClass):
-        if self.cleaned_data['new_'+class_name+'_name']:
-            new_class_instance = Class( name=self.cleaned_data['new_'+class_name+'_name'] )
-            new_class_instance.save()
-            new_plot_instance = PlotClass( **{'plot':plot, class_name: new_class_instance} )
-            new_plot_instance.save() 
-            RelationClass( **{  'plot_pice': self.instance,
-                                plot_name: new_plot_instance,
-                                'rank': -1,                     } ).save()
+        def save_new_relation(self, Class, class_name, PlotClass, plot_name, RelationClass):
+            if self.cleaned_data['new_'+class_name+'_name']:
+                new_class_instance = Class( name=self.cleaned_data['new_'+class_name+'_name'] )
+                new_class_instance.save()
+                new_plot_instance = PlotClass( **{'plot':plot, class_name: new_class_instance} )
+                new_plot_instance.save() 
+                RelationClass( **{  'plot_pice': self.instance,
+                                    plot_name: new_plot_instance,
+                                    'rank': -1,                     } ).save()
 
         def save(self):
             self.is_valid()
@@ -340,7 +340,6 @@ def PlotPiceForm(larp, *args, **kw):
                             self.instance.group_plots.all(), 
                             self.cleaned_data['groups'],
                             GroupPlotPice, 'plot_pice', 'group_plot' )
-):
          
             save_relations( self.instance,
                             larp.personalplot_set.all(),

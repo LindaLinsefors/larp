@@ -23,7 +23,7 @@ urlpatterns = [
             views.plot_pice, name='plot_pice'),
 
     url(r'^larp_plots/(?P<parent_type>\w+)/(?P<parent_id>[0-9]+)/plot_pice/(?P<id>[0-9]+)/delete/$', 
-            views.delete_plot_pice, name='plot_pice'),
+            views.delete_plot_pice, name='delete_plot_pice'),
 
     url(r'^larp_plots/plot_pice/(?P<id>[0-9]+)/$', 
             views.plot_pice_no_parent, name='plot_pice'),

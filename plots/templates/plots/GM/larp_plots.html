@@ -21,7 +21,7 @@
     <ul>
     {% for plot_pice in plot_pices_without_character_or_group %} 
         <li>
-        <a href="{% url 'GM:plot_pice' larp.id plot_pice.id %}"> 
+        <a href="{% url 'GM:plot_pice' plot_pice.id %}"> 
         {{ plot_pice }} </a> 
         </li>
     {% endfor %}
@@ -35,7 +35,7 @@
     <ul>
     {% for plot_pice in plot_pices_without_plot_thread %} 
         <li>
-        <a href="{% url 'GM:plot_pice' larp.id plot_pice.id %}"> 
+        <a href="{% url 'GM:plot_pice' plot_pice.id %}"> 
         {{ plot_pice }} </a> 
         </li>
     {% endfor %}

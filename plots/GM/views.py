@@ -101,11 +101,11 @@ def larp_plots(request, id):
                 # There is probably a better way to do this with filter
                 'plot_pices_without_character_or_group':
                    [plot_pice for plot_pice in larp.plotpice_set.all()
-                    if (list( plot_pice.characters.filter(larp=larp) )==[]
-                        and list( plot_pice.groups.filter(larp=larp) )==[] ) ],   
+                    if (list( plot_pice.personal_plots.filter(larp=larp) )==[]
+                        and list( plot_pice.group_plots.filter(larp=larp) )==[] ) ],   
                 'plot_pices_without_plot_thread':
                    [plot_pice for plot_pice in larp.plotpice_set.all()
-                    if list( plot_pice.plot_threads.filter(larp=larp) )==[] ],       
+                    if list( plot_pice.larp_plot_threads.filter(larp=larp) )==[] ],       
                 } )
 
 #Plot Pice
@@ -115,6 +115,7 @@ def edit_plot_pice(request, plot_pice, back):
         plot_pice_form = PlotPiceForm(  plot_pice.larp, 
                                         request.POST, 
                                         instance=plot_pice, )
+        import pdb; pdb.set_trace()
         if plot_pice_form.is_valid():
             plot_pice_form.save()
             return HttpResponseRedirect( back )

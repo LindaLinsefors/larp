@@ -256,6 +256,11 @@ class Group(BasicModel):
     larps = models.ManyToManyField(
                 'Larp', null=True, blank=True, through='GroupPlot' )
 
+    def characters_at_larp(self,larp):
+        Character.objects.filter(group=self,larp=larp)
+
+    def personal_plots_at_larp(self,larp):
+        PersonalPlot.objects.filter(larp=larp, character__in=self.characters.all() )
 
     def make_members_presentations(self):
         characters = []
@@ -283,3 +288,18 @@ class Larp(BasicModel):
                 'Group', null=True, blank=True, through='GroupPlot' )
     plot_threads = models.ManyToManyField( 
                 'PlotThread', null=True, blank=True, through='LarpPlotThread')
+
+    def characters_with_no_group(self):
+        return self.characters.exclude(group__in=self.groups.all())
+
+    def personal_plots_with_no_group(self):
+        return self.personalplot_set.exclude()
+
+    def plot_pices_with_no_character_or_group(self):
+        return self.plotpice_set.exclude(   
+                        personal_plots__in=self.personalplot_set.all(),
+                        group_plots__in=self.groupplot_set.all(),        )
+            
+    def plot_pices_with_no_plot_thread(self):
+        return self.plotpice_set.exclude(   
+                        larp_plot_threads__in=self.larpplotthread_set.all(),  )

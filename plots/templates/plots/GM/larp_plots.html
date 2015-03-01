@@ -17,9 +17,9 @@
 
 
 <h3> Plot Pices without Character or Group </h3>
-{% if plot_pices_without_character_or_group %}
+{% if larp.plot_pices_with_no_character_or_group %}
     <ul>
-    {% for plot_pice in plot_pices_without_character_or_group %} 
+    {% for plot_pice in larp.plot_pices_with_no_character_or_group %} 
         <li>
         <a href="{% url 'GM:plot_pice' plot_pice.id %}"> 
         {{ plot_pice }} </a> 
@@ -31,9 +31,9 @@
 {% endif %}
 
 <h3> Plot Pices without Plot Thread </h3>
-{% if plot_pices_without_plot_thread %}
+{% if larp.plot_pices_with_no_plot_thread %}
     <ul>
-    {% for plot_pice in plot_pices_without_plot_thread %} 
+    {% for plot_pice in larp.plot_pices_with_no_plot_thread %} 
         <li>
         <a href="{% url 'GM:plot_pice' plot_pice.id %}"> 
         {{ plot_pice }} </a> 
@@ -69,8 +69,12 @@
         (<a href="{% url 'GM:new_plots' larp.id 'character' %}">New</a>)
     </small> 
 </h1>
+
+{% for group in larp.groupplot_set.all %}
+<h3> {{ group }} </h3>
+
 <ul>
-    {% for personal_plot in larp.personalplot_set.all %}
+    {% for character in group.personal_plot_at_larp(larp) %}
     <li>
         <a href="{% url 'GM:plot_resiver' larp.id 'character' personal_plot.character.id %}"> 
         {{ personal_plot.character.name }}</a>
@@ -79,5 +83,6 @@
     </li>
     {% endfor %}
 </ul> 
+{% endfor %}
 
 {% endblock %}

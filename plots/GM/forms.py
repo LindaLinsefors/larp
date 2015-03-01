@@ -284,7 +284,7 @@ def CharacterFormLarp(larp):
                         'groups',              ]
 
             widgets = { 'groups': forms.CheckboxSelectMultiple(
-                                    choices = larp.groups.all()   ),  }
+                                    choices = larp.groups.all()   ),}
 
         def save(self):
             character = self.instance
@@ -307,6 +307,10 @@ def CharacterFormLarp(larp):
 
 def PlotPiceForm(larp):
 
+    personal_plot_choices = [ (group.name ,group.personal_plots_at_larp(larp) ) 
+                              for group in larp.groups.all() ]
+    personal_plot_choices.append( ('No_group', larp.personal_plots_with_no_group()) )
+
     class PlotPiceFromClass(forms.ModelForm):
         class Meta:
             model=PlotPice
@@ -320,7 +324,7 @@ def PlotPiceForm(larp):
                                     choices = larp.groupplot_set.all()   ),
 
                         'personal_plots': forms.CheckboxSelectMultiple(
-                                    choices = larp.personalplot_set.all()    ),
+                                    choices = personal_plot_choices ),
 
                         'larp_plot_threads': forms.CheckboxSelectMultiple(
                                     choices = larp.larpplotthread_set.all()  ),  }

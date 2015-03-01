@@ -298,29 +298,27 @@ class CharacterFormLarp(forms.ModelForm):
 class PlotPiceFormBasic(forms.ModelForm):
     class Meta:
         model=PlotPice
-        fields = [ 'plot_pice', 'plot_is_finished', 'larp' ]
+        fields = [  'larp',
+                    'plot_pice', 
+                    'plot_is_finished',  
+                    'larp_plot_threads',
+                    'group_plots',
+                    'personal_plots',]
+
+        widgets = { 'group_plots': forms.CheckboxSelectMultiple,
+                    'personal_plots': forms.CheckboxSelectMultiple,
+                    'larp_plot_threads': forms.CheckboxSelectMultiple,  }
     
     new_character_name = forms.CharField(required=False, max_length=50)
     new_group_name = forms.CharField(required=False, max_length=50)    
     new_plot_thread_name = forms.CharField(required=False, max_length=50)
 
 
-
-
-
 def PlotPiceForm(larp, *args, **kw):
 
     class PlotPiceFromClass(PlotPiceFormBasic):
-        characters = checkboxes( larp.personalplot_set.all() )
-        groups = checkboxes( larp.groupplot_set.all() )
-        plot_threads = checkboxes( LarpPlotThread.objects.all() )
 
-        def __init__(self, *args, **kw):
-            PlotPiceFormBasic.__init__(self, *args, **kw)
-            if kw.has_key('instance'):
-                self.fields['groups'].initial = self.instance.group_plots.all()
-                self.fields['characters'].initial = self.instance.personal_plots.all()
-                self.fields['plot_threads'].initial = self.instance.larp_plot_threads.all()
+    
 
         def save_new_relation(self, Class, class_name, PlotClass, plot_name, RelationClass):
             if self.cleaned_data['new_'+class_name+'_name']:

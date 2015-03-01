@@ -115,7 +115,6 @@ def edit_plot_pice(request, plot_pice, back):
         plot_pice_form = PlotPiceForm(  plot_pice.larp, 
                                         request.POST, 
                                         instance=plot_pice, )
-        import pdb; pdb.set_trace()
         if plot_pice_form.is_valid():
             plot_pice_form.save()
             return HttpResponseRedirect( back )

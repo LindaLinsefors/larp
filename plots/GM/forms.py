@@ -295,30 +295,29 @@ class CharacterFormLarp(forms.ModelForm):
 
 #Plot Pice
 
-class PlotPiceFormBasic(forms.ModelForm):
-    class Meta:
-        model=PlotPice
-        fields = [  'larp',
-                    'plot_pice', 
-                    'plot_is_finished',  
-                    'larp_plot_threads',
-                    'group_plots',
-                    'personal_plots',]
-
-        widgets = { 'group_plots': forms.CheckboxSelectMultiple,
-                    'personal_plots': forms.CheckboxSelectMultiple,
-                    'larp_plot_threads': forms.CheckboxSelectMultiple,  }
-    
-    new_character_name = forms.CharField(required=False, max_length=50)
-    new_group_name = forms.CharField(required=False, max_length=50)    
-    new_plot_thread_name = forms.CharField(required=False, max_length=50)
-
-
 def PlotPiceForm(larp, *args, **kw):
 
-    class PlotPiceFromClass(PlotPiceFormBasic):
+    class PlotPiceFromClass(forms.ModelForm):
+        class Meta:
+            model=PlotPice
+            fields = [  'plot_pice', 
+                        'plot_is_finished',  
+                        'larp_plot_threads',
+                        'group_plots',
+                        'personal_plots',]
 
-    
+            widgets = { 'group_plots': forms.CheckboxSelectMultiple(
+                                choices = GroupPlot.objects.filter(larp=larp)   ),
+
+                        'personal_plots': forms.CheckboxSelectMultiple(
+                                choices = PersonalPlot.objects.filter(larp=larp)    ),
+
+                        'larp_plot_threads': forms.CheckboxSelectMultiple(
+                                choices = LarpPlotThread.objects.filter(larp=larp)  ),  }
+        
+        new_character_name = forms.CharField(required=False, max_length=50)
+        new_group_name = forms.CharField(required=False, max_length=50)    
+        new_plot_thread_name = forms.CharField(required=False, max_length=50)
 
         def save_new_relation(self, Class, class_name, PlotClass, plot_name, RelationClass):
             if self.cleaned_data['new_'+class_name+'_name']:
@@ -332,23 +331,28 @@ def PlotPiceForm(larp, *args, **kw):
 
         def save(self):
             self.is_valid()
-            forms.ModelForm.save(self)
+
+            plot_pice = self.instance
+            plot_pice.larp = larp
+            plot_pice.plot_pice = self.cleaned_data['plot_pice']
+            plot_pice.plot_is_finished = self.cleaned_data['plot_is_finished']
+
             save_relations( self.instance,
                             larp.groupplot_set.all(),
                             self.instance.group_plots.all(), 
-                            self.cleaned_data['groups'],
+                            self.cleaned_data['group_plots'],
                             GroupPlotPice, 'plot_pice', 'group_plot' )
          
             save_relations( self.instance,
                             larp.personalplot_set.all(),
                             self.instance.personal_plots.all(), 
-                            self.cleaned_data['characters'],
+                            self.cleaned_data['personal_plots'],
                             PersonalPlotPice, 'plot_pice', 'personal_plot' )
 
             save_relations( self.instance,
                             larp.larpplotthread_set.all(),
                             self.instance.larp_plot_threads.all(), 
-                            self.cleaned_data['plot_threads'],
+                            self.cleaned_data['larp_plot_threads'],
                             PlotPart, 'plot_pice', 'larp_plot_thread' )
 
             self.save_new_relation( Character, 'character', 

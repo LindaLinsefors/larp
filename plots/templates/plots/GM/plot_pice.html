@@ -8,7 +8,6 @@
 
 <form method="POST" >
     {% csrf_token %}
-    {{ plot_pice_form.larp }}
     <p>{{ plot_pice_form.plot_pice }}</p>
     <p><b> Plot Pice is finnished: </b> {{ plot_pice_form.plot_is_finished }}</p>
 

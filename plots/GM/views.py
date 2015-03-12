@@ -276,7 +276,8 @@ def edit_plot_resiver(request, larp_id, class_name, id):
 
     return render(  request, 'plots/GM/basic_form.html',
                    {'class_form': class_form,
-                    'class_instance': class_form.instance,    }   ) 
+                    'class_instance': class_form.instance,   
+                    'larp': larp                            }   ) 
 
 def delete_plot_resiver(request, larp_id, class_name, id):
     class_instance = get_object_or_404(class_dict[class_name], pk=id)

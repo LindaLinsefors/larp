@@ -25,8 +25,9 @@ WebSiteName
   <div class="container-fluid">
       <ul class="nav navbar-nav ">
         <li><a href="/">Home</a></li>
-        <li><a href="{% url 'GM:index' %}">GM</a></li> 
-        {% if larp %}<li><a href="{% url 'GM:larp_plots' larp.id %}">{{ larp.name }}</a></li> {% endif %}
+        {% for nav_item in nav_list %}
+        <li><a href="{% url 'pages:page' nav_item.id %}">{{ nav_item.name }}</a></li> 
+        {% endfor %}
       </ul>
   </div>
 </div>

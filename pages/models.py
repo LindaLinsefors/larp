@@ -14,5 +14,7 @@ class Page(models.Model):
 
     text = models.TextField(blank=True, default='')
     
-    up = models.ForeignKey('Page', null=True,)
+    up = models.ForeignKey('Page', null=True)
+    
+    in_nav = models.BooleanField(default=True)
 

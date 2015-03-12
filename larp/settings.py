@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'plots',
     'floppyforms',
+    'pages',
 )
 
 MIDDLEWARE_CLASSES = (

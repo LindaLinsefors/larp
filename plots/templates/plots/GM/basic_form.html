@@ -4,6 +4,7 @@
 
 
 {% block body %}
+<div class="container-fluid">
 
     {% if class_instance %}
         <h1> {{ class_instance.name }} </h1>
@@ -28,5 +29,5 @@
             {% endif %}
         </p>
     </form>
-
+</div>
 {% endblock %}

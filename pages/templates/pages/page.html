@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebSiteName</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    -->
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'plots/bootstrap.css' %}">
+    <script src="{% static 'plots/jquery.js' %}"></script>
+    <script src="{% static 'plots/bootstrap.js' %}"></script>
+    <script src="{% static 'plots/jquery.sortable.js' %}"></script>
+
+
+
+</head>
+<body>
+WebSiteName 
+<div class="larp-title">
+  <div class="container-fluid">
+      <ul class="nav navbar-nav ">
+        <li><a href="/">Home</a></li>
+        <li><a href="{% url 'GM:index' %}">GM</a></li> 
+        {% if larp %}<li><a href="{% url 'GM:larp_plots' larp.id %}">{{ larp.name }}</a></li> {% endif %}
+      </ul>
+  </div>
+</div>
+
+
+
+{% block body %}
+{% endblock %}
+
+</body>
+</html>

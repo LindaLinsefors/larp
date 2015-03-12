@@ -38,8 +38,7 @@
         {% block style %}
         {% endblock %}    
 
-        .larp-title {
-            width: 100%;
+        .my-navbar {
             background-color: #BBF;
         }
         
@@ -56,14 +55,18 @@
 
 </head>
 <body>
-
-{% if larp %}
+WebSiteName 
 <div class="larp-title">
-    <h2>
-        {{ larp.name }}
-    </h2>
+  <div class="container-fluid my-navbar">
+      <ul class="nav navbar-nav ">
+        <li><a href="/">Home</a></li>
+        <li><a href="{% url 'GM:index' %}">GM</a></li> 
+        {% if larp %}<li><a href="{% url 'GM:larp_plots' larp.id %}">{{ larp.name }}</a></li> {% endif %}
+      </ul>
+  </div>
 </div>
-{% endif %}
+
+
 
 {% block body %}
 {% endblock %}

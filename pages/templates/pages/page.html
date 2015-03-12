@@ -20,9 +20,20 @@
 
 </head>
 <body>
+<div class="container-fluid">
+    WebSiteName 
+</div>
 
-
-<div id='topDIV' class='top'><div id='topLogo'><a href='http://www.w3schools.com'><img src='/images/w3logotest2.png' alt='W3Schools.com' style='border:0;' /></a></div></div><div id='topnavDIV' class='topnavContainer'><div class='container-fluid' style='max-width:1600px;margin-left:0px;padding-left:0;'><ul class='nav nav-pills topnav'><li><a href='/default.asp' class='topnav_home' title='Home'>&nbsp;</a></li><li><a href='/html/default.asp' class='topnav_html' title='HTML Tutorial'>HTML</a></li><li><a href='/css/default.asp' class='topnav_css' title='CSS Tutorial'>CSS</a></li><li><a href='/js/default.asp' class='topnav_js' title='JavaScript Tutorial'>JAVASCRIPT</a></li><li><a href='/sql/default.asp' class='topnav_sql' title='SQL Tutorial'>SQL</a></li><li><a href='/php/default.asp' class='topnav_php' title='PHP Tutorial'>PHP</a></li><li><a href='/jquery/default.asp' class='topnav_jquery' title='jQuery Tutorial'>jQUERY</a></li><li><a href='/bootstrap/default.asp' class='topnav_bootstrap' title='Bootstrap Tutorial'>BOOTSTRAP</a></li><li><a href='/angular/default.asp' class='topnav_angular' title='Angular Tutorial'>ANGULAR</a></li><li><a href='/xml/default.asp' class='topnav_xml' title='XML Tutorial'>XML</a></li><li><a id='dropdownTutorialsBtn' href='#' class='topnav_tutorials' title='More Tutorials'>TUTORIALS <span class='caret'></span></a></li><li><a id='dropdownReferencesBtn' href='#' class='topnav_references' title='More References'>REFERENCES <span class='caret'></span></a></li><li><a id='dropdownExamplesBtn' href='#' class='topnav_examples' title='More Examples'>EXAMPLES <span class='caret'></span></a></li><li><a href='/forum/default.asp' class='topnav_forum' title='W3Schools Forum'>FORUM</a></li><li class='menuBtn'><a href='javascript:void(0)' class='topnav_menu' onclick='vismenyen()' title='Menu'><hr><hr><hr></a></li><li class='menuSearch'><a id='dropdownSearchBtn' href='javascript:void(0);' class='topnav_search' title='Search W3Schools'>&nbsp;</a></li><li class='menuTranslate'><a id='dropdownTranslateBtn' href='javascript:void(0);' class='topnav_translate' title='Translate W3Schools'>&nbsp;</a></li></ul></div></div>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+      <ul class="nav navbar-nav ">
+        <li><a href="/">Home</a></li>
+        {% for nav_item in nav_list %}
+        <li><a href="{% url 'pages:page' nav_item.id %}">{{ nav_item.name }}</a></li> 
+        {% endfor %}
+      </ul>
+  </div>
+</nav>
 
 
 

@@ -1,0 +1,8 @@
+{% extends "pages/page.html" %}
+
+{% block body %}
+        {% if title %}
+        <h1>{{ title }}</h1>
+        {% endif %}
+    {{ html|safe }}
+{% endblock %}

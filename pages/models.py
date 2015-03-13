@@ -27,7 +27,7 @@ class Page(models.Model):
         return unicode(self.title)
 
     top_page = models.BooleanField(default=True)
-    sort_under = models.ForeignKey('Page', null=True)
+    sort_under = models.ForeignKey('Page', null=True, blank=True, on_delete=models.SET_NULL)
     html = models.TextField(blank=True, default='')
     
 

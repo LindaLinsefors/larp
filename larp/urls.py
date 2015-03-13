@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     url(r'^page/(?P<id>\d+)/edit$', views.edit_page, name='edit_page'),
     url(r'^page/(?P<id>\d+)/delete$', views.delete_page, name='delete_page'),
 
+    url(r'^site_map$', views.sitemap, name='site_map'),
+
     #url(r'^/', include('pages.urls', namespace='pages')),
     
 )

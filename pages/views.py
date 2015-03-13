@@ -23,7 +23,7 @@ class HomeForm(forms.ModelForm):
 
 
 def nav_list():
-    return Page.objects.filter(top_page=1).exclude(title='home')
+    return Page.objects.filter(top_page=1)
 
 def get_home():
     try:
@@ -150,4 +150,38 @@ def new_subpage(request, id):
 
     page_form.save()
     return HttpResponseRedirect( reverse('page', args=(page_form.instance.id,)) ) 
+
+
+
+
+
+# Site Map
+
+def map_from_list(page_list):
+    if not page_list:
+        return ''
+
+    return( '<ul>' 
+            + ''.join([('<li><a href="/page/' + str(page.id) + '">' 
+                        + page.title + '</a>' 
+                        + map_from_list(page.page_set.all() ) + '</li>')
+                       for page in page_list]                        )
+            +'</ul>'                                                    )
+
+
+def sitemap(request):
+    html = map_from_list( Page.objects.filter(top_page=1) )
+
+    lost_pages = [  page for page 
+                    in Page.objects.exclude(top_page=1) 
+                    if not page.sort_under              ]
+    if lost_pages:
+        html += '<h2>Lost pages</h2>' + map_from_list( lost_pages )
+
+
+
+    return render( request, 'pages/other_page.html',
+                   {'title': 'Site Map',
+                    'html': html, })
+    
 

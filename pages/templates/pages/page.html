@@ -24,17 +24,38 @@
     WebSiteName 
 </div>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse">
   <div class="container-fluid">
       <ul class="nav navbar-nav ">
         <li><a href="/">Home</a></li>
+
         {% for nav_item in nav_list %}
-        <li><a href="{% url 'pages:page' nav_item.id %}">{{ nav_item.name }}</a></li> 
+        <li><a href="{% url 'page' nav_item.id %}">{{ nav_item.title }}</a></li> 
         {% endfor %}
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">GM
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="edit">Edit/Delete this page</a></li>
+            <li><a href="#">Add topp page</a></li>
+            <li><a href="#">Add subpage</a></li>
+            <li><a href="{% url 'GM:index' %}">GM index</a></li> 
+          </ul>
+        </li>
+
       </ul>
   </div>
 </nav>
 
+
+<div class="container-fluid">
+    {{ error_message }}
+    {% block body %}
+        </h1>{{ page.title }}<h1>
+        {{ page.text|safe }}
+    {% endblock %}    
+</div>
 
 
 </body>

@@ -4,17 +4,17 @@ from django.db import models
 
 class Page(models.Model):
     class Meta:
-        ordering = ['name']
+        ordering = ['title']
 
-    name = models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
     def __str__(self):
-        return self.name
+        return self.title
     def __unicode__(self):          # for Python 2 
-        return unicode(self.name)
+        return unicode(self.title)
 
-    text = models.TextField(blank=True, default='')
+    top_page = models.BooleanField(default=True)
+    sort_under = models.ForeignKey('Page', null=True)
+    html = models.TextField(blank=True, default='')
     
-    up = models.ForeignKey('Page', null=True)
-    
-    in_nav = models.BooleanField(default=True)
+
 

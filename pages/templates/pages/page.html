@@ -38,8 +38,7 @@
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="edit">Edit/Delete this page</a></li>
-            <li><a href="#">Add topp page</a></li>
-            <li><a href="#">Add subpage</a></li>
+            <li><a href="new">Add new page</a></li>
             <li><a href="{% url 'GM:index' %}">GM index</a></li> 
           </ul>
         </li>
@@ -50,7 +49,7 @@
 
 
 <div class="container-fluid">
-    {{ error_message }}
+    {{ my_error_message }}
     {% block body %}
         </h1>{{ page.title }}<h1>
         {{ page.text|safe }}

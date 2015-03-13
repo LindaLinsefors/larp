@@ -6,11 +6,17 @@
         {{ page_form.as_p }}
         <p>
             <input type="submit" class="btn btn-default" value="Save" />
-            <a href="{% url 'page' id %}" class="btn btn-default" > Cancel </a>
+
+            <a {% if id %} href="{% url 'page' id %}" {% else %} href="{% url 'home' %}" {% endif %}
+                class="btn btn-default" > Cancel </a>
+
             <input type="reset" class="btn btn-default" value="Reset" />
+
+            {% if delete %}
             <a href="delete" class="btn btn-default" 
                 onclick="return confirm('Are you sure you want to delete this page?');"> 
-            Delete </a>
+                Delete </a>
+            {% endif %}
         </p>
     </form>
 {% endblock %}

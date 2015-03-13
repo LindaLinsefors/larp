@@ -20,6 +20,21 @@ def nav_list():
     return Page.objects.filter(top_page=1).exclude(title='home')
 
 
+initial_html = u'''<p>
+Fist paragraph... 
+</p>
+
+<p>
+Second paragraph...
+</p>
+
+<h2> Sub-title </h2>
+<p>
+Evem more text...
+</p>'''
+            
+
+
 def home(request):
     try:
         home = Page.objects.get(title='home')
@@ -41,10 +56,9 @@ Ahrgh, the confusion! I can't stand it. Fix this problem now!!
 
 def page(request, id):
     page = get_object_or_404(Page,pk=id)
-
     return render( request, 'pages/page.html', 
                {'nav_list': nav_list(),
-                'page':page,            } )
+                'page': page,            } )
 
 
 def edit_page(request, id):
@@ -78,7 +92,8 @@ def new_top_page(request):
     if request.method != 'POST':
         return render( request, 'pages/edit_page.html',
                        {'nav_list': nav_list(),
-                        'page_form': PageForm(initial={'top_page':True}), })
+                        'page_form': PageForm({ 'top_page':True,
+                                                'html': initial_html }), })
 
     page_form = PageForm(request.POST)
     if not page_form.is_valid():
@@ -97,7 +112,8 @@ def new_subpage(request, id):
         return render( request, 'pages/edit_page.html',
                        {'nav_list': nav_list(),
                         'page_form': PageForm({ 'top_page': False,
-                                                'sort_under': page,  }),
+                                                'sort_under': page,
+                                                'html': initial_html  }),
                         'id': id                    })
 
     page_form = PageForm(request.POST)

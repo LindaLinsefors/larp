@@ -26,7 +26,7 @@
 </head>
 <body>
 <div class="container-fluid">
-    WebSiteName 
+    {{ top_logo }} 
 </div>
 
 <nav class="navbar navbar-inverse">
@@ -42,7 +42,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">GM
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="edit">Edit/Delete this page</a></li>
+            {% if edit %}<li><a href="edit">Edit/Delete this page</a></li>{% endif %}
             <li><a href="new">Add new page</a></li>
             <li><a href="{% url 'GM:index' %}">GM index</a></li> 
           </ul>
@@ -56,7 +56,9 @@
 <div class="container-fluid">
     {{ my_error_message }}
     {% block body %}
-        <h1>{{ page.title }}</h1>
+        <h1>
+            {% if page.title %}{{ page.title }}{% else %}WebSiteName{% endif %}
+        </h1>
         {{ page.html|safe }}
     {% endblock %}    
 </div>

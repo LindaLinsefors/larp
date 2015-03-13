@@ -19,6 +19,7 @@ urlpatterns = patterns('',
 
     url(r'^$', views.home, name='home'),
     url(r'^new', views.new_top_page, name='new_top_page'),
+    url(r'^edit', views.edit_home, name='edit_home'),
     url(r'^page/(?P<id>\d+)/$', views.page, name='page'),
     url(r'^page/(?P<id>\d+)/new$', views.new_subpage, name='new_subpage'),
     url(r'^page/(?P<id>\d+)/edit$', views.edit_page, name='edit_page'),

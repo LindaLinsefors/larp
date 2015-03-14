@@ -1,4 +1,5 @@
 from django.db import models
+import plots.models as plots
 
 # Create your models here.
 
@@ -28,6 +29,8 @@ class Page(models.Model):
 
     top_page = models.BooleanField(default=True)
     sort_under = models.ForeignKey('Page', null=True, blank=True, on_delete=models.SET_NULL)
+    sort_under_group = models.ForeignKey('plots.Group', null=True, blank=True, on_delete=models.SET_NULL)
+    sort_under_larp = models.ForeignKey('plots.Larp', null=True, blank=True, on_delete=models.SET_NULL)
     html = models.TextField(blank=True, default='')
     
 

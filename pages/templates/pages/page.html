@@ -59,10 +59,12 @@
     {{ my_error_message }}
     {% block body %}
         <h1>
-            {% if page.title %}{{ page.title }}{% else %}WebSiteName{% endif %}
+            {% if title %}{{ title }}
+            {% elif page.title %}{{ page.title }}
+            {% else %}WebSiteName{% endif %}
         </h1>
         {{ page.html|safe }}
-
+        {{ html|safe }}
         <ul>
         {% for subpage in page.page_set.all %}
             <li><a href="{% url 'page' subpage.id %}">{{ subpage.title }}</a></li>

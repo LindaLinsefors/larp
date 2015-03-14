@@ -7,12 +7,16 @@ from pages.models import Page, Home
 import floppyforms.__future__  as forms
 
 
+# Forms
+
 class PageForm(forms.ModelForm):
     class Meta:
         model = Page
         fields = [  'title',
                     'top_page',
                     'sort_under',
+                    'sort_under_group',
+                    'sort_under_larp',
                     'html',         ]
 
 class HomeForm(forms.ModelForm):
@@ -21,6 +25,7 @@ class HomeForm(forms.ModelForm):
         fields = [  'title',
                     'html',  ]
 
+# Help funktions
 
 def nav_list():
     return Page.objects.filter(top_page=1)
@@ -51,7 +56,7 @@ Evem more text...
 </p>'''
             
 
-
+# Home
 
 def home(request):
     return render( request, 'pages/page.html', 
@@ -76,6 +81,8 @@ def edit_home(request):
     home_form.save()
     return HttpResponseRedirect( reverse('home') ) 
     
+
+# Page
 
 def page(request, id):
     page = get_object_or_404(Page,pk=id)
@@ -178,10 +185,9 @@ def sitemap(request):
     if lost_pages:
         html += '<h2>Lost pages</h2>' + map_from_list( lost_pages )
 
-
-
-    return render( request, 'pages/other_page.html',
-                   {'title': 'Site Map',
+    return render( request, 'pages/page.html',
+                   {'nav_list': nav_list(),'top_logo': top_logo(),
+                    'title': 'Site Map',
                     'html': html, })
     
 
